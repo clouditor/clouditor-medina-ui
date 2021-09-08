@@ -8,7 +8,16 @@ const config = {
 
 	kit: {
 		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte'
+		target: '#svelte',
+		ssr: false, // for now, until we figure out authentication
+		vite: {
+			server: {
+				proxy: {
+					'/v1/auth/': 'http://localhost:8080',
+					'/v1/discovery/': 'http://localhost:8080'
+				}
+			}
+		}
 	}
 };
 
