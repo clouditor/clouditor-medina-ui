@@ -1,44 +1,29 @@
-<script lang="ts">
-	import type { StartDiscoveryResponse } from '$lib/discovery';
-	import type { QueryResponse } from '$lib/login';
-	import { Button, Table } from 'sveltestrap';
+<script lang="ts" context="module">
+	import { queryDiscovery } from '$lib/discovery';
 
-	let success;
-	let result: any[] = [];
-
-	function startDiscovery() {
-		const apiUrl = `/v1/discovery/start`;
-
-		fetch(apiUrl, {
-			method: 'POST',
-			body: JSON.stringify({})
-		})
-			.then((res) => res.json())
-			.then((response: StartDiscoveryResponse) => {
-				success = response.successful;
-			});
-	}
-
-	function queryDiscovery() {
-		const apiUrl = `/v1/discovery/query`;
-
-		fetch(apiUrl, {
-			method: 'POST',
-			body: JSON.stringify({})
-		})
-			.then((res) => res.json())
-			.then((response: QueryResponse) => {
-				result = response.result;
-			});
+	/**
+	 * @type {import('@sveltejs/kit').Load}
+	 */
+	export async function load({ page, fetch, session, context }) {
+		return queryDiscovery().then((results) => {
+			return {
+				props: {
+					resources: results
+				}
+			};
+		});
 	}
 </script>
 
-<Button on:click={startDiscovery}>Start</Button>
-<Button on:click={queryDiscovery}>Query</Button>
+<script lang="ts">
+	import { Button, Table } from 'sveltestrap';
+	import { Resource, startDiscovery } from '$lib/discovery';
+	import { base } from '$app/paths';
 
-<p>Was successful: {success}</p>
+	export let resources: Resource[] = [];
+</script>
 
-<p>Result</p>
+<h2>Discovered Resources</h2>
 
 <Table>
 	<thead>
@@ -50,13 +35,15 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each result as resource, i}
+		{#each resources as resource, i}
 			<tr>
 				<th scope="row">{i}</th>
-				<td>{resource.name}</td>
+				<td><a href="{base}/discovery/{resource.id}">{resource.name}</a></td>
 				<td>{resource.type.join(', ')}</td>
 				<td><pre>{JSON.stringify(resource)}</pre></td>
 			</tr>
 		{/each}
 	</tbody>
 </Table>
+
+<Button on:click={startDiscovery}>Start Discovery</Button>

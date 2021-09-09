@@ -1,49 +1,50 @@
 <script lang="ts" context="module">
-	import { AssessmentResult, listAssessmentResults, Metric } from '$lib/assessment';
+	import { AssessmentResult, listAssessmentResults } from '$lib/assessment';
+	import { metrics } from '$lib/stores';
 	import { listMetrics } from '$lib/orchestrator';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ page, fetch, session, context }) {
-		let results = await listAssessmentResults();
-
-		let array = await listMetrics();
-
-		for (let metric of array) {
-			metrics.update((m) => m.set(metric.id, metric));
-		}
-
-		return {
-			props: {
-				results: results
+		listMetrics().then((list) => {
+			for (let metric of list) {
+				// update metrics store
+				metrics.update((m) => m.set(metric.id, metric));
 			}
-		};
+		});
+
+		return listAssessmentResults().then((results) => {
+			return {
+				props: {
+					results: results
+				}
+			};
+		});
 	}
 </script>
 
 <script lang="ts">
 	import { Table } from 'sveltestrap';
-	import { metrics } from '$lib/stores';
 
 	export let results: AssessmentResult[];
 </script>
 
-Results:
+<h2>Security Assessment Results</h2>
 
 {#if results}
-	<Table>
+	<Table hover>
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>Name</th>
 				<th>Metric</th>
-				<th>Raw</th>
+				<th>Compliant</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each results as result, i}
-				<tr>
+				<tr class={result.compliant ? 'table-success' : 'table-danger'}>
 					<th scope="row">{i}</th>
 					<td>{result.resourceId}</td>
 					<td>

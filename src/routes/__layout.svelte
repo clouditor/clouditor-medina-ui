@@ -1,10 +1,17 @@
 <script lang="ts">
+	import Navigation from '$lib/Navigation.svelte';
 	import { Styles } from 'sveltestrap';
 </script>
 
 <Styles />
+<Navigation />
 
-My Header | Home | <a href="/discovery">Discovery</a> | <a href="/assessment">Assessment</a> |
-<a href="/login">Login</a>
-<br />
-<slot />
+<main>
+	<slot />
+</main>
+
+<style>
+	main {
+		padding: 1rem;
+	}
+</style>
