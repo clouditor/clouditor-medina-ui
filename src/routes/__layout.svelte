@@ -4,6 +4,7 @@
 
 <Styles />
 
-My Header | Home | <a href="/discovery">Discovery</a> | <a href="/login">Login</a>
+My Header | Home | <a href="/discovery">Discovery</a> | <a href="/assessment">Assessment</a> |
+<a href="/login">Login</a>
 <br />
 <slot />
