@@ -4,6 +4,11 @@ export interface AssessmentResult {
     metricId: number
 }
 
+export interface Metric {
+    id: number
+    name: string
+}
+
 export interface ListAssessmentResultsResponse {
     results: AssessmentResult[]
 }

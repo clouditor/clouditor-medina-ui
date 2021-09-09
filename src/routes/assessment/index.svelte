@@ -1,12 +1,18 @@
 <script lang="ts" context="module">
-	import { browser } from '$app/env';
-	import { AssessmentResult, listAssessmentResults } from '$lib/assessment';
-	import { metrics } from '$lib/stores';
+	import { AssessmentResult, listAssessmentResults, Metric } from '$lib/assessment';
+	import { listMetrics } from '$lib/orchestrator';
+
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ page, fetch, session, context }) {
 		let results = await listAssessmentResults();
+
+		let array = await listMetrics();
+
+		for (let metric of array) {
+			metrics.update((m) => m.set(metric.id, metric));
+		}
 
 		return {
 			props: {
@@ -18,15 +24,9 @@
 
 <script lang="ts">
 	import { Table } from 'sveltestrap';
-	import { getMetric, Metric } from '$lib/orchestrator';
+	import { metrics } from '$lib/stores';
 
 	export let results: AssessmentResult[];
-
-	async function getMetricCached(id: number): Promise<Metric> {
-		// TODO: implement store caching
-
-		return await getMetric(id);
-	}
 </script>
 
 Results:
@@ -38,7 +38,7 @@ Results:
 				<th>#</th>
 				<th>Name</th>
 				<th>Metric</th>
-				<th>Compliant</th>
+				<th>Raw</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -47,9 +47,7 @@ Results:
 					<th scope="row">{i}</th>
 					<td>{result.resourceId}</td>
 					<td>
-						{#await getMetricCached(1) then metric}
-							{metric.name}
-						{/await}
+						{$metrics.get(result.metricId)?.name ?? 'Unknown'}
 					</td>
 					<td>{result.compliant}</td>
 				</tr>
