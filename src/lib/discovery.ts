@@ -3,7 +3,7 @@ export interface StartDiscoveryResponse {
 }
 
 export interface QueryResponse {
-    result: Resource[]
+    results: Resource[]
 }
 
 export interface Resource {
@@ -35,6 +35,6 @@ export async function queryDiscovery(): Promise<Resource[]> {
     })
         .then((res) => res.json())
         .then((response: QueryResponse) => {
-            return response.result;
+            return response.results;
         });
 }
