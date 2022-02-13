@@ -7,9 +7,6 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte',
-		ssr: false, // for now, until we figure out authentication
 		vite: {
 			server: {
 				proxy: {

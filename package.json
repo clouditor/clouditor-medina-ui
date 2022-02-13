@@ -1,6 +1,7 @@
 {
   "name": "ui",
   "version": "0.0.1",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
@@ -11,7 +12,7 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "^1.0.0-next.266",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "bootstrap": "^5.1.1",

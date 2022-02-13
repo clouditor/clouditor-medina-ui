@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
-	import { AssessmentResult, listAssessmentResults } from '$lib/assessment';
 	import { metrics } from '$lib/stores';
-	import { listMetrics } from '$lib/orchestrator';
+	import type { AssessmentResult } from '$lib/assessment';
+	import { listMetrics, listAssessmentResults } from '$lib/orchestrator';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ page, fetch, session, context }) {
+	export async function load({ params, fetch, session, context }) {
 		listMetrics().then((list) => {
 			for (let metric of list) {
 				// update metrics store

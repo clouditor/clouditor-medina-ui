@@ -11,6 +11,7 @@
 
 		fetch(apiUrl, {
 			method: 'POST',
+			credentials: 'include',
 			body: JSON.stringify({
 				username: username,
 				password: password

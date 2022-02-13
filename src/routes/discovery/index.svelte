@@ -4,7 +4,7 @@
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ page, fetch, session, context }) {
+	export async function load({ params, fetch, session, context }) {
 		return queryDiscovery().then((results) => {
 			return {
 				props: {

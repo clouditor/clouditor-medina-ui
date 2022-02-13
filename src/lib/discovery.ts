@@ -17,7 +17,10 @@ export async function startDiscovery(): Promise<boolean> {
 
     return fetch(apiUrl, {
         method: 'POST',
-        body: JSON.stringify({})
+        body: JSON.stringify({}),
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
     })
         .then((res) => res.json())
         .then((response: StartDiscoveryResponse) => {
@@ -31,7 +34,10 @@ export async function queryDiscovery(): Promise<Resource[]> {
 
     return fetch(apiUrl, {
         method: 'POST',
-        body: JSON.stringify({})
+        body: JSON.stringify({}),
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
     })
         .then((res) => res.json())
         .then((response: QueryResponse) => {
