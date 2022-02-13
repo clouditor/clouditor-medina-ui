@@ -19,13 +19,13 @@
 	}
 </script>
 
-<Navbar color="secondary" dark expand="md">
+<Navbar color="dark" dark expand="md">
 	<NavbarBrand href="{base}/">Clouditor</NavbarBrand>
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
 		<Nav navbar>
 			<NavItem>
-				<NavLink href="{base}/">Home</NavLink>
+				<NavLink href="{base}/cloud">Cloud Services</NavLink>
 			</NavItem>
 			<NavItem>
 				<NavLink href="{base}/discovery">Discovery</NavLink>
