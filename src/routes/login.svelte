@@ -1,44 +1,36 @@
-<script lang="ts">
-	import { goto, invalidate, prefetch, prefetchRoutes } from '$app/navigation';
-	import type { LoginResponse } from '$lib/login';
-	import { Card, InputGroup, InputGroupText, Input, CardBody } from 'sveltestrap';
+<script context="module" lang="ts">
+	import { generateChallenge, generateVerifier } from '$lib/oauth';
 
-	let username;
-	let password;
+	let url: string;
 
-	function handleSubmit() {
-		const apiUrl = `/v1/auth/login`;
+	const AUTH_URL = 'http://localhost:8000/authorize';
+	const CLIENT_ID = 'public';
+	const REDIRECT_URI = 'http://localhost:3000/callback';
 
-		fetch(apiUrl, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({
-				username: username,
-				password: password
-			})
-		})
-			.then((res) => res.json())
-			.then((response: LoginResponse) => {
-				localStorage.token = response.accessToken;
-				goto('/');
-			});
+	export async function load({ session }) {
+		const { user } = session;
+
+		if (!user) {
+			// generate a new verifier
+			const v = generateVerifier();
+
+			localStorage.setItem('verifier', v);
+
+			const challenge = await generateChallenge(v);
+
+			url = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
+				REDIRECT_URI
+			)}&code_challenge=${challenge}&code_challenge_method=S256`;
+
+			return {
+				status: 302,
+				redirect: url
+			};
+		}
+
+		return {};
 	}
 </script>
 
-Log me in!
-<Card class="mr-auto">
-	<CardBody>
-		<form on:submit|preventDefault={handleSubmit}>
-			<InputGroup>
-				<InputGroupText>@</InputGroupText>
-				<Input placeholder="username" bind:value={username} />
-			</InputGroup>
-			<InputGroup>
-				<InputGroupText>*</InputGroupText>
-				<Input type="password" placeholder="password" bind:value={password} />
-			</InputGroup>
-
-			<Input type="submit" value="Login" class="mt-2" />
-		</form>
-	</CardBody>
-</Card>
+<script>
+</script>
