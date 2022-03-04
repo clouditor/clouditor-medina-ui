@@ -1,11 +1,13 @@
 <script context="module" lang="ts">
-	import { generateChallenge, generateVerifier } from '$lib/oauth';
+	import {
+		generateChallenge,
+		generateVerifier,
+		AUTH_URL,
+		CLIENT_ID,
+		REDIRECT_URI
+	} from '$lib/oauth';
 
 	let url: string;
-
-	const AUTH_URL = 'http://localhost:8000/authorize';
-	const CLIENT_ID = 'public';
-	const REDIRECT_URI = 'http://localhost:3000/callback';
 
 	export async function load({ session }) {
 		const { user } = session;

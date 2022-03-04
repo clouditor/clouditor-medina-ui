@@ -1,8 +1,7 @@
-import { get, writable } from "svelte/store";
-
-const AUTH_URL = 'http://localhost:8000/authorize';
-const TOKEN_URL = 'http://localhost:8000/token';
-const CLIENT_ID = 'public';
+export const AUTH_URL = 'http://localhost:8080/authorize';
+export const TOKEN_URL = 'http://localhost:8080/token';
+export const CLIENT_ID = 'dashboard';
+export const REDIRECT_URI = 'http://localhost:3000/callback'
 
 export interface TokenResponse {
     access_token: string
