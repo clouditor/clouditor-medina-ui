@@ -13,26 +13,43 @@
 		DropdownItem
 	} from 'sveltestrap';
 	import { base } from '$app/paths';
+	import { page } from '$app/stores';
+
 	let isOpen = false;
 	function handleUpdate(event) {
 		isOpen = event.detail.isOpen;
 	}
+
+	let routes = [
+		{
+			url: '/cloud',
+			name: 'Cloud Services'
+		},
+		{
+			url: '/discovery',
+			name: 'Discovery'
+		},
+		{
+			url: '/assessment',
+			name: 'Assessment'
+		}
+	];
+
+	console.log($page.url);
 </script>
 
-<Navbar color="dark" dark expand="md">
+<Navbar color="secondary" dark expand="md">
 	<NavbarBrand href="{base}/">Clouditor</NavbarBrand>
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
 		<Nav navbar>
-			<NavItem>
-				<NavLink href="{base}/cloud">Cloud Services</NavLink>
-			</NavItem>
-			<NavItem>
-				<NavLink href="{base}/discovery">Discovery</NavLink>
-			</NavItem>
-			<NavItem>
-				<NavLink href="{base}/assessment">Assessment</NavLink>
-			</NavItem>
+			{#each routes as route}
+				<NavItem>
+					<NavLink active={$page.url.pathname.startsWith(route.url)} href="{base}{route.url}">
+						{route.name}
+					</NavLink>
+				</NavItem>
+			{/each}
 		</Nav>
 		<Nav class="ms-auto" navbar>
 			<NavItem>

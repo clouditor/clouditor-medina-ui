@@ -44,8 +44,8 @@
 
 The following page can be used to configure Cloud services.
 
-<Container class="mt-2">
-	<Row cols={2}>
+<Container class="mt-4 ms-0 me-0">
+	<Row cols={2} noGutters>
 		{#each services as service, i}
 			<Col>
 				<Card class="mb-3">
@@ -54,7 +54,7 @@ The following page can be used to configure Cloud services.
 						<CardText>
 							{service.description}
 						</CardText>
-						<Button>Remove</Button>
+						<Button disabled>Remove</Button>
 					</CardBody>
 					<CardFooter>{service.id}</CardFooter>
 				</Card>

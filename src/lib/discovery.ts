@@ -14,10 +14,13 @@ export interface Resource {
 
 export async function startDiscovery(): Promise<boolean> {
     const apiUrl = `/v1/discovery/start`;
+    const providers = prompt("Enter providers (seperated with comma)", "").split(",");
 
     return fetch(apiUrl, {
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+            'providers': providers,
+        }),
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         }
@@ -27,7 +30,6 @@ export async function startDiscovery(): Promise<boolean> {
             return response.successful;
         });
 }
-
 
 export async function queryDiscovery(): Promise<Resource[]> {
     const apiUrl = `/v1/discovery/query`;
