@@ -44,34 +44,34 @@
 		ListGroupItem,
 		Row
 	} from 'sveltestrap';
-	import Fa from 'svelte-fa';
-	import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import CloudServiceCard, { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
+	import EmptyCloudService from '$lib/EmptyCloudService.svelte';
 
 	export let services: CloudService[];
 
-	function removeRequirement(serviceIdx, reqIdx) {
-		var requirements = services[serviceIdx].requirements.requirementIds;
+	function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
+		var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
 
-		services[serviceIdx].requirements.requirementIds = requirements.filter(
-			(_r, idx) => idx != reqIdx
+		services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
+			(_r, idx) => idx != e.detail.requirementIdx
 		);
 
-		updateCloudService(services[serviceIdx]);
+		updateCloudService(services[e.detail.serviceIdx]);
 	}
 
-	function addRequirement(serviceIdx) {
+	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
 		const reqId = prompt('Enter a requirement id');
 
 		if (reqId != '') {
-			var requirements = services[serviceIdx].requirements?.requirementIds ?? [];
+			var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
 
-			if (services[serviceIdx].requirements == null) {
-				services[serviceIdx].requirements = { requirementIds: [] };
+			if (services[e.detail.serviceIdx].requirements == null) {
+				services[e.detail.serviceIdx].requirements = { requirementIds: [] };
 			}
 
-			services[serviceIdx].requirements.requirementIds = [...requirements, reqId];
+			services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
 
-			updateCloudService(services[serviceIdx]);
+			updateCloudService(services[e.detail.serviceIdx]);
 		}
 	}
 </script>
@@ -84,38 +84,13 @@ The following page can be used to configure Cloud services.
 	<Row cols={2} noGutters>
 		{#each services as service, i}
 			<Col>
-				<Card class="mb-3">
-					<CardHeader><b>{service.name}</b></CardHeader>
-					<CardBody>
-						<CardText>
-							<p>
-								{service.description}
-							</p>
-						</CardText>
-						<CardSubtitle>Requirements in Scope</CardSubtitle>
-						<CardText>
-							<ListGroup flush>
-								{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
-									<ListGroupItem class="d-flex">
-										<div class="ms-2 me-auto">
-											{reqId}: {$requirements.get(reqId)?.name}
-										</div>
-
-										<Button on:click={() => removeRequirement(i, reqIdx)}>
-											<Fa icon={faTrash} />
-										</Button>
-									</ListGroupItem>
-								{/each}
-							</ListGroup>
-							<Button class="mt-2" on:click={() => addRequirement(i)}><Fa icon={faPlus} /></Button>
-						</CardText>
-						<Button disabled>
-							<Fa icon={faTrash} />
-						</Button>
-					</CardBody>
-					<CardFooter>{service.id}</CardFooter>
-				</Card>
+				<CloudServiceCard
+					{service}
+					on:add-requirement={addRequirement}
+					on:remove-requirement={removeRequirement}
+				/>
 			</Col>
 		{/each}
+		<EmptyCloudService />
 	</Row>
 </Container>
