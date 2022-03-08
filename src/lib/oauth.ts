@@ -33,9 +33,8 @@ export async function exchange(code: string): Promise<TokenResponse | ErrorRespo
 }
 
 export function generateVerifier(): string {
-    /*const random = crypto.getRandomValues(new Uint8Array(32));
-    return btoa(String.fromCharCode(...new Uint8Array(random)));*/
-    return "012345678901234567890123456789012345678901234567890123456789";
+    const random = crypto.getRandomValues(new Uint8Array(32));
+    return btoa(String.fromCharCode(...new Uint8Array(random)));
 }
 
 export async function generateChallenge(v: string): Promise<string> {
