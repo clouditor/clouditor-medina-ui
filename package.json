@@ -22,7 +22,7 @@
     "prettier": "~2.6.0",
     "prettier-plugin-svelte": "^2.2.0",
     "svelte": "^3.34.0",
-    "svelte-check": "^2.4.5",
+    "svelte-check": "^2.4.6",
     "svelte-preprocess": "^4.10.4",
     "sveltestrap": "^5.9.0",
     "tslib": "^2.0.0",
