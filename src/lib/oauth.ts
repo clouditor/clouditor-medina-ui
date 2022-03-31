@@ -33,7 +33,7 @@ export async function exchange(code: string, sessionState: string | undefined = 
 
 export function generateVerifier(): string {
     const random = crypto.getRandomValues(new Uint8Array(32));
-    return btoa(String.fromCharCode(...new Uint8Array(random)));
+    return base64urlencode(String.fromCharCode(...new Uint8Array(random)));
 }
 
 export async function generateChallenge(v: string): Promise<string> {
