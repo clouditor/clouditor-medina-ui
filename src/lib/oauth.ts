@@ -1,8 +1,3 @@
-export const AUTH_URL = 'http://localhost:8080/authorize';
-export const TOKEN_URL = 'http://localhost:8080/token';
-export const CLIENT_ID = 'dashboard';
-export const REDIRECT_URI = 'http://localhost:3000/callback'
-
 export interface TokenResponse {
     access_token: string
 }
@@ -20,9 +15,9 @@ export async function exchange(code: string): Promise<TokenResponse | ErrorRespo
     params.append("grant_type", "authorization_code");
     params.append("code_verifier", localStorage.verifier);
     params.append("code", code);
-    params.append("client_id", CLIENT_ID);
+    params.append("client_id", import.meta.env.VITE_CLIENT_ID);
 
-    return fetch(TOKEN_URL, {
+    return fetch(import.meta.env.VITE_TOKEN_URL, {
         method: 'POST',
         body: params,
     })
