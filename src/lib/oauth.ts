@@ -19,6 +19,7 @@ export async function exchange(code: string, sessionState: string | undefined = 
         params.append("session_state", sessionState);
     }
     params.append("client_id", import.meta.env.VITE_CLIENT_ID);
+    params.append("redirect_uri", import.meta.env.VITE_REDIRECT_URI);
 
     return fetch(import.meta.env.VITE_TOKEN_URL, {
         method: 'POST',
