@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
 	import { requirements } from '$lib/stores';
 	import {
-		CloudService,
 		listCloudServices,
 		listRequirements,
 		updateCloudService
 	} from '$lib/orchestrator';
+	import type { CloudService } from '$lib/orchestrator';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
@@ -44,7 +44,8 @@
 		ListGroupItem,
 		Row
 	} from 'sveltestrap';
-	import CloudServiceCard, { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
+	import CloudServiceCard from '$lib/CloudServiceCard.svelte';
+	import type { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
 	import EmptyCloudService from '$lib/EmptyCloudService.svelte';
 
 	export let services: CloudService[];

@@ -1,3 +1,8 @@
+export const AUTH_URL = 'http://localhost:8080/v1/auth/authorize';
+export const TOKEN_URL = 'http://localhost:8080/v1/auth/token';
+export const CLIENT_ID = 'dashboard';
+export const REDIRECT_URI = 'http://localhost:3000/callback'
+
 export interface TokenResponse {
     access_token: string
 }
