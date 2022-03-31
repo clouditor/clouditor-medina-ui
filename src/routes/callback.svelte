@@ -6,6 +6,7 @@
 	export async function load({ params, url }) {
 		const error = url.searchParams.get('error');
 		const code = url.searchParams.get('code');
+		const sessionCode = url.searchParams.get('session_state');
 
 		if (error != null) {
 			return {
@@ -15,7 +16,7 @@
 				}
 			};
 		} else {
-			let response = await exchange(code);
+			let response = await exchange(code, sessionCode);
 			if (isError(response)) {
 				return {
 					props: {

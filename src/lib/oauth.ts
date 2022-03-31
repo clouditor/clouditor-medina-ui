@@ -10,11 +10,14 @@ export function isError(response: TokenResponse | ErrorResponse): response is Er
     return (response as ErrorResponse).error !== undefined;
 }
 
-export async function exchange(code: string): Promise<TokenResponse | ErrorResponse> {
+export async function exchange(code: string, sessionState: string | undefined = undefined): Promise<TokenResponse | ErrorResponse> {
     const params = new URLSearchParams();
     params.append("grant_type", "authorization_code");
     params.append("code_verifier", localStorage.verifier);
     params.append("code", code);
+    if (sessionState != undefined) {
+        params.append("session_state", sessionState);
+    }
     params.append("client_id", import.meta.env.VITE_CLIENT_ID);
 
     return fetch(import.meta.env.VITE_TOKEN_URL, {
