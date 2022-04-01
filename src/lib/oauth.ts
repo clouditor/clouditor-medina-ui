@@ -43,7 +43,7 @@ export async function generateChallenge(v: string): Promise<string> {
 }
 
 function base64urlencode(b: string): string {
-    b = btoa(b).replace("+", "-").replace("/", "_").replace("=", "");
+    b = btoa(b).replace(/+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
     return b;
 }
