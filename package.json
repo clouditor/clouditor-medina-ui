@@ -22,7 +22,7 @@
     "eslint-plugin-svelte3": "^3.4.1",
     "prettier": "~2.6.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "svelte": "^3.34.0",
+    "svelte": "^3.46.6",
     "svelte-check": "^2.4.6",
     "svelte-preprocess": "^4.10.4",
     "sveltestrap": "^5.9.0",
