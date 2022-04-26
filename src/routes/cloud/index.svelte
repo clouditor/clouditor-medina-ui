@@ -1,17 +1,24 @@
 <script lang="ts" context="module">
-	import { metrics } from '$lib/stores';
-	import type { AssessmentResult } from '$lib/assessment';
+	import { requirements } from '$lib/stores';
 	import {
-		listMetrics,
-		listAssessmentResults,
-		CloudService,
-		listCloudServices
+		listCloudServices,
+		listRequirements,
+		updateCloudService
 	} from '$lib/orchestrator';
+	import type { CloudService } from '$lib/orchestrator';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch, session, context }) {
+		// TODO(oxisto): this should be moved to more central component
+		listRequirements().then((list) => {
+			for (let requirement of list) {
+				// update requirements store
+				requirements.update((r) => r.set(requirement.id, requirement));
+			}
+		});
+
 		return listCloudServices().then((services) => {
 			return {
 				props: {
@@ -31,13 +38,43 @@
 		CardHeader,
 		CardSubtitle,
 		CardText,
-		CardTitle,
 		Col,
 		Container,
+		ListGroup,
+		ListGroupItem,
 		Row
 	} from 'sveltestrap';
+	import CloudServiceCard from '$lib/CloudServiceCard.svelte';
+	import type { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
+	import EmptyCloudService from '$lib/EmptyCloudService.svelte';
 
 	export let services: CloudService[];
+
+	function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
+		var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
+
+		services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
+			(_r, idx) => idx != e.detail.requirementIdx
+		);
+
+		updateCloudService(services[e.detail.serviceIdx]);
+	}
+
+	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
+		const reqId = prompt('Enter a requirement id');
+
+		if (reqId != '') {
+			var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
+
+			if (services[e.detail.serviceIdx].requirements == null) {
+				services[e.detail.serviceIdx].requirements = { requirementIds: [] };
+			}
+
+			services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
+
+			updateCloudService(services[e.detail.serviceIdx]);
+		}
+	}
 </script>
 
 <h3>Target Cloud Services</h3>
@@ -48,17 +85,13 @@ The following page can be used to configure Cloud services.
 	<Row cols={2} noGutters>
 		{#each services as service, i}
 			<Col>
-				<Card class="mb-3">
-					<CardHeader><b>{service.name}</b></CardHeader>
-					<CardBody>
-						<CardText>
-							{service.description}
-						</CardText>
-						<Button disabled>Remove</Button>
-					</CardBody>
-					<CardFooter>{service.id}</CardFooter>
-				</Card>
+				<CloudServiceCard
+					{service}
+					on:add-requirement={addRequirement}
+					on:remove-requirement={removeRequirement}
+				/>
 			</Col>
 		{/each}
+		<EmptyCloudService />
 	</Row>
 </Container>
