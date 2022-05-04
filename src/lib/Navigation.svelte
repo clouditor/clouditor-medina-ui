@@ -32,6 +32,10 @@
 		{
 			url: '/assessment',
 			name: 'Assessment'
+		},
+		{
+			url: '/certificates',
+			name: 'Certificates'
 		}
 	];
 
