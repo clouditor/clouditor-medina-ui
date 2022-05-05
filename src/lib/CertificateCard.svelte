@@ -18,33 +18,31 @@
 </script>
 
 <Card class="mb-3 me-3">
-	<CardHeader><b>{certificate.name}</b></CardHeader>
+	<CardHeader><b>"{certificate.name}"</b></CardHeader>
 	<CardBody>
 		<CardText>
 			<p>
 				{certificate.id}
 				{certificate.name}
-				{certificate.service_id}
-				{certificate.issue_date}
-				{certificate.expiration_date}
-				{certificate.standard}
-				{certificate.assurance_level}
-				{certificate.cab}
-				{certificate.description}
+                {certificate.service_id}
+                {certificate.issue_date}
+                {certificate.expiration_date}
+                {certificate.standard}
+                {certificate.assurance_level}
+                {certificate.cab}
+                {certificate.description}
 			</p>
 		</CardText>
-		<CardText>
-			<ListGroup flush>
-				{#each certificate.states as state}
-					<ListGroupItem class="d-flex">
-						<div class="ms-2 me-auto">
-							{state.state}
-							{state.timestamp}
-							{state.treeId}
-						</div>
-					</ListGroupItem>
-				{/each}
-			</ListGroup>
-		</CardText>
+            <ListGroup flush>
+                {#each certificate.states as state}
+                    <ListGroupItem class="d-flex">
+                        <div class="ms-2 me-auto">
+                            {state.state}
+                            {state.timestamp}
+                            {state.treeId}
+                        </div>
+                    </ListGroupItem>
+                {/each}
+            </ListGroup>
 	</CardBody>
 </Card>

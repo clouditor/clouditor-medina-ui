@@ -4,8 +4,6 @@
 	} from '$lib/orchestrator';
 	import type { Certificate } from '$lib/orchestrator';
 
-	export let certificates: Certificate[];
-
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
@@ -28,11 +26,14 @@
 	} from 'sveltestrap';
 	import CertificateCard from '$lib/CertificateCard.svelte';
 	import EmptyCertificate from '$lib/EmptyCertificate.svelte';
+
+	export let certificates: Certificate[];
 </script>
 
 <h3>Certificates</h3>
 
 <Container class="mt-4 ms-0 me-0">
+	{#if certificates}
 	<Row cols={2} noGutters>
 		{#each certificates as certificate, i}
 			<Col>
@@ -41,6 +42,8 @@
 				/>
 			</Col>
 		{/each}
-		<EmptyCertificate />
 	</Row>
+	{:else}
+	<EmptyCertificate />
+	{/if}
 </Container>
