@@ -25,11 +25,11 @@ export interface ListMetricsResponse {
 export interface Certificate {
     id: string
     name: string
-    service_id: string
-    issue_date: string
-    expiration_date: string
+    serviceId: string
+    issueDate: string
+    expirationDate: string
     standard: string
-    assurance_level: string
+    assuranceLevel: string
     cab: string
     description: string
     states: States

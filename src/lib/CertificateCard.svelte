@@ -22,15 +22,17 @@
 	<CardBody>
 		<CardText>
 			<p>
-				{certificate.id}
-				{certificate.name}
-                {certificate.service_id}
-                {certificate.issue_date}
-                {certificate.expiration_date}
-                {certificate.standard}
-                {certificate.assurance_level}
-                {certificate.cab}
-                {certificate.description}
+				<b>ID:</b> {certificate.id}
+			</p>
+			<p>
+				<b>Name:</b> {certificate.name}
+                <b>Service ID:</b> {certificate.serviceId}
+                <b>Issue Date:</b> {certificate.issueDate}
+                <b>Expiration Date:</b> {certificate.expirationDate}
+                <b>Schema:</b> {certificate.standard}
+                <b>Assurance Level:</b> {certificate.assuranceLevel}
+                <b>CAB:</b> {certificate.cab}
+                <b>Description:</b> {certificate.description}
 			</p>
 		</CardText>
             <ListGroup flush>
