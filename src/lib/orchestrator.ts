@@ -22,6 +22,29 @@ export interface ListMetricsResponse {
     metrics: Metric[];
 }
 
+export interface Certificate {
+    id: string
+    name: string
+    serviceId: string
+    issueDate: string
+    expirationDate: string
+    standard: string
+    assuranceLevel: string
+    cab: string
+    description: string
+    states: State[]
+}
+
+export interface State {
+    state: string
+    treeId: string
+    timestamp: string
+    certificateId: string
+}
+
+export interface ListCertificatesResponse {
+    certificates: Certificate[];
+}
 
 export interface ListAssessmentResultsResponse {
     results: AssessmentResult[]
@@ -149,6 +172,26 @@ export async function listRequirements(): Promise<Requirement[]> {
         .then((res) => res.json())
         .then((response: ListRequirementsResponse) => {
             return response.requirements;
+        });
+}
+
+/**
+ * Retrieves a list of certificates from the orchestrator service.
+ * 
+ * @returns an array of {@link Certificate}s.
+ */
+export async function listCertificates(): Promise<Certificate[]> {
+    const apiUrl = `/v1/orchestrator/certificates`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then((res) => res.json())
+        .then((response: ListCertificatesResponse) => {
+            return response.certificates;
         });
 }
 
