@@ -32,18 +32,14 @@ export interface Certificate {
     assuranceLevel: string
     cab: string
     description: string
-    states: States
-}
-
-export interface States {
-    stateIds: string[]
+    states: State[]
 }
 
 export interface State {
     state: string
-    tree_id: string
+    treeId: string
     timestamp: string
-    certificate_id: string
+    certificateId: string
 }
 
 export interface ListCertificatesResponse {
@@ -184,7 +180,7 @@ export async function listRequirements(): Promise<Requirement[]> {
  * 
  * @returns an array of {@link Certificate}s.
  */
- export async function listCertificates(): Promise<Certificate[]> {
+export async function listCertificates(): Promise<Certificate[]> {
     const apiUrl = `/v1/orchestrator/certificates`
 
     return fetch(apiUrl, {
