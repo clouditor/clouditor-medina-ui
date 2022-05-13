@@ -1,11 +1,14 @@
 <script lang="ts" context="module">
 	export interface CloudServiceEvent {
 		serviceIdx: number;
-		requirements: any[];
+		requirementIdx?: number;
+		requirementId?: string;
 	}
 
 	export interface CloudServiceEventMap {
-		'add-requirements': CloudServiceEvent;
+		'add-requirement': CloudServiceEvent;
+		'remove-requirement': CloudServiceEvent;
+		save: CloudServiceEvent;
 	}
 </script>
 
@@ -25,7 +28,7 @@
 		ListGroup,
 		ListGroupItem
 	} from 'sveltestrap';
-	import type { CloudService } from '$lib/orchestrator';
+	import type { CloudService, Requirement } from '$lib/orchestrator';
 	import { requirements } from '$lib/stores';
 	import { createEventDispatcher } from 'svelte';
 	import Fa from 'svelte-fa';
@@ -35,19 +38,25 @@
 
 	const dispatch = createEventDispatcher<CloudServiceEventMap>();
 
-	var available_requirements = Array.from($requirements.values())
-	let selected_requirements = []
+	var dirty = false;
 
-	function handleAdd(requirement) {
-		selected_requirements.push(requirement)
-		selected_requirements = selected_requirements;
+	function addRequirement(req: Requirement) {
+		if (dispatch('add-requirement', { serviceIdx: 0, requirementId: req.id })) {
+			dirty = true;
+		}
 	}
 
-	function handleRemove(requirement) {
-		selected_requirements.splice(requirement)
-		selected_requirements = selected_requirements;
+	function removeRequirement(reqIdx: number): void {
+		if (dispatch('remove-requirement', { serviceIdx: 0, requirementIdx: reqIdx })) {
+			dirty = true;
+		}
 	}
 
+	function save(): void {
+		if (dispatch('save', { serviceIdx: 0 })) {
+			dirty = false;
+		}
+	}
 </script>
 
 <Card class="mb-3 me-3">
@@ -61,10 +70,13 @@
 		<CardSubtitle>Selected Requirements</CardSubtitle>
 		<CardText>
 			<ListGroup>
-				{#each selected_requirements as req}
+				{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
 					<ListGroupItem class="d-flex">
-						{req.id}: {req.name}
-						<Button on:click={(e) => handleRemove(req)}>
+						<div class="ms-2 me-auto">
+							{reqId}: {$requirements.get(reqId)?.name}
+						</div>
+
+						<Button on:click={(e) => removeRequirement(reqIdx)}>
 							<Fa icon={faTrash} />
 						</Button>
 					</ListGroupItem>
@@ -74,14 +86,14 @@
 		<Dropdown>
 			<DropdownToggle caret>Add</DropdownToggle>
 			<DropdownMenu>
-				{#each available_requirements as req, reqIdx}
-					<DropdownItem on:click={(e) => handleAdd(req)}>{req.id}: {req.name}</DropdownItem>
+				{#each Array.from($requirements.values()) as req}
+					<DropdownItem on:click={(e) => addRequirement(req)}>
+						{req.id}: {req.name}
+					</DropdownItem>
 				{/each}
 			</DropdownMenu>
 		</Dropdown>
-		<Button color=primary on:click={(e) => dispatch('add-requirements', {serviceIdx: 0, requirements: selected_requirements})}>
-			Update
-		</Button>
+		<Button disabled={!dirty} color="primary" on:click={(e) => save()}>Save</Button>
 	</CardBody>
 	<CardFooter>{service.id}</CardFooter>
 </Card>

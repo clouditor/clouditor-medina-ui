@@ -1,10 +1,6 @@
 <script lang="ts" context="module">
 	import { requirements } from '$lib/stores';
-	import {
-		listCloudServices,
-		listRequirements,
-		updateCloudService
-	} from '$lib/orchestrator';
+	import { listCloudServices, listRequirements, updateCloudService } from '$lib/orchestrator';
 	import type { CloudService } from '$lib/orchestrator';
 
 	/**
@@ -50,18 +46,27 @@
 
 	export let services: CloudService[];
 
-	function addRequirements(e: CustomEvent<CloudServiceEvent>) {
-		let reqIds = []
-		e.detail.requirements.forEach(req => {
-			reqIds.push(req.id)
-		});
+	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
+		const reqId = e.detail.requirementId;
+
+		var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
 
 		if (services[e.detail.serviceIdx].requirements == null) {
 			services[e.detail.serviceIdx].requirements = { requirementIds: [] };
 		}
 
-		services[e.detail.serviceIdx].requirements.requirementIds = reqIds;
+		services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
+	}
 
+	function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
+		var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
+
+		services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
+			(_r, idx) => idx != e.detail.requirementIdx
+		);
+	}
+
+	function save(e: CustomEvent<CloudServiceEvent>) {
 		updateCloudService(services[e.detail.serviceIdx]);
 	}
 </script>
@@ -76,7 +81,9 @@ The following page can be used to configure Cloud services.
 			<Col>
 				<CloudServiceCard
 					{service}
-					on:add-requirements={addRequirements}
+					on:add-requirement={addRequirement}
+					on:remove-requirement={removeRequirement}
+					on:save={save}
 				/>
 			</Col>
 		{/each}
