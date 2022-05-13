@@ -50,30 +50,19 @@
 
 	export let services: CloudService[];
 
-	function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
-		var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
+	function addRequirements(e: CustomEvent<CloudServiceEvent>) {
+		let reqIds = []
+		e.detail.requirements.forEach(req => {
+			reqIds.push(req.id)
+		});
 
-		services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
-			(_r, idx) => idx != e.detail.requirementIdx
-		);
+		if (services[e.detail.serviceIdx].requirements == null) {
+			services[e.detail.serviceIdx].requirements = { requirementIds: [] };
+		}
+
+		services[e.detail.serviceIdx].requirements.requirementIds = reqIds;
 
 		updateCloudService(services[e.detail.serviceIdx]);
-	}
-
-	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
-		const reqId = prompt('Enter a requirement id');
-
-		if (reqId != '') {
-			var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
-
-			if (services[e.detail.serviceIdx].requirements == null) {
-				services[e.detail.serviceIdx].requirements = { requirementIds: [] };
-			}
-
-			services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
-
-			updateCloudService(services[e.detail.serviceIdx]);
-		}
 	}
 </script>
 
@@ -87,8 +76,7 @@ The following page can be used to configure Cloud services.
 			<Col>
 				<CloudServiceCard
 					{service}
-					on:add-requirement={addRequirement}
-					on:remove-requirement={removeRequirement}
+					on:add-requirements={addRequirements}
 				/>
 			</Col>
 		{/each}
