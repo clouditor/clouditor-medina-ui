@@ -1,10 +1,6 @@
 <script lang="ts" context="module">
 	import { requirements } from '$lib/stores';
-	import {
-		listCloudServices,
-		listRequirements,
-		updateCloudService
-	} from '$lib/orchestrator';
+	import { listCloudServices, listRequirements, updateCloudService } from '$lib/orchestrator';
 	import type { CloudService } from '$lib/orchestrator';
 
 	/**
@@ -50,30 +46,28 @@
 
 	export let services: CloudService[];
 
+	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
+		const reqId = e.detail.requirementId;
+
+		var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
+
+		if (services[e.detail.serviceIdx].requirements == null) {
+			services[e.detail.serviceIdx].requirements = { requirementIds: [] };
+		}
+
+		services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
+	}
+
 	function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
 		var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
 
 		services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
 			(_r, idx) => idx != e.detail.requirementIdx
 		);
-
-		updateCloudService(services[e.detail.serviceIdx]);
 	}
 
-	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
-		const reqId = prompt('Enter a requirement id');
-
-		if (reqId != '') {
-			var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
-
-			if (services[e.detail.serviceIdx].requirements == null) {
-				services[e.detail.serviceIdx].requirements = { requirementIds: [] };
-			}
-
-			services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
-
-			updateCloudService(services[e.detail.serviceIdx]);
-		}
+	function save(e: CustomEvent<CloudServiceEvent>) {
+		updateCloudService(services[e.detail.serviceIdx]);
 	}
 </script>
 
@@ -89,6 +83,7 @@ The following page can be used to configure Cloud services.
 					{service}
 					on:add-requirement={addRequirement}
 					on:remove-requirement={removeRequirement}
+					on:save={save}
 				/>
 			</Col>
 		{/each}

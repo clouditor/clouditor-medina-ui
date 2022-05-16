@@ -2,11 +2,13 @@
 	export interface CloudServiceEvent {
 		serviceIdx: number;
 		requirementIdx?: number;
+		requirementId?: string;
 	}
 
 	export interface CloudServiceEventMap {
 		'add-requirement': CloudServiceEvent;
 		'remove-requirement': CloudServiceEvent;
+		save: CloudServiceEvent;
 	}
 </script>
 
@@ -19,10 +21,14 @@
 		CardHeader,
 		CardSubtitle,
 		CardText,
+		Dropdown,
+		DropdownItem,
+		DropdownMenu,
+		DropdownToggle,
 		ListGroup,
 		ListGroupItem
 	} from 'sveltestrap';
-	import type { CloudService } from '$lib/orchestrator';
+	import type { CloudService, Requirement } from '$lib/orchestrator';
 	import { requirements } from '$lib/stores';
 	import { createEventDispatcher } from 'svelte';
 	import Fa from 'svelte-fa';
@@ -31,6 +37,26 @@
 	export let service: CloudService;
 
 	const dispatch = createEventDispatcher<CloudServiceEventMap>();
+
+	var dirty = false;
+
+	function addRequirement(req: Requirement) {
+		if (dispatch('add-requirement', { serviceIdx: 0, requirementId: req.id })) {
+			dirty = true;
+		}
+	}
+
+	function removeRequirement(reqIdx: number): void {
+		if (dispatch('remove-requirement', { serviceIdx: 0, requirementIdx: reqIdx })) {
+			dirty = true;
+		}
+	}
+
+	function save(): void {
+		if (dispatch('save', { serviceIdx: 0 })) {
+			dirty = false;
+		}
+	}
 </script>
 
 <Card class="mb-3 me-3">
@@ -41,31 +67,33 @@
 				{service.description}
 			</p>
 		</CardText>
-		<CardSubtitle>Requirements in Scope</CardSubtitle>
+		<CardSubtitle>Selected Requirements</CardSubtitle>
 		<CardText>
-			<ListGroup flush>
+			<ListGroup>
 				{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
 					<ListGroupItem class="d-flex">
 						<div class="ms-2 me-auto">
 							{reqId}: {$requirements.get(reqId)?.name}
 						</div>
 
-						<Button
-							on:click={(e) =>
-								dispatch('remove-requirement', { serviceIdx: 0, requirementIdx: reqIdx })}
-						>
+						<Button on:click={(e) => removeRequirement(reqIdx)}>
 							<Fa icon={faTrash} />
 						</Button>
 					</ListGroupItem>
 				{/each}
 			</ListGroup>
-			<Button class="mt-2" on:click={(e) => dispatch('add-requirement', { serviceIdx: 0 })}>
-				<Fa icon={faPlus} />
-			</Button>
 		</CardText>
-		<Button disabled>
-			<Fa icon={faTrash} />
-		</Button>
+		<Dropdown>
+			<DropdownToggle caret>Add</DropdownToggle>
+			<DropdownMenu>
+				{#each Array.from($requirements.values()) as req}
+					<DropdownItem on:click={(e) => addRequirement(req)}>
+						{req.id}: {req.name}
+					</DropdownItem>
+				{/each}
+			</DropdownMenu>
+		</Dropdown>
+		<Button disabled={!dirty} color="primary" on:click={(e) => save()}>Save</Button>
 	</CardBody>
 	<CardFooter>{service.id}</CardFooter>
 </Card>
