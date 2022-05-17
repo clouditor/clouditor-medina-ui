@@ -1,18 +1,23 @@
 <script lang="ts" context="module">
 	import { listCertificates } from '$lib/orchestrator';
 	import type { Certificate } from '$lib/orchestrator';
+	import { redirectLogin } from '$lib/oauth';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch, session, context }) {
-		return listCertificates().then((certificates) => {
-			return {
-				props: {
-					certificates: certificates
-				}
-			};
-		});
+		return listCertificates()
+			.then((certificates) => {
+				return {
+					props: {
+						certificates: certificates
+					}
+				};
+			})
+			.catch(() => {
+				return redirectLogin();
+			});
 	}
 </script>
 

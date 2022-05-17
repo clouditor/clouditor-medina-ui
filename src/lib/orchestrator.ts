@@ -72,6 +72,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: ListAssessmentResultsResponse) => {
             return response.results;
@@ -93,6 +94,7 @@ export async function getMetric(id: number): Promise<Metric> {
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: Metric) => {
             return response;
@@ -113,6 +115,7 @@ export async function listCloudServices(): Promise<CloudService[]> {
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: ListCloudServicesResponse) => {
             return response.services;
@@ -129,6 +132,7 @@ export async function updateCloudService(service: CloudService): Promise<CloudSe
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: CloudService) => {
             return response;
@@ -149,10 +153,25 @@ export async function listMetrics(): Promise<Metric[]> {
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: ListMetricsResponse) => {
             return response.metrics;
         });
+}
+
+/**
+ * Throws an {@link Error} if an HTTP status other than OK is contained in {@link response}.
+ * 
+ * @param response the original HTTP response
+ * @returns the response or an error
+ */
+function throwError(response: Response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+
+    return response;
 }
 
 /**
@@ -169,6 +188,7 @@ export async function listRequirements(): Promise<Requirement[]> {
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: ListRequirementsResponse) => {
             return response.requirements;
@@ -189,6 +209,7 @@ export async function listCertificates(): Promise<Certificate[]> {
             'Authorization': `Bearer ${localStorage.token}`,
         }
     })
+        .then(throwError)
         .then((res) => res.json())
         .then((response: ListCertificatesResponse) => {
             return response.certificates;

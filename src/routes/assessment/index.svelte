@@ -2,25 +2,34 @@
 	import { metrics } from '$lib/stores';
 	import type { AssessmentResult } from '$lib/assessment';
 	import { listMetrics, listAssessmentResults } from '$lib/orchestrator';
+	import { redirectLogin } from '$lib/oauth';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch, session, context }) {
-		listMetrics().then((list) => {
-			for (let metric of list) {
-				// update metrics store
-				metrics.update((m) => m.set(metric.id, metric));
-			}
-		});
-
-		return listAssessmentResults().then((results) => {
-			return {
-				props: {
-					results: results
+		listMetrics()
+			.then((list) => {
+				for (let metric of list) {
+					// update metrics store
+					metrics.update((m) => m.set(metric.id, metric));
 				}
-			};
-		});
+			})
+			.catch(() => {
+				// ignore, we will catch it later
+			});
+
+		return listAssessmentResults()
+			.then((results) => {
+				return {
+					props: {
+						results: results
+					}
+				};
+			})
+			.catch(() => {
+				return redirectLogin();
+			});
 	}
 </script>
 
