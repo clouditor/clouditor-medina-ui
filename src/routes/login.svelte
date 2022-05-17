@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { generateChallenge, generateVerifier } from '$lib/oauth';
+	import { generateChallenge, generateVerifier, redirectLogin } from '$lib/oauth';
 
 	let url: string;
 
@@ -7,23 +7,7 @@
 		const { user } = session;
 
 		if (!user) {
-			// generate a new verifier
-			const v = generateVerifier();
-
-			localStorage.setItem('verifier', v);
-
-			const challenge = await generateChallenge(v);
-
-			url = `${import.meta.env.VITE_AUTH_URL}?response_type=code&client_id=${
-				import.meta.env.VITE_CLIENT_ID
-			}&redirect_uri=${encodeURIComponent(
-				import.meta.env.VITE_REDIRECT_URI
-			)}&code_challenge=${challenge}&code_challenge_method=S256`;
-
-			return {
-				status: 302,
-				redirect: url
-			};
+			return redirectLogin();
 		}
 
 		return {};

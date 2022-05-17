@@ -1,17 +1,22 @@
 <script lang="ts" context="module">
 	import { queryDiscovery } from '$lib/discovery';
+	import { redirectLogin } from '$lib/oauth';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch, session, context }) {
-		return queryDiscovery().then((results) => {
-			return {
-				props: {
-					resources: results
-				}
-			};
-		});
+		return queryDiscovery()
+			.then((results) => {
+				return {
+					props: {
+						resources: results
+					}
+				};
+			})
+			.catch(() => {
+				return redirectLogin();
+			});
 	}
 </script>
 
