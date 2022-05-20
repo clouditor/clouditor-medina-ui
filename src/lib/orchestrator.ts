@@ -16,6 +16,7 @@ export interface Requirement {
     name: string
     description: string
     metricIds: string[]
+    category: string
 }
 
 export interface ListMetricsResponse {

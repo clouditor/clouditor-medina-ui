@@ -33,6 +33,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import { derived } from 'svelte/store';
 
 	export let service: CloudService;
 
@@ -40,23 +41,51 @@
 
 	var dirty = false;
 
-	function addRequirement(req: Requirement) {
-		if (dispatch('add-requirement', { serviceIdx: 0, requirementId: req.id })) {
-			dirty = true;
+	function groupBy(arr: Iterable<Requirement>, property) {
+		var grouped = new Map<String, Array<Requirement>>();
+		for (let value of arr) {
+			var p = value[property];
+			if (!grouped.has(p)) {
+				grouped.set(p, []);
+			}
+
+			grouped.get(p).push(value);
 		}
+		return grouped;
+	}
+
+	const sortedRequirements = derived(requirements, (map) => {
+		return groupBy(map.values(), 'category');
+	});
+
+	console.log($sortedRequirements);
+
+	function addRequirement(req: Requirement) {
+		dispatch('add-requirement', { serviceIdx: 0, requirementId: req.id });
+		dirty = true;
 	}
 
 	function removeRequirement(reqIdx: number): void {
-		if (dispatch('remove-requirement', { serviceIdx: 0, requirementIdx: reqIdx })) {
-			dirty = true;
-		}
+		dispatch('remove-requirement', { serviceIdx: 0, requirementIdx: reqIdx });
+		dirty = true;
 	}
 
 	function save(): void {
-		if (dispatch('save', { serviceIdx: 0 })) {
-			dirty = false;
+		dispatch('save', { serviceIdx: 0 });
+		dirty = false;
+	}
+
+	function trim(s: string): string {
+		const maxLength = 200;
+
+		if (s.length < maxLength) {
+			return s;
+		} else {
+			return s.substring(0, maxLength);
 		}
 	}
+
+	let category = '';
 </script>
 
 <Card class="mb-3 me-3">
@@ -73,7 +102,7 @@
 				{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
 					<ListGroupItem class="d-flex">
 						<div class="ms-2 me-auto">
-							{reqId}: {$requirements.get(reqId)?.name}
+							{reqId}: {trim($requirements.get(reqId)?.description ?? '')}
 						</div>
 
 						<Button on:click={(e) => removeRequirement(reqIdx)}>
@@ -86,10 +115,16 @@
 		<Dropdown>
 			<DropdownToggle caret>Add</DropdownToggle>
 			<DropdownMenu>
-				{#each Array.from($requirements.values()) as req}
-					<DropdownItem on:click={(e) => addRequirement(req)}>
-						{req.id}: {req.name}
-					</DropdownItem>
+				{#each [...$sortedRequirements] as [category, reqList], i}
+					{#if i != 0}
+						<DropdownItem divider />
+					{/if}
+					<DropdownItem header>{category}</DropdownItem>
+					{#each reqList as req}
+						<DropdownItem on:click={(e) => addRequirement(req)}>
+							{req.id}: {trim(req.description)}
+						</DropdownItem>
+					{/each}
 				{/each}
 			</DropdownMenu>
 		</Dropdown>
