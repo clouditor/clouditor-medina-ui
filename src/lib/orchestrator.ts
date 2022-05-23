@@ -189,7 +189,7 @@ export async function listMetrics(): Promise<Metric[]> {
  * @param response the original HTTP response
  * @returns the response or an error
  */
-function throwError(response: Response) {
+export function throwError(response: Response) {
     if (!response.ok) {
         throw Error(response.statusText);
     }

@@ -50,6 +50,7 @@
 	} from 'sveltestrap';
 	import Fa from 'svelte-fa';
 	import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+	import { getEvidence } from '$lib/evidence';
 
 	export let results: AssessmentResult[];
 	let filterCompliant;
@@ -128,8 +129,8 @@ The following list contains all assessment results, sorted by timestamp.
 							<Tooltip target={`compliant-${i}`}>Resource is compliant to metric</Tooltip>
 						{:else}
 							<Fa id={`compliant-${i}`} icon={faTriangleExclamation} color="darkred" />
-							<Tooltip target={`compliant-${i}`}
-								>Resource is not compliant to metric: Target value was not {result
+							<Tooltip target={`compliant-${i}`}>
+								Resource is not compliant to metric: Target value was not {result
 									.metricConfiguration.operator}
 								{result.metricConfiguration.targetValue}
 							</Tooltip>

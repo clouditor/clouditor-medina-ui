@@ -1,4 +1,5 @@
 export interface AssessmentResult {
+    evidenceId: string
     resourceId: string
     resourceTypes: string[]
     compliant: boolean
