@@ -70,6 +70,10 @@
 		dirty = true;
 	}
 
+	function isAlreadySelected(req: Requirement, service: CloudService) {
+		return service?.requirements?.requirementIds.includes(req.id) ?? false;
+	}
+
 	function save(): void {
 		dispatch('save', { serviceIdx: 0 });
 		dirty = false;
@@ -98,7 +102,7 @@
 		</CardText>
 		<CardSubtitle>Selected Requirements</CardSubtitle>
 		<CardText>
-			<ListGroup>
+			<ListGroup class="mt-2">
 				{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
 					<ListGroupItem class="d-flex">
 						<div class="ms-2 me-auto">
@@ -121,14 +125,17 @@
 					{/if}
 					<DropdownItem header>{category}</DropdownItem>
 					{#each reqList as req}
-						<DropdownItem on:click={(e) => addRequirement(req)}>
+						<DropdownItem
+							on:click={(e) => addRequirement(req)}
+							disabled={isAlreadySelected(req, service)}
+						>
 							{req.id}: {trim(req.description)}
 						</DropdownItem>
 					{/each}
 				{/each}
 			</DropdownMenu>
 		</Dropdown>
-		<Button disabled={!dirty} color="primary" on:click={(e) => save()}>Save</Button>
+		<Button disabled={!dirty} color="primary" on:click={(e) => save()} class="mt-2">Save</Button>
 	</CardBody>
 	<CardFooter>{service.id}</CardFooter>
 </Card>
