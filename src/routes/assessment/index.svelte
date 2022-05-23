@@ -130,8 +130,8 @@ The following list contains all assessment results, sorted by timestamp.
 						{:else}
 							<Fa id={`compliant-${i}`} icon={faTriangleExclamation} color="darkred" />
 							<Tooltip target={`compliant-${i}`}>
-								Resource is not compliant to metric: Target value was not {result
-									.metricConfiguration.operator}
+								Resource is not compliant: Metric {$metrics.get(result.metricId)?.name ?? 'Unknown'}
+								was not {result.metricConfiguration.operator}
 								{result.metricConfiguration.targetValue}
 							</Tooltip>
 						{/if}
