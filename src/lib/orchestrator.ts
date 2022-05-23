@@ -1,4 +1,4 @@
-import type { AssessmentResult, Metric } from "./assessment";
+import type { AssessmentResult, Metric, MetricImplementation } from "./assessment";
 
 export interface CloudService {
     id: number
@@ -86,7 +86,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @param id the metric id
  * @returns 
  */
-export async function getMetric(id: number): Promise<Metric> {
+export async function getMetric(id: string): Promise<Metric> {
     const apiUrl = `/v1/orchestrator/metrics/${id}`
 
     return fetch(apiUrl, {
@@ -98,6 +98,28 @@ export async function getMetric(id: number): Promise<Metric> {
         .then(throwError)
         .then((res) => res.json())
         .then((response: Metric) => {
+            return response;
+        });
+}
+
+/**
+ * Retrieves a particular metric implementation from the orchestrator service.
+ * 
+ * @param id the metric id
+ * @returns 
+ */
+export async function getMetricImplemenation(id: string): Promise<MetricImplementation> {
+    const apiUrl = `/v1/orchestrator/metrics/${id}/implementation`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: MetricImplementation) => {
             return response;
         });
 }

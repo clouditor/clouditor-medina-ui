@@ -1,10 +1,17 @@
 export interface AssessmentResult {
     resourceId: string
     compliant: boolean
-    metricId: number
+    metricId: string
 }
 
 export interface Metric {
-    id: number
+    id: string
     name: string
+    description: string
+}
+
+export interface MetricImplementation {
+    metricId: string
+    lang: string
+    code: string
 }
