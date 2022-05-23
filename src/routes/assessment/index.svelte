@@ -60,6 +60,7 @@ The following list contains all assessment results, sorted by timestamp.
 				<th>Date</th>
 				<th>Time</th>
 				<th>Resource ID</th>
+				<th>Resource Type</th>
 				<th>Metric</th>
 				<th>Metric Category</th>
 				<th>Compliant</th>
@@ -71,8 +72,12 @@ The following list contains all assessment results, sorted by timestamp.
 					<td>{new Date(result.timestamp).toLocaleDateString()} </td>
 					<td>{new Date(result.timestamp).toLocaleTimeString()}</td>
 					<td>
-						<span id={`resource-${i}`}>{short(result.resourceId)}</span>
+						<span id={`resource-${i}`} style="cursor: pointer">{short(result.resourceId)}</span>
 						<Tooltip target={`resource-${i}`} placement="bottom">{result.resourceId}</Tooltip>
+					</td>
+					<td>
+						<span id={`resource-type-${i}`} style="cursor: pointer">{result.resourceTypes[0]}</span>
+						<Tooltip target={`resource-type-${i}`}>{result.resourceTypes.join(' <- ')}</Tooltip>
 					</td>
 					<td>
 						{$metrics.get(result.metricId)?.name ?? 'Unknown'}

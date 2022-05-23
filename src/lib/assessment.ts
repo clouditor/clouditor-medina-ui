@@ -1,5 +1,6 @@
 export interface AssessmentResult {
     resourceId: string
+    resourceTypes: string[]
     compliant: boolean
     metricId: string
     timestamp: string
