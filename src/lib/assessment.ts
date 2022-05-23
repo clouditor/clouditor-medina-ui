@@ -2,6 +2,7 @@ export interface AssessmentResult {
     resourceId: string
     compliant: boolean
     metricId: string
+    timestamp: string
 }
 
 export interface Metric {

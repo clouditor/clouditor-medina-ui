@@ -21,6 +21,9 @@
 
 		return listAssessmentResults()
 			.then((results) => {
+				results = results.sort((a: AssessmentResult, b: AssessmentResult) => {
+					return new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1;
+				});
 				return {
 					props: {
 						results: results
@@ -35,6 +38,7 @@
 
 <script lang="ts">
 	import { Table } from 'sveltestrap';
+	import A from '../discovery/[...id].svelte';
 
 	export let results: AssessmentResult[];
 </script>
@@ -45,8 +49,9 @@
 	<Table hover>
 		<thead>
 			<tr>
-				<th>#</th>
-				<th>Name</th>
+				<th>Date</th>
+				<th>Time</th>
+				<th>Resource ID</th>
 				<th>Metric</th>
 				<th>Compliant</th>
 			</tr>
@@ -54,7 +59,8 @@
 		<tbody>
 			{#each results as result, i}
 				<tr class={result.compliant ? 'table-success' : 'table-danger'}>
-					<th scope="row">{i}</th>
+					<td>{new Date(result.timestamp).toLocaleDateString()} </td>
+					<td>{new Date(result.timestamp).toLocaleTimeString()}</td>
 					<td>{result.resourceId}</td>
 					<td>
 						{$metrics.get(result.metricId)?.name ?? 'Unknown'}
