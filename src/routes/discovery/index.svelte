@@ -15,7 +15,7 @@
 				};
 			})
 			.catch(() => {
-				return redirectLogin();
+				return redirectLogin('/discovery');
 			});
 	}
 </script>

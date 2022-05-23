@@ -1,7 +1,5 @@
 <script context="module" lang="ts">
-	import { page } from '$app/stores';
 	import { exchange, isError } from '$lib/oauth';
-	import { get } from 'svelte/store';
 
 	export async function load({ params, url }) {
 		const error = url.searchParams.get('error');
@@ -31,7 +29,7 @@
 			// exchange token
 			return {
 				status: 302,
-				redirect: '/'
+				redirect: localStorage.backTo ?? '/'
 			};
 		}
 	}

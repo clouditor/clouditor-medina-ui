@@ -16,7 +16,7 @@
 				};
 			})
 			.catch(() => {
-				return redirectLogin();
+				return redirectLogin('/certificates');
 			});
 	}
 </script>
