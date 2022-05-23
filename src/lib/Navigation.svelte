@@ -34,6 +34,10 @@
 			name: 'Assessment'
 		},
 		{
+			url: '/metrics',
+			name: 'Metrics'
+		},
+		{
 			url: '/certificates',
 			name: 'Certificates'
 		}
