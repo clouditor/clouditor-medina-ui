@@ -41,10 +41,13 @@
 		Card,
 		CardBody,
 		CardHeader,
+		Col,
+		Container,
 		Form,
 		FormGroup,
 		Input,
 		Label,
+		Row,
 		Table,
 		Tooltip
 	} from 'sveltestrap';
@@ -55,6 +58,7 @@
 	export let results: AssessmentResult[];
 	let filterCompliant;
 	let filterMetricCategory;
+	let filterMetric;
 
 	function short(resourceID: string) {
 		// Split resource by / and take the last index
@@ -71,7 +75,13 @@
 					: false
 				: true) &&
 			(filterMetricCategory != ''
-				? $metrics.get(r.metricId)?.category.includes(filterMetricCategory)
+				? $metrics
+						.get(r.metricId)
+						?.category?.toLowerCase()
+						?.includes(filterMetricCategory?.toLowerCase())
+				: true) &&
+			(filterMetric != ''
+				? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
 				: true)
 		);
 	});
@@ -81,29 +91,46 @@
 
 The following list contains all assessment results, sorted by timestamp.
 
-<Card style="width: 400px" class="mt-2">
+<Card style="width: 800px" class="mt-2">
 	<CardHeader>
 		<b>Filter results</b>
 	</CardHeader>
 	<CardBody>
 		<Form>
-			<FormGroup>
-				<Label for="compliant">Compliant</Label>
-				<Input type="select" name="select" id="compliant" bind:value={filterCompliant}>
-					<option />
-					<option value="true">Compliant</option>
-					<option value="false">Not compliant</option>
-				</Input>
-			</FormGroup>
-			<FormGroup>
-				<Label for="exampleEmail">Metric Category</Label>
-				<Input
-					type="text"
-					name="metric-category"
-					id="metricCateglory"
-					bind:value={filterMetricCategory}
-				/>
-			</FormGroup>
+			<Container>
+				<Row>
+					<Col>
+						<FormGroup>
+							<Label for="compliant">Compliant</Label>
+							<Input type="select" name="select" id="compliant" bind:value={filterCompliant}>
+								<option />
+								<option value="true">Compliant</option>
+								<option value="false">Not compliant</option>
+							</Input>
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="exampleEmail">Metric Category</Label>
+							<Input
+								type="text"
+								name="metric-category"
+								id="metricCateglory"
+								bind:value={filterMetricCategory}
+							/>
+						</FormGroup>
+					</Col>
+				</Row>
+				<Row>
+					<Col>
+						<FormGroup>
+							<Label for="exampleEmail">Metric</Label>
+							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
+						</FormGroup>
+					</Col>
+					<Col />
+				</Row>
+			</Container>
 		</Form>
 	</CardBody>
 </Card>
