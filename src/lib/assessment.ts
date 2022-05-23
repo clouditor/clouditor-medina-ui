@@ -4,6 +4,12 @@ export interface AssessmentResult {
     compliant: boolean
     metricId: string
     timestamp: string
+    metricConfiguration: MetricConfiguration
+}
+
+export interface MetricConfiguration {
+    targetValue: object
+    operator: string
 }
 
 export interface Metric {

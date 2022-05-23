@@ -37,11 +37,23 @@
 </script>
 
 <script lang="ts">
-	import { Table, Tooltip } from 'sveltestrap';
+	import {
+		Card,
+		CardBody,
+		CardHeader,
+		Form,
+		FormGroup,
+		Input,
+		Label,
+		Table,
+		Tooltip
+	} from 'sveltestrap';
 	import Fa from 'svelte-fa';
 	import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 	export let results: AssessmentResult[];
+	let filterCompliant;
+	let filterMetricCategory;
 
 	function short(resourceID: string) {
 		// Split resource by / and take the last index
@@ -49,19 +61,58 @@
 
 		return rr[rr.length - 1];
 	}
+
+	$: filteredResults = results.filter((r) => {
+		return (
+			(filterCompliant != ''
+				? r.compliant == (filterCompliant == 'true')
+					? true
+					: false
+				: true) &&
+			(filterMetricCategory != ''
+				? $metrics.get(r.metricId)?.category.includes(filterMetricCategory)
+				: true)
+		);
+	});
 </script>
 
 <h2>Security Assessment Results</h2>
 
 The following list contains all assessment results, sorted by timestamp.
 
+<Card style="width: 400px" class="mt-2">
+	<CardHeader>
+		<b>Filter results</b>
+	</CardHeader>
+	<CardBody>
+		<Form>
+			<FormGroup>
+				<Label for="compliant">Compliant</Label>
+				<Input type="select" name="select" id="compliant" bind:value={filterCompliant}>
+					<option />
+					<option value="true">Compliant</option>
+					<option value="false">Not compliant</option>
+				</Input>
+			</FormGroup>
+			<FormGroup>
+				<Label for="exampleEmail">Metric Category</Label>
+				<Input
+					type="text"
+					name="metric-category"
+					id="metricCateglory"
+					bind:value={filterMetricCategory}
+				/>
+			</FormGroup>
+		</Form>
+	</CardBody>
+</Card>
+
 {#if results}
 	<Table hover striped class="mt-2">
 		<thead>
 			<tr>
-				<th>Compliant</th>
+				<th style="text-align: center">Compliant</th>
 				<th>Date</th>
-				<th>Time</th>
 				<th>Resource ID</th>
 				<th>Resource Type</th>
 				<th>Metric</th>
@@ -69,17 +120,26 @@ The following list contains all assessment results, sorted by timestamp.
 			</tr>
 		</thead>
 		<tbody>
-			{#each results as result, i}
+			{#each filteredResults as result, i}
 				<tr>
 					<td style="text-align: center">
 						{#if result.compliant}
-							<Fa icon={faSquareCheck} color="green" />
+							<Fa id={`compliant-${i}`} icon={faSquareCheck} color="green" />
+							<Tooltip target={`compliant-${i}`}>Resource is compliant to metric</Tooltip>
 						{:else}
-							<Fa icon={faTriangleExclamation} color="darkred" />
+							<Fa id={`compliant-${i}`} icon={faTriangleExclamation} color="darkred" />
+							<Tooltip target={`compliant-${i}`}
+								>Resource is not compliant to metric: Target value was not {result
+									.metricConfiguration.operator}
+								{result.metricConfiguration.targetValue}
+							</Tooltip>
 						{/if}
 					</td>
-					<td>{new Date(result.timestamp).toLocaleDateString()} </td>
-					<td>{new Date(result.timestamp).toLocaleTimeString()}</td>
+					<td
+						>{new Date(result.timestamp).toLocaleDateString()}&nbsp;{new Date(
+							result.timestamp
+						).toLocaleTimeString()}</td
+					>
 					<td>
 						<span id={`resource-${i}`} style="cursor: pointer">{short(result.resourceId)}</span>
 						<Tooltip target={`resource-${i}`} placement="bottom">{result.resourceId}</Tooltip>
