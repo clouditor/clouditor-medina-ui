@@ -29,7 +29,7 @@
 				};
 			})
 			.catch(() => {
-				return redirectLogin();
+				return redirectLogin('/cloud');
 			});
 	}
 </script>

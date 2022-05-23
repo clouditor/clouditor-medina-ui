@@ -42,11 +42,12 @@ export async function generateChallenge(v: string): Promise<string> {
     return base64urlencode(String.fromCharCode(...new Uint8Array(digest)));
 }
 
-export async function redirectLogin() {
+export async function redirectLogin(backTo = '/') {
     // generate a new verifier
     const v = generateVerifier();
 
     localStorage.setItem('verifier', v);
+    localStorage.setItem('backTo', backTo);
 
     const challenge = await generateChallenge(v);
 

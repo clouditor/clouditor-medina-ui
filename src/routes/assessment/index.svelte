@@ -28,7 +28,7 @@
 				};
 			})
 			.catch(() => {
-				return redirectLogin();
+				return redirectLogin('/assessment');
 			});
 	}
 </script>
