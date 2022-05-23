@@ -37,22 +37,31 @@
 </script>
 
 <script lang="ts">
-	import { Table } from 'sveltestrap';
-	import A from '../discovery/[...id].svelte';
+	import { Table, Tooltip } from 'sveltestrap';
 
 	export let results: AssessmentResult[];
+
+	function short(resourceID: string) {
+		// Split resource by / and take the last index
+		const rr = resourceID.split('/');
+
+		return rr[rr.length - 1];
+	}
 </script>
 
 <h2>Security Assessment Results</h2>
 
+The following list contains all assessment results, sorted by timestamp.
+
 {#if results}
-	<Table hover>
+	<Table hover class="mt-2">
 		<thead>
 			<tr>
 				<th>Date</th>
 				<th>Time</th>
 				<th>Resource ID</th>
 				<th>Metric</th>
+				<th>Metric Category</th>
 				<th>Compliant</th>
 			</tr>
 		</thead>
@@ -61,9 +70,15 @@
 				<tr class={result.compliant ? 'table-success' : 'table-danger'}>
 					<td>{new Date(result.timestamp).toLocaleDateString()} </td>
 					<td>{new Date(result.timestamp).toLocaleTimeString()}</td>
-					<td>{result.resourceId}</td>
+					<td>
+						<span id={`resource-${i}`}>{short(result.resourceId)}</span>
+						<Tooltip target={`resource-${i}`} placement="bottom">{result.resourceId}</Tooltip>
+					</td>
 					<td>
 						{$metrics.get(result.metricId)?.name ?? 'Unknown'}
+					</td>
+					<td>
+						{$metrics.get(result.metricId)?.category ?? 'Unknown'}
 					</td>
 					<td>{result.compliant}</td>
 				</tr>
