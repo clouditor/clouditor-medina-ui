@@ -38,6 +38,8 @@
 
 <script lang="ts">
 	import { Table, Tooltip } from 'sveltestrap';
+	import Fa from 'svelte-fa';
+	import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 	export let results: AssessmentResult[];
 
@@ -54,21 +56,28 @@
 The following list contains all assessment results, sorted by timestamp.
 
 {#if results}
-	<Table hover class="mt-2">
+	<Table hover striped class="mt-2">
 		<thead>
 			<tr>
+				<th>Compliant</th>
 				<th>Date</th>
 				<th>Time</th>
 				<th>Resource ID</th>
 				<th>Resource Type</th>
 				<th>Metric</th>
 				<th>Metric Category</th>
-				<th>Compliant</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each results as result, i}
-				<tr class={result.compliant ? 'table-success' : 'table-danger'}>
+				<tr>
+					<td style="text-align: center">
+						{#if result.compliant}
+							<Fa icon={faSquareCheck} color="green" />
+						{:else}
+							<Fa icon={faTriangleExclamation} color="darkred" />
+						{/if}
+					</td>
 					<td>{new Date(result.timestamp).toLocaleDateString()} </td>
 					<td>{new Date(result.timestamp).toLocaleTimeString()}</td>
 					<td>
@@ -85,7 +94,6 @@ The following list contains all assessment results, sorted by timestamp.
 					<td>
 						{$metrics.get(result.metricId)?.category ?? 'Unknown'}
 					</td>
-					<td>{result.compliant}</td>
 				</tr>
 			{/each}
 		</tbody>
