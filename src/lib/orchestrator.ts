@@ -202,7 +202,7 @@ export async function updateCloudService(service: CloudService): Promise<CloudSe
  * @returns an array of {@link Metric}s.
  */
 export async function listMetrics(): Promise<Metric[]> {
-    const apiUrl = `/v1/orchestrator/metrics`
+    const apiUrl = `/v1/orchestrator/metrics?pageSize=200`
 
     return fetch(apiUrl, {
         method: 'GET',
