@@ -11,6 +11,7 @@ export interface AssessmentResult {
 export interface MetricConfiguration {
     targetValue: object
     operator: string
+    isDefault: boolean
 }
 
 export interface Metric {

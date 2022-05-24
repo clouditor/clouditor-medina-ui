@@ -35,20 +35,7 @@
 </script>
 
 <script lang="ts">
-	import {
-		Button,
-		Card,
-		CardBody,
-		CardFooter,
-		CardHeader,
-		CardSubtitle,
-		CardText,
-		Col,
-		Container,
-		ListGroup,
-		ListGroupItem,
-		Row
-	} from 'sveltestrap';
+	import { Col, Container, Row } from 'sveltestrap';
 	import CloudServiceCard from '$lib/CloudServiceCard.svelte';
 	import type { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
 	import EmptyCloudService from '$lib/EmptyCloudService.svelte';

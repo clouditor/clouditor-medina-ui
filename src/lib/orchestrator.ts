@@ -1,7 +1,7 @@
-import type { AssessmentResult, Metric, MetricImplementation } from "./assessment";
+import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
 
 export interface CloudService {
-    id: number
+    id: string
     name: string
     description: string
     requirements: Requirements
@@ -21,6 +21,10 @@ export interface Requirement {
 
 export interface ListMetricsResponse {
     metrics: Metric[];
+}
+
+export interface ListMetricConfigurationsResponse {
+    configurations: Map<string, MetricConfiguration>;
 }
 
 export interface Certificate {
@@ -125,7 +129,37 @@ export async function getMetricImplemenation(id: string): Promise<MetricImplemen
 }
 
 /**
- * Retrieves a list of metrics from the orchestrator service.
+ * Retrieves a particular metric implementation from the orchestrator service.
+ * 
+ * @param id the metric id
+ * @returns 
+ */
+export async function listMetricConfigurations(serviceId: string, skipDefault = false): Promise<Map<string, MetricConfiguration>> {
+    const apiUrl = `/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListMetricConfigurationsResponse) => {
+            let entries: [string, MetricConfiguration][] = Object.entries(response.configurations);
+
+            if (skipDefault) {
+                entries = entries.filter(([, value]) => {
+                    return !value.isDefault
+                })
+            }
+
+            return new Map<string, MetricConfiguration>(entries);
+        });
+}
+
+/**
+ * Retrieves a list of cloud services from the orchestrator service.
  * 
  * @returns an array of {@link Metric}s.
  */

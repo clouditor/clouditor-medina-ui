@@ -28,14 +28,23 @@
 		ListGroup,
 		ListGroupItem
 	} from 'sveltestrap';
-	import type { CloudService, Requirement } from '$lib/orchestrator';
+	import { listMetricConfigurations, type CloudService, type Requirement } from '$lib/orchestrator';
 	import { requirements } from '$lib/stores';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 	import { derived } from 'svelte/store';
+	import type { MetricConfiguration } from './assessment';
 
 	export let service: CloudService;
+	let metricConfigurations: Map<string, MetricConfiguration> = new Map<
+		string,
+		MetricConfiguration
+	>();
+
+	onMount(async () => {
+		metricConfigurations = await listMetricConfigurations(service.id, true);
+	});
 
 	const dispatch = createEventDispatcher<CloudServiceEventMap>();
 
@@ -100,7 +109,7 @@
 				{service.description}
 			</p>
 		</CardText>
-		<CardSubtitle>Selected Requirements</CardSubtitle>
+		<CardSubtitle>Selected Requirements for Customization</CardSubtitle>
 		<CardText>
 			<ListGroup class="mt-2">
 				{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
@@ -115,27 +124,41 @@
 					</ListGroupItem>
 				{/each}
 			</ListGroup>
-		</CardText>
-		<Dropdown>
-			<DropdownToggle caret>Add</DropdownToggle>
-			<DropdownMenu>
-				{#each [...$sortedRequirements] as [category, reqList], i}
-					{#if i != 0}
-						<DropdownItem divider />
-					{/if}
-					<DropdownItem header>{category}</DropdownItem>
-					{#each reqList as req}
-						<DropdownItem
-							on:click={(e) => addRequirement(req)}
-							disabled={isAlreadySelected(req, service)}
-						>
-							{req.id}: {trim(req.description)}
-						</DropdownItem>
+			<Dropdown>
+				<DropdownToggle caret class="mt-2">Add</DropdownToggle>
+				<DropdownMenu>
+					{#each [...$sortedRequirements] as [category, reqList], i}
+						{#if i != 0}
+							<DropdownItem divider />
+						{/if}
+						<DropdownItem header>{category}</DropdownItem>
+						{#each reqList as req}
+							<DropdownItem
+								on:click={(e) => addRequirement(req)}
+								disabled={isAlreadySelected(req, service)}
+							>
+								{req.id}: {trim(req.description)}
+							</DropdownItem>
+						{/each}
 					{/each}
-				{/each}
-			</DropdownMenu>
-		</Dropdown>
+				</DropdownMenu>
+			</Dropdown>
+		</CardText>
+		{#if metricConfigurations.size > 0}
+			<CardSubtitle>Changed Metric Configurations</CardSubtitle>
+			<CardText>
+				<ListGroup class="mt-2">
+					{#each [...metricConfigurations] as [metricId, config]}
+						<ListGroupItem class="d-flex">
+							{metricId}
+							{config.operator}
+							{config.targetValue}
+						</ListGroupItem>
+					{/each}
+				</ListGroup>
+			</CardText>
+		{/if}
 		<Button disabled={!dirty} color="primary" on:click={(e) => save()} class="mt-2">Save</Button>
 	</CardBody>
-	<CardFooter>{service.id}</CardFooter>
+	<!--<CardFooter>{service.id}</CardFooter>-->
 </Card>
