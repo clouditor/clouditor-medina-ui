@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem } from 'sveltestrap';
+	import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem, Table } from 'sveltestrap';
 	import type { Certificate } from '$lib/orchestrator';
 
 	export let certificate: Certificate;
@@ -32,20 +32,28 @@
 			<hr />
 		</CardText>
 		<b>State History</b>
-		<ListGroup flush>
+		<Table>
+			<thead>
+			  <tr>
+				<th>State</th>
+				<th>Deviation</th>
+				<th>Timestamp</th>
+				<th>Tree ID</th>
+			  </tr>
+			</thead>
+			<tbody>
 			{#each certificate.states as state}
-				<ListGroupItem class="d-flex">
-					<div class="ms-2 me-auto">
-						<b>{state.state}</b>
-					</div>
-					<div class="ms-2 me-auto">
-						{state.timestamp}
-					</div>
-					<div class="ms-2 me-auto">
-						{state.treeId}
-					</div>
-				</ListGroupItem>
+			  <tr>
+				<td>{state.state}</td>
+				<td>
+					{#if state.state == "continued"}Minor{/if}
+					{#if state.state == "suspended"}Major{/if}
+				</td>
+				<td>{state.timestamp}</td>
+				<td>{state.treeId}</td>
+			  </tr>
 			{/each}
-		</ListGroup>
+			</tbody>
+		</Table>
 	</CardBody>
 </Card>
