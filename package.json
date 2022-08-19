@@ -25,7 +25,7 @@
     "prettier-plugin-svelte": "^2.7.0",
     "sass": "^1.54.4",
     "svelte": "^3.49.0",
-    "svelte-check": "^2.7.2",
+    "svelte-check": "^2.8.1",
     "svelte-preprocess": "^4.10.7",
     "svelte-fa": "^3.0.3",
     "sveltestrap": "^5.9.0",
