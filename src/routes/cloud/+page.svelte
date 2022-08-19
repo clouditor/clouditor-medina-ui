@@ -1,46 +1,14 @@
-<script lang="ts" context="module">
-	import { requirements } from '$lib/stores';
-	import { listCloudServices, listRequirements, updateCloudService } from '$lib/orchestrator';
-	import type { CloudService } from '$lib/orchestrator';
-	import { redirectLogin } from '$lib/oauth';
-
-	/**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-	export async function load({ params, fetch, session, context }) {
-		// TODO(oxisto): this should be moved to more central component
-		listRequirements()
-			.then((list) => {
-				for (let requirement of list) {
-					// update requirements store
-					requirements.update((r) => r.set(requirement.id, requirement));
-				}
-			})
-			.catch(() => {
-				// ignore, we will catch it later
-			});
-
-		return listCloudServices()
-			.then((services) => {
-				return {
-					props: {
-						services: services
-					}
-				};
-			})
-			.catch(() => {
-				return redirectLogin('/cloud');
-			});
-	}
-</script>
-
 <script lang="ts">
 	import { Col, Container, Row } from 'sveltestrap';
 	import CloudServiceCard from '$lib/CloudServiceCard.svelte';
 	import type { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
 	import EmptyCloudService from '$lib/EmptyCloudService.svelte';
+	import { updateCloudService } from '$lib/orchestrator';
+	import type { PageData } from './$types';
 
-	export let services: CloudService[];
+	export let data: PageData;
+
+	const { services } = data;
 
 	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
 		const reqId = e.detail.requirementId;

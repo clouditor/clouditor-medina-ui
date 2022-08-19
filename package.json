@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "svelte-kit build",
-    "preview": "svelte-kit preview",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore  --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -14,7 +14,7 @@
   "devDependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
     "@sveltejs/adapter-node": "^1.0.0-next.86",
-    "@sveltejs/kit": "^1.0.0-next.355",
+    "@sveltejs/kit": "^1.0.0-next.418",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.26.0",
     "bootstrap": "^5.2.0",

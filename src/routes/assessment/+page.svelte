@@ -1,41 +1,3 @@
-<script lang="ts" context="module">
-	import { metrics } from '$lib/stores';
-	import type { AssessmentResult } from '$lib/assessment';
-	import { listMetrics, listAssessmentResults } from '$lib/orchestrator';
-	import { redirectLogin } from '$lib/oauth';
-
-	/**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-	export async function load({ params, fetch, session, context }) {
-		listMetrics()
-			.then((list) => {
-				for (let metric of list) {
-					// update metrics store
-					metrics.update((m) => m.set(metric.id, metric));
-				}
-			})
-			.catch(() => {
-				// ignore, we will catch it later
-			});
-
-		return listAssessmentResults()
-			.then((results) => {
-				results = results.sort((a: AssessmentResult, b: AssessmentResult) => {
-					return new Date(a.timestamp) > new Date(b.timestamp) ? -1 : 1;
-				});
-				return {
-					props: {
-						results: results
-					}
-				};
-			})
-			.catch(() => {
-				return redirectLogin('/assessment');
-			});
-	}
-</script>
-
 <script lang="ts">
 	import {
 		Card,
@@ -54,8 +16,13 @@
 	import Fa from 'svelte-fa';
 	import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 	import { getEvidence } from '$lib/evidence';
+	import type { PageData } from './$types';
+	import { metrics } from '$lib/stores';
 
-	export let results: AssessmentResult[];
+	export let data: PageData;
+
+	let { results } = data;
+
 	let filterCompliant;
 	let filterMetricCategory;
 	let filterMetric;
