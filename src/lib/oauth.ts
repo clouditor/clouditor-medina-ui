@@ -1,3 +1,7 @@
+import { browser } from "$app/env";
+import { goto } from "$app/navigation";
+import { redirect } from "@sveltejs/kit";
+
 export interface TokenResponse {
     access_token: string
 }
@@ -56,10 +60,12 @@ export async function redirectLogin(backTo = '/') {
             import.meta.env.VITE_REDIRECT_URI
         )}&code_challenge=${challenge}&code_challenge_method=S256`;
 
-    return {
-        status: 302,
-        redirect: url
-    };
+    // Workaround because of https://github.com/sveltejs/kit/issues/5952
+    if (browser) {
+        return await goto(url);
+    } else {
+        throw redirect(302, url);
+    }
 }
 
 function base64urlencode(b: string): string {

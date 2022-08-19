@@ -4,5 +4,5 @@ WORKDIR /app
 COPY ./build build
 COPY package.json .
 
-EXPOSE 3000
+EXPOSE 5173
 CMD ["node", "./build"]

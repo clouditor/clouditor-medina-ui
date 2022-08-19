@@ -1,32 +1,12 @@
-<script lang="ts" context="module">
-	import { queryDiscovery } from '$lib/discovery';
-	import { redirectLogin } from '$lib/oauth';
-
-	/**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-	export async function load({ params, fetch, session, context }) {
-		return queryDiscovery()
-			.then((results) => {
-				return {
-					props: {
-						resources: results
-					}
-				};
-			})
-			.catch(() => {
-				return redirectLogin('/discovery');
-			});
-	}
-</script>
-
 <script lang="ts">
 	import { Button, Table } from 'sveltestrap';
 	import { startDiscovery } from '$lib/discovery';
 	import type { Resource } from '$lib/discovery';
 	import { base } from '$app/paths';
+	import type { PageData } from './$types';
 
-	export let resources: Resource[] = [];
+	export let data: PageData;
+	const { resources } = data;
 </script>
 
 <h2>Discovered Resources</h2>

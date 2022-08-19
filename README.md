@@ -14,7 +14,7 @@ npm run dev -- --open
 If you want to test your UI against actual Clouditor endpoints, be sure to start a Clouditor engine instance with the following parameters:
 
 ```bash
-./engine --db-in-memory --dashboard-url=http://localhost:3000
+./engine --db-in-memory --dashboard-url=http://localhost:5173
 ```
 
 This will configure the necessary login redirects for your local development instance.

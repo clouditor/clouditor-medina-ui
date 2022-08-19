@@ -1,32 +1,11 @@
-<script lang="ts" context="module">
-	import type { AssessmentResult, Metric, MetricImplementation } from '$lib/assessment';
-	import { listMetrics, listAssessmentResults, getMetricImplemenation } from '$lib/orchestrator';
-	import { redirectLogin } from '$lib/oauth';
-
-	/**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-	export async function load({ params, fetch, session, context }) {
-		return listMetrics()
-			.then((results) => {
-				return {
-					props: {
-						metrics: results
-					}
-				};
-			})
-			.catch(() => {
-				return redirectLogin('/metrics');
-			});
-	}
-</script>
-
 <script lang="ts">
 	import { Table } from 'sveltestrap';
 	import MetricImplementationBlock from '$lib/MetricImplementationBlock.svelte';
-	import A from '../discovery/[...id].svelte';
+	import { getMetricImplemenation } from '$lib/orchestrator';
+	import type { Metric, MetricImplementation } from '$lib/assessment';
+	import type { PageData } from './$types';
 
-	export let metrics: Metric[];
+	export let data: PageData;
 
 	async function fetchImplementation(metric: Metric): Promise<MetricImplementation> {
 		return await getMetricImplemenation(metric.id);
@@ -37,7 +16,7 @@
 
 The following metrics are configued in the Clouditor orchestrator.
 
-{#if metrics}
+{#if data.metrics}
 	<Table hover>
 		<thead>
 			<tr>
@@ -47,7 +26,7 @@ The following metrics are configued in the Clouditor orchestrator.
 			</tr>
 		</thead>
 		<tbody>
-			{#each metrics as metric, i}
+			{#each data.metrics as metric, i}
 				<tr>
 					<td>{metric.id}</td>
 					<td>{metric.description}</td>
