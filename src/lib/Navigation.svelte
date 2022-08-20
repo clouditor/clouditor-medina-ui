@@ -1,52 +1,52 @@
 <script lang="ts">
-	import {
-		Collapse,
-		Navbar,
-		NavbarToggler,
-		NavbarBrand,
-		Nav,
-		NavItem,
-		NavLink,
-		Dropdown,
-		DropdownToggle,
-		DropdownMenu,
-		DropdownItem
-	} from 'sveltestrap';
-	import { base } from '$app/paths';
-	import { page } from '$app/stores';
+import {
+	Collapse,
+	Navbar,
+	NavbarToggler,
+	NavbarBrand,
+	Nav,
+	NavItem,
+	NavLink,
+	Dropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem
+} from 'sveltestrap';
+import { base } from '$app/paths';
+import { page } from '$app/stores';
 
-	let isOpen = false;
-	function handleUpdate(event) {
-		isOpen = event.detail.isOpen;
+let isOpen = false;
+function handleUpdate(event) {
+	isOpen = event.detail.isOpen;
+}
+
+let routes = [
+	{
+		url: '/cloud',
+		name: 'Cloud Services'
+	},
+	{
+		url: '/discovery',
+		name: 'Discovery'
+	},
+	{
+		url: '/assessment',
+		name: 'Assessment'
+	},
+	{
+		url: '/metrics',
+		name: 'Metrics'
+	},
+	{
+		url: '/certificates',
+		name: 'Certificates'
 	}
+];
 
-	let routes = [
-		{
-			url: '/cloud',
-			name: 'Cloud Services'
-		},
-		{
-			url: '/discovery',
-			name: 'Discovery'
-		},
-		{
-			url: '/assessment',
-			name: 'Assessment'
-		},
-		{
-			url: '/metrics',
-			name: 'Metrics'
-		},
-		{
-			url: '/certificates',
-			name: 'Certificates'
-		}
-	];
-
-	console.log($page.url);
+console.log($page.url);
 </script>
 
-<Navbar color="secondary" dark expand="md">
+<Navbar color="primary" dark expand="md">
 	<NavbarBrand href="{base}/">Clouditor</NavbarBrand>
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>

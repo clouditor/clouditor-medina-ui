@@ -1,57 +1,57 @@
+<script lang="ts" context="module">
+console.log('hello?');
+</script>
+
 <script lang="ts">
-	import {
-		Card,
-		CardBody,
-		CardHeader,
-		Col,
-		Container,
-		Form,
-		FormGroup,
-		Input,
-		Label,
-		Row,
-		Table,
-		Tooltip
-	} from 'sveltestrap';
-	import Fa from 'svelte-fa';
-	import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-	import { getEvidence } from '$lib/evidence';
-	import type { PageData } from './$types';
-	import { metrics } from '$lib/stores';
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	Col,
+	Container,
+	Form,
+	FormGroup,
+	Input,
+	Label,
+	Row,
+	Table,
+	Tooltip
+} from 'sveltestrap';
+import Fa from 'svelte-fa';
+import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { getEvidence } from '$lib/evidence';
+import type { PageData } from './$types';
+import { metrics } from '$lib/stores';
 
-	export let data: PageData;
+export let data: PageData;
 
-	let { results } = data;
+let { results } = data;
 
-	let filterCompliant;
-	let filterMetricCategory;
-	let filterMetric;
+let filterCompliant;
+let filterMetricCategory;
+let filterMetric;
 
-	function short(resourceID: string) {
-		// Split resource by / and take the last index
-		const rr = resourceID.split('/');
+function short(resourceID: string) {
+	// Split resource by / and take the last index
+	const rr = resourceID.split('/');
 
-		return rr[rr.length - 1];
-	}
+	return rr[rr.length - 1];
+}
 
-	$: filteredResults = results.filter((r) => {
-		return (
-			(filterCompliant != ''
-				? r.compliant == (filterCompliant == 'true')
-					? true
-					: false
-				: true) &&
-			(filterMetricCategory != ''
-				? $metrics
-						.get(r.metricId)
-						?.category?.toLowerCase()
-						?.includes(filterMetricCategory?.toLowerCase())
-				: true) &&
-			(filterMetric != ''
-				? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
-				: true)
-		);
-	});
+$: filteredResults = results.filter((r) => {
+	return (
+		(filterCompliant != '' ? (r.compliant == (filterCompliant == 'true') ? true : false) : true) &&
+		(filterMetricCategory != ''
+			? $metrics
+					.get(r.metricId)
+					?.category?.toLowerCase()
+					?.includes(filterMetricCategory?.toLowerCase())
+			: true) &&
+		(filterMetric != ''
+			? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
+			: true)
+	);
+});
 </script>
 
 <h2>Security Assessment Results</h2>

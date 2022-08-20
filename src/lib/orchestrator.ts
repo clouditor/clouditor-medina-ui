@@ -161,7 +161,7 @@ export async function listMetricConfigurations(serviceId: string, skipDefault = 
 /**
  * Retrieves a list of cloud services from the orchestrator service.
  * 
- * @returns an array of {@link Metric}s.
+ * @returns an array of {@link CloudService}s.
  */
 export async function listCloudServices(): Promise<CloudService[]> {
     const apiUrl = `/v1/orchestrator/cloud_services`
@@ -177,6 +177,24 @@ export async function listCloudServices(): Promise<CloudService[]> {
         .then((response: ListCloudServicesResponse) => {
             return response.services;
         });
+}
+
+/**
+ * Retrieve a cloud service from the orchestrator service using its ID.
+ * 
+ * @returns the cloud service
+ */
+export async function getCloudService(id: string, fetch = window.fetch): Promise<CloudService> {
+    const apiUrl = `/v1/orchestrator/cloud_services/${id}`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
 }
 
 export async function updateCloudService(service: CloudService): Promise<CloudService> {

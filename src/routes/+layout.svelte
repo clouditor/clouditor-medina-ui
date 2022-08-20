@@ -1,9 +1,11 @@
 <script lang="ts">
-	import Navigation from '$lib/Navigation.svelte';
-	import { Styles } from 'sveltestrap';
+import '../app.scss';
+import Navigation from '$lib/Navigation.svelte';
+//import { Styles } from 'sveltestrap';
+
+export let data;
 </script>
 
-<Styles />
 <Navigation />
 
 <main>
@@ -18,9 +20,3 @@
 
 	<slot />
 </main>
-
-<style>
-	main {
-		padding: 1rem;
-	}
-</style>

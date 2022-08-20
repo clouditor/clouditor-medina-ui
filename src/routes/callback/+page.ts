@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { exchange, isError } from '$lib/oauth';
+import { exchange, isError, workaroundRedirect } from '$lib/oauth';
 
 export async function load({ params, url }) {
 	const error = url.searchParams.get('error');
@@ -23,6 +23,7 @@ export async function load({ params, url }) {
 		localStorage.token = response.access_token;
 
 		// exchange token
-		throw redirect(302, localStorage.backTo ?? '/');
+		//throw redirect(302, localStorage.backTo ?? '/');
+		return workaroundRedirect(localStorage.backTo ?? '/');
 	}
 }

@@ -1,38 +1,38 @@
 <script lang="ts">
-	import { Col, Container, Row } from 'sveltestrap';
-	import CloudServiceCard from '$lib/CloudServiceCard.svelte';
-	import type { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
-	import EmptyCloudService from '$lib/EmptyCloudService.svelte';
-	import { updateCloudService } from '$lib/orchestrator';
-	import type { PageData } from './$types';
+import { Col, Container, Row } from 'sveltestrap';
+import CloudServiceCard from '$lib/CloudServiceCard.svelte';
+import type { CloudServiceEvent } from '$lib/CloudServiceCard.svelte';
+import EmptyCloudService from '$lib/EmptyCloudService.svelte';
+import { updateCloudService } from '$lib/orchestrator';
+import type { PageData } from './$types';
 
-	export let data: PageData;
+export let data: PageData;
 
-	const { services } = data;
+const { services } = data;
 
-	function addRequirement(e: CustomEvent<CloudServiceEvent>) {
-		const reqId = e.detail.requirementId;
+function addRequirement(e: CustomEvent<CloudServiceEvent>) {
+	const reqId = e.detail.requirementId;
 
-		var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
+	var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
 
-		if (services[e.detail.serviceIdx].requirements == null) {
-			services[e.detail.serviceIdx].requirements = { requirementIds: [] };
-		}
-
-		services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
+	if (services[e.detail.serviceIdx].requirements == null) {
+		services[e.detail.serviceIdx].requirements = { requirementIds: [] };
 	}
 
-	function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
-		var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
+	services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
+}
 
-		services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
-			(_r, idx) => idx != e.detail.requirementIdx
-		);
-	}
+function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
+	var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
 
-	function save(e: CustomEvent<CloudServiceEvent>) {
-		updateCloudService(services[e.detail.serviceIdx]);
-	}
+	services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
+		(_r, idx) => idx != e.detail.requirementIdx
+	);
+}
+
+function save(e: CustomEvent<CloudServiceEvent>) {
+	updateCloudService(services[e.detail.serviceIdx]);
+}
 </script>
 
 <h3>Target Cloud Services</h3>
