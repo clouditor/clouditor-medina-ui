@@ -1,6 +1,7 @@
 <script lang="ts">
 import '../app.scss';
 import Navigation from '$lib/Navigation.svelte';
+import PageDebug from '$lib/components/PageDebug.svelte';
 //import { Styles } from 'sveltestrap';
 
 export let data;
@@ -20,3 +21,5 @@ export let data;
 
 	<slot />
 </main>
+<hr />
+<PageDebug />

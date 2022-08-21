@@ -1,6 +1,7 @@
 <script lang="ts">
 import ServiceTopBar from '$lib/components/ServiceTopBar.svelte';
 import { page } from '$app/stores';
+
 export let data: import('./$types').LayoutData;
 
 $: overviewActive = $page.routeId == 'cloud/[...id]';
@@ -37,6 +38,3 @@ $: assessmentActive = $page.routeId == 'cloud/[...id]/assessment';
 <div class="p-3">
 	<slot />
 </div>
-
-<hr />
-{JSON.stringify(data.service)}
