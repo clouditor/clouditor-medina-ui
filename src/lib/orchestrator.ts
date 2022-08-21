@@ -197,7 +197,7 @@ export async function getCloudService(id: string, fetch = window.fetch): Promise
         .then((res) => res.json())
 }
 
-export async function updateCloudService(service: CloudService): Promise<CloudService> {
+export async function updateCloudService(service: CloudService, fetch = window.fetch): Promise<CloudService> {
     const apiUrl = `/v1/orchestrator/cloud_services/${service.id}`
 
     return fetch(apiUrl, {

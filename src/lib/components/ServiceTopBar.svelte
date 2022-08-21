@@ -7,7 +7,7 @@ export let service: CloudService;
 
 <Breadcrumb class="ps-3">
 	<BreadcrumbItem>
-		<a href="#home">Home</a>
+		<a href="/cloud">Cloud Services</a>
 	</BreadcrumbItem>
 	<BreadcrumbItem active>{service.name}</BreadcrumbItem>
 </Breadcrumb>

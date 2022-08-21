@@ -37,3 +37,6 @@ $: assessmentActive = $page.routeId == 'cloud/[...id]/assessment';
 <div class="p-3">
 	<slot />
 </div>
+
+<hr />
+{JSON.stringify(data.service)}
