@@ -6,10 +6,28 @@ export interface QueryResponse {
     results: Resource[]
 }
 
+export interface QueryRequest {
+    filteredServiceId?: string
+    orderBy?: string
+}
+
+export interface HttpEndpoint {
+    transportEncryption?: TransportEncryption
+}
+
+export interface TransportEncryption {
+    algorithm: string
+    enabled: boolean
+    enforced: boolean
+    tlsVersion: string
+}
+
 export interface Resource {
     id: string
     name: string
     type: string[]
+    httpEndpoint?: HttpEndpoint
+    creationTime: number
 }
 
 export async function startDiscovery(): Promise<boolean> {
@@ -31,12 +49,23 @@ export async function startDiscovery(): Promise<boolean> {
         });
 }
 
-export async function queryDiscovery(): Promise<Resource[]> {
+export async function queryDiscovery(
+    filteredServiceId?: string,
+    orderBy = "",
+    fetch = window.fetch): Promise<Resource[]> {
     const apiUrl = `/v1/discovery/query`;
+
+    const req: QueryRequest = {};
+
+    if (filteredServiceId) {
+        req.filteredServiceId = filteredServiceId;
+    }
+
+    req.orderBy = orderBy;
 
     return fetch(apiUrl, {
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify(req),
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         }

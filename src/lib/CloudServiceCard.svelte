@@ -35,6 +35,7 @@ import Fa from 'svelte-fa';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { derived } from 'svelte/store';
 import type { MetricConfiguration } from './assessment';
+import { trim } from './util';
 
 export let service: CloudService;
 let metricConfigurations: Map<string, MetricConfiguration> = new Map<string, MetricConfiguration>();
@@ -83,16 +84,6 @@ function isAlreadySelected(req: Requirement, service: CloudService) {
 function save(): void {
 	dispatch('save', { serviceIdx: 0 });
 	dirty = false;
-}
-
-function trim(s: string): string {
-	const maxLength = 200;
-
-	if (s.length < maxLength) {
-		return s;
-	} else {
-		return s.substring(0, maxLength);
-	}
 }
 
 let category = '';
