@@ -15,6 +15,9 @@ import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 </Card>
 
 <style lang="scss">
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
 .sign {
 	text-align: center;
 	vertical-align: middle;
