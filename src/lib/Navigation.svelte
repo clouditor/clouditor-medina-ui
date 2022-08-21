@@ -12,6 +12,7 @@ import {
 	DropdownMenu,
 	DropdownItem
 } from 'sveltestrap';
+import { SvelteToast } from '@zerodevx/svelte-toast';
 import { base } from '$app/paths';
 import { page } from '$app/stores';
 
@@ -46,6 +47,7 @@ let routes = [
 console.log($page.url);
 </script>
 
+<SvelteToast />
 <Navbar color="primary" dark expand="md">
 	<NavbarBrand href="{base}/">Clouditor</NavbarBrand>
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
