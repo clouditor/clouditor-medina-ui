@@ -2,9 +2,8 @@
 import { updateCloudService } from '$lib/orchestrator';
 import { toast } from '@zerodevx/svelte-toast';
 import { Button, FormGroup, Input } from 'sveltestrap';
-import type { PageData } from './$types';
 
-export let data: PageData;
+export let data: import('./$types').PageData;
 
 async function save(event) {
 	try {
@@ -26,6 +25,9 @@ async function save(event) {
 </FormGroup>
 
 <Button color={'primary'} on:click={save}>Save</Button>
+
+<hr />
+<pre style="font-size: 0.8rem">data = {JSON.stringify(data, null, ' ')}</pre>
 
 <style>
 :root {
