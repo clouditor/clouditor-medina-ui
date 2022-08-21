@@ -85,6 +85,27 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
 }
 
 /**
+ * Requests a list of assessment results from the orchestrator service.
+ * 
+ * @returns an array of {@link AssessmentResult}s.
+ */
+export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
+    const apiUrl = `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=1000`;
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListAssessmentResultsResponse) => {
+            return response.results;
+        });
+}
+
+/**
  * Retrieves a particular metric from the orchestrator service.
  * 
  * @param id the metric id
