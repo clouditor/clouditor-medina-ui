@@ -9,8 +9,7 @@ export async function load({ fetch, params }: LoadEvent) {
                 results: results,
             };
         })
-        .catch((err) => {
-            console.log(err);
+        .catch(() => {
             redirectLogin(`/cloud/${params.id}/assessment`);
         });
 }

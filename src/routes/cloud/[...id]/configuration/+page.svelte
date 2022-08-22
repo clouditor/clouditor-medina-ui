@@ -1,4 +1,5 @@
 <script lang="ts">
+import { invalidate } from '$app/navigation';
 import { updateCloudService } from '$lib/orchestrator';
 import { toast } from '@zerodevx/svelte-toast';
 import { Button, FormGroup, Input } from 'sveltestrap';
@@ -8,6 +9,7 @@ export let data: import('./$types').PageData;
 async function save(event) {
 	try {
 		data.service = await updateCloudService(data.service);
+		invalidate('service-changed');
 		toast.push('Cloud service updated.', { classes: ['toast-success'] });
 	} catch (err) {
 		toast.push(err);
