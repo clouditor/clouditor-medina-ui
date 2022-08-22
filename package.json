@@ -15,7 +15,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@sveltejs/adapter-node": "^1.0.0-next.86",
     "@sveltejs/kit": "^1.0.0-next.428",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.26.0",
     "bootstrap": "^5.2.0",
     "eslint": "^8.22.0",
