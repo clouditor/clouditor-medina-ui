@@ -60,7 +60,11 @@ export async function redirectLogin(backTo = '/') {
             import.meta.env.VITE_REDIRECT_URI
         )}&code_challenge=${challenge}&code_challenge_method=S256`;
 
-    // Workaround because of https://github.com/sveltejs/kit/issues/5952
+    return workaroundRedirect(url);
+}
+
+// Workaround because of https://github.com/sveltejs/kit/issues/5952
+export async function workaroundRedirect(url) {
     if (browser) {
         return await goto(url);
     } else {
