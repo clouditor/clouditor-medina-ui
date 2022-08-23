@@ -9,8 +9,10 @@ export let data: import('./$types').PageData;
 async function save(event) {
 	try {
 		data.service = await updateCloudService(data.service);
-		invalidate('service-changed');
 		toast.push('Cloud service updated.', { classes: ['toast-success'] });
+
+		// Invalidate the cloud service's URL, so the layout's load function is triggered again
+		invalidate(`/v1/orchestrator/cloud_services/${data.service.id}`);
 	} catch (err) {
 		toast.push(err);
 	}

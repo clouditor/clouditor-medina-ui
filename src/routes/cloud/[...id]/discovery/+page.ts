@@ -3,14 +3,7 @@ import { redirectLogin } from "$lib/oauth";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ fetch, params }: LoadEvent) {
-    return queryDiscovery(params.id, "", fetch)
-        .then((results) => {
-            return {
-                resources: results,
-                sortedBy: "test",
-            };
-        })
-        .catch(() => {
-            redirectLogin('/discovery');
-        });
+    // no load needed, we are fetching the resources in the parent layout,
+    // because we need information about it in multiple views.
+    return {}
 }
