@@ -2,3 +2,7 @@ $primary: #007FC3;
 $min-contrast-ratio: 4;
 
 @import "bootstrap";
+
+html {
+    font-size: 0.9rem;
+}

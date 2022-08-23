@@ -1,7 +1,13 @@
 <script lang="ts">
 import ServiceTopBar from '$lib/components/ServiceTopBar.svelte';
 import { page } from '$app/stores';
-import { Breadcrumb, BreadcrumbItem } from 'sveltestrap';
+import {
+	faBinoculars,
+	faCircleCheck,
+	faGear,
+	faTableColumns
+} from '@fortawesome/free-solid-svg-icons';
+import Fa from 'svelte-fa';
 
 export let data: import('./$types').LayoutData;
 
@@ -15,23 +21,25 @@ $: assessmentActive = $page.routeId == 'cloud/[...id]/assessment';
 	<ServiceTopBar service={data.service} />
 	<ul class="nav nav-tabs">
 		<li class="nav-item ps-2">
-			<a class="nav-link" class:active={overviewActive} href="/cloud/{data.service.id}">Overview</a>
+			<a class="nav-link" class:active={overviewActive} href="/cloud/{data.service.id}"
+				><Fa icon={faTableColumns} /> Overview</a
+			>
 		</li>
 		<li class="nav-item">
 			<a
 				class="nav-link"
 				class:active={configurationActive}
-				href="/cloud/{data.service.id}/configuration">Configuration</a
+				href="/cloud/{data.service.id}/configuration"><Fa icon={faGear} /> Configuration</a
 			>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" class:active={discoveryActive} href="/cloud/{data.service.id}/discovery"
-				>Discovery</a
+				><Fa icon={faBinoculars} /> Discovery</a
 			>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" class:active={assessmentActive} href="/cloud/{data.service.id}/assessment"
-				>Assessment</a
+				><Fa icon={faCircleCheck} /> Assessment</a
 			>
 		</li>
 	</ul>

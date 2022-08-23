@@ -7,6 +7,11 @@ export let data: import('./$types').PageData;
 	<p>
 		{data.service.description}
 	</p>
+	<p>
+		<a href="./{data.service.id}/discovery">
+			{data.statistics.discoveredResources} discovered resources
+		</a>
+	</p>
 	<a href="./{data.service.id}/configuration">
 		<button class="btn btn-outline-secondary" type="button">Configure</button>
 	</a>
