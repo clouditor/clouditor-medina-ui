@@ -4,14 +4,13 @@ export interface CloudService {
     id: string
     name: string
     description: string
-    requirements: Requirements
 }
 
-export interface Requirements {
-    requirementIds: string[]
+export interface Catalog {
+    controls: Control[]
 }
 
-export interface Requirement {
+export interface Control {
     id: string
     name: string
     description: string
@@ -57,10 +56,6 @@ export interface ListAssessmentResultsResponse {
 
 export interface ListCloudServicesResponse {
     services: CloudService[]
-}
-
-export interface ListRequirementsResponse {
-    requirements: Requirement[]
 }
 
 /**
@@ -180,6 +175,26 @@ export async function listMetricConfigurations(serviceId: string, skipDefault = 
 }
 
 /**
+ * Creates a new cloud service
+ */
+ export async function registerCloudService(service: CloudService): Promise<CloudService> {
+    const apiUrl = `/v1/orchestrator/cloud_services`
+
+    return fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(service),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: CloudService) => {
+            return response;
+        });
+}
+
+/**
  * Retrieves a list of cloud services from the orchestrator service.
  * 
  * @returns an array of {@link CloudService}s.
@@ -268,27 +283,6 @@ export function throwError(response: Response) {
     }
 
     return response;
-}
-
-/**
- * Retrieves a list of requirements from the orchestrator service.
- * 
- * @returns an array of {@link Requirement}s.
- */
-export async function listRequirements(): Promise<Requirement[]> {
-    const apiUrl = `/v1/orchestrator/requirements`
-
-    return fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${localStorage.token}`,
-        }
-    })
-        .then(throwError)
-        .then((res) => res.json())
-        .then((response: ListRequirementsResponse) => {
-            return response.requirements;
-        });
 }
 
 /**

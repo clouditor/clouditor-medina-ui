@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
-import type { Requirement } from '$lib/orchestrator';
+import type { Control } from '$lib/orchestrator';
 import type { Metric } from '$lib/assessment';
 
 export const metrics = writable(new Map<string, Metric>());
-export const requirements = writable(new Map<string, Requirement>());
+export const controls = writable(new Map<string, Control>());
+export var editing = writable(new Boolean);
