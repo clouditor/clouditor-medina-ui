@@ -12,7 +12,7 @@ import Fa from 'svelte-fa';
 export let data: import('./$types').LayoutData;
 
 $: overviewActive = $page.routeId == 'cloud/[...id]';
-$: configurationActive = $page.routeId == 'cloud/[...id]/configuration';
+$: configurationActive = $page.routeId.startsWith('cloud/[...id]/configuration');
 $: discoveryActive = $page.routeId == 'cloud/[...id]/discovery';
 $: assessmentActive = $page.routeId == 'cloud/[...id]/assessment';
 </script>

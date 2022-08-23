@@ -30,9 +30,6 @@ async function save(event) {
 
 <Button color={'primary'} on:click={save}>Save</Button>
 
-<hr />
-<pre style="font-size: 0.8rem">data = {JSON.stringify(data, null, ' ')}</pre>
-
 <style>
 :root {
 	--toastBorderRadius: 0.375rem;
