@@ -7,6 +7,9 @@ export interface CloudService {
 }
 
 export interface Catalog {
+    id: string
+    name: string
+    description: string
     controls: Control[]
 }
 
@@ -16,6 +19,7 @@ export interface Control {
     description: string
     metricIds: string[]
     category: string
+    controls: Control[]
 }
 
 export interface ListMetricsResponse {
@@ -44,6 +48,10 @@ export interface State {
     treeId: string
     timestamp: string
     certificateId: string
+}
+
+export interface ListCatalogsResponse {
+    catalogs: Catalog[];
 }
 
 export interface ListCertificatesResponse {
@@ -128,7 +136,7 @@ export async function getMetric(id: string): Promise<Metric> {
  * @param id the metric id
  * @returns 
  */
-export async function getMetricImplemenation(id: string): Promise<MetricImplementation> {
+export async function getMetricImplementation(id: string): Promise<MetricImplementation> {
     const apiUrl = `/v1/orchestrator/metrics/${id}/implementation`
 
     return fetch(apiUrl, {
@@ -212,6 +220,27 @@ export async function listCloudServices(): Promise<CloudService[]> {
         .then((res) => res.json())
         .then((response: ListCloudServicesResponse) => {
             return response.services;
+        });
+}
+
+/**
+ * Retrieves a list of catalogs from the orchestrator service.
+ * 
+ * @returns an array of {@link Catalog}s.
+ */
+export async function listCatalogs(): Promise<Catalog[]> {
+    const apiUrl = `/v1/orchestrator/catalogs`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListCatalogsResponse) => {
+            return response.catalogs;
         });
 }
 

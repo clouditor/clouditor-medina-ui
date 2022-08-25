@@ -1,25 +1,28 @@
-<script lang="ts" context="module">
-import { Card, CardBody, CardText, Button, Form } from 'sveltestrap';
-import { type CloudService, registerCloudService } from './orchestrator';
-import { editing } from './stores';
+<script type="ts">
+import { Button, Form, Card, CardBody, CardText } from 'sveltestrap';
+import { editing } from '$lib/stores';
+import { registerCloudService } from './orchestrator';
 
-// cloud service properties
 let serviceId = '';
 let serviceName = '';
 let serviceDescription = '';
 
+let isEditing = false;
+editing.subscribe((value) => {
+	isEditing = value;
+});
+
 function save(): void {
-	const service: CloudService = {
+	registerCloudService({
 		id: serviceId,
 		name: serviceName,
 		description: serviceDescription
-	};
-	registerCloudService(service);
+	});
 	editing.set(false);
 }
 </script>
 
-{#if !editing}
+{#if !isEditing}
 	<Card class="mb-3">
 		<CardBody>
 			<CardText>
@@ -41,7 +44,7 @@ function save(): void {
 			class="block px-1 py-2 mt-2 border-2 border-gray-100 text-gray-800"
 			bind:value={serviceId}
 		/>
-
+		<br />
 		<label for="serviceName" class="block text-sm text-gray-600">Service Name</label>
 		<input
 			id="serviceName"
@@ -50,7 +53,7 @@ function save(): void {
 			class="block px-1 py-2 mt-2 border-2 border-gray-100 text-gray-800"
 			bind:value={serviceName}
 		/>
-
+		<br />
 		<label for="serviceDescription" class="block text-sm text-gray-600 mt-4"
 			>Service Description</label
 		>
@@ -61,7 +64,7 @@ function save(): void {
 			placeholder="service description"
 			class="block px-1 py-2 mt-2 border-2 border-gray-100 text-gray-800"
 		/>
-
+		<br />
 		<Button color="primary" on:click={(e) => save()} class="mt-2">Save</Button>
 	</Form>
 {/if}

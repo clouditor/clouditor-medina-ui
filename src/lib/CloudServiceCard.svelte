@@ -19,10 +19,37 @@ export interface CatalogEventMap {
 </script>
 
 <script lang="ts">
-import { Card, CardBody, CardHeader, CardText } from 'sveltestrap';
-import type { CloudService } from '$lib/orchestrator';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+	CardSubtitle,
+	CardText,
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
+	ListGroup,
+	ListGroupItem
+} from 'sveltestrap';
+import { listMetricConfigurations, type CloudService } from '$lib/orchestrator';
+import { createEventDispatcher, onMount } from 'svelte';
+import Fa from 'svelte-fa';
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { derived } from 'svelte/store';
+import type { MetricConfiguration } from './assessment';
+import { trim } from './util';
 
 export let service: CloudService;
+let metricConfigurations: Map<string, MetricConfiguration> = new Map<string, MetricConfiguration>();
+
+onMount(async () => {
+	metricConfigurations = await listMetricConfigurations(service.id, true);
+});
+
+let category = '';
 </script>
 
 <Card class="mb-3 me-3">
