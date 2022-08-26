@@ -1,11 +1,16 @@
+import { queryDiscovery } from '$lib/discovery';
 import { getCloudService } from '$lib/orchestrator';
-import type { LoadEvent } from '@sveltejs/kit';
+import type { LayoutLoad } from './$types';
 
-export async function load({ fetch, params, depends }: LoadEvent) {
-    depends("service-changed");
+export const load: LayoutLoad = async ({ fetch, params }) => {
     const service = await getCloudService(params.id, fetch);
+    const resources = await queryDiscovery(service.id, "", fetch);
 
     return {
-        service: service
+        service: service,
+        resources: resources,
+        statistics: {
+            discoveredResources: resources.length,
+        }
     }
 }

@@ -90,7 +90,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=1000`;
+    const apiUrl = `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`;
 
     return fetch(apiUrl, {
         method: 'GET',
