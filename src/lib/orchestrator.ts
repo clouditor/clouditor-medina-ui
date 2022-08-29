@@ -245,6 +245,24 @@ export async function listCatalogs(): Promise<Catalog[]> {
 }
 
 /**
+ * Retrieves a catalog from the orchestrator service.
+ * 
+ * @returns a {@link Catalog}s.
+ */
+ export async function getCatalog(id: string, fetch = window.fetch): Promise<Catalog> {
+    const apiUrl = `/v1/orchestrator/catalogs/${id}`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+/**
  * Retrieve a cloud service from the orchestrator service using its ID.
  * 
  * @returns the cloud service
