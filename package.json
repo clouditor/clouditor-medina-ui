@@ -35,7 +35,7 @@
     "svelte-toast": "^1.0.0",
     "sveltestrap": "^5.9.0",
     "tslib": "^2.4.0",
-    "typescript": "^4.7.4",
+    "typescript": "^4.8.4",
     "vite": "^3.0.0"
   },
   "type": "module"
