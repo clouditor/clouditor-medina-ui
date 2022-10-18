@@ -24,6 +24,7 @@ export async function exchange(code: string, sessionState: string | undefined = 
     }
     params.append("client_id", import.meta.env.VITE_CLIENT_ID);
     params.append("redirect_uri", import.meta.env.VITE_REDIRECT_URI);
+    params.append("scope", import.meta.env.VITE_SCOPE)
 
     return fetch(import.meta.env.VITE_TOKEN_URL, {
         method: 'POST',
@@ -58,7 +59,7 @@ export async function redirectLogin(backTo = '/') {
     const url = `${import.meta.env.VITE_AUTH_URL}?response_type=code&client_id=${import.meta.env.VITE_CLIENT_ID
         }&redirect_uri=${encodeURIComponent(
             import.meta.env.VITE_REDIRECT_URI
-        )}&code_challenge=${challenge}&code_challenge_method=S256`;
+        )}&code_challenge=${challenge}&code_challenge_method=S256&scope=${import.meta.env.VITE_SCOPE}`;
 
     return workaroundRedirect(url);
 }
