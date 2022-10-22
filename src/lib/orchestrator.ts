@@ -10,7 +10,12 @@ export interface Catalog {
     id: string
     name: string
     description: string
+    categories: Category[]
     controls: Control[]
+}
+
+export interface Category {
+    name: string
 }
 
 export interface Control {
@@ -52,6 +57,10 @@ export interface State {
 
 export interface ListCatalogsResponse {
     catalogs: Catalog[];
+}
+
+export interface ListControlsResponse {
+    controls: Control[];
 }
 
 export interface ListCertificatesResponse {
@@ -260,6 +269,27 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
     })
         .then(throwError)
         .then((res) => res.json())
+}
+
+/**
+ * Retrieves controls from the orchestrator service.
+ * 
+ * @returns a list of {@link Control}s.
+ */
+export async function listControls(catalogId: string, categoryName: string, fetch = window.fetch): Promise<Control[]> {
+    const apiUrl = `/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListControlsResponse) => {
+            return response.controls;
+        });
 }
 
 /**
