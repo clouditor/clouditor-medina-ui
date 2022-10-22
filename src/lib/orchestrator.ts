@@ -3,7 +3,7 @@ import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementatio
 export interface CloudService {
     id: string
     name: string
-    description: string
+    description?: string
 }
 
 export interface Catalog {
@@ -185,7 +185,7 @@ export async function listMetricConfigurations(serviceId: string, skipDefault = 
 /**
  * Creates a new cloud service
  */
- export async function registerCloudService(service: CloudService): Promise<CloudService> {
+export async function registerCloudService(service: CloudService): Promise<CloudService> {
     const apiUrl = `/v1/orchestrator/cloud_services`
 
     return fetch(apiUrl, {
@@ -249,7 +249,7 @@ export async function listCatalogs(): Promise<Catalog[]> {
  * 
  * @returns a {@link Catalog}s.
  */
- export async function getCatalog(id: string, fetch = window.fetch): Promise<Catalog> {
+export async function getCatalog(id: string, fetch = window.fetch): Promise<Catalog> {
     const apiUrl = `/v1/orchestrator/catalogs/${id}`
 
     return fetch(apiUrl, {

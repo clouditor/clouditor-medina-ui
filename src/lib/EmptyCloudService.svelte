@@ -1,23 +1,26 @@
 <script type="ts">
-import { Button, Form, Card, CardBody, CardText } from 'sveltestrap';
+import { Button, Form, Card, CardBody, CardText, FormGroup, Input } from 'sveltestrap';
 import { editing } from '$lib/stores';
-import { registerCloudService } from './orchestrator';
+import { registerCloudService, type CloudService } from './orchestrator';
+import { invalidate } from '$app/navigation';
 
-let serviceId = '';
-let serviceName = '';
-let serviceDescription = '';
+let service: CloudService = { id: undefined, name: undefined };
 
 let isEditing = false;
 editing.subscribe((value) => {
 	isEditing = value;
 });
 
-function save(): void {
-	registerCloudService({
-		id: serviceId,
-		name: serviceName,
-		description: serviceDescription
-	});
+async function save() {
+	let _ = await registerCloudService(service);
+
+	// Invalidate the cloud services's list
+	invalidate(`/v1/orchestrator/cloud_services/`);
+	editing.set(false);
+}
+
+function discard() {
+	service = { id: undefined, name: undefined };
 	editing.set(false);
 }
 </script>
@@ -36,36 +39,17 @@ function save(): void {
 	</Card>
 {:else}
 	<Form>
-		<label for="serviceId" class="block text-sm text-gray-600">Service ID</label>
-		<input
-			id="serviceId"
-			type="text"
-			placeholder="service id"
-			class="block px-1 py-2 mt-2 border-2 border-gray-100 text-gray-800"
-			bind:value={serviceId}
-		/>
-		<br />
-		<label for="serviceName" class="block text-sm text-gray-600">Service Name</label>
-		<input
-			id="serviceName"
-			type="text"
-			placeholder="service name"
-			class="block px-1 py-2 mt-2 border-2 border-gray-100 text-gray-800"
-			bind:value={serviceName}
-		/>
-		<br />
-		<label for="serviceDescription" class="block text-sm text-gray-600 mt-4"
-			>Service Description</label
-		>
-		<input
-			id="serviceDescription"
-			type="text"
-			bind:value={serviceDescription}
-			placeholder="service description"
-			class="block px-1 py-2 mt-2 border-2 border-gray-100 text-gray-800"
-		/>
-		<br />
-		<Button color="primary" on:click={(e) => save()} class="mt-2">Save</Button>
+		<FormGroup floating label="Name">
+			<Input placeholder="Enter a name" bind:value={service.name} />
+		</FormGroup>
+
+		<FormGroup floating>
+			<Input type="textarea" placeholder="Enter a description" bind:value={service.description} />
+			<div slot="label">Description</div>
+		</FormGroup>
+
+		<Button color={'primary'} on:click={save}>Save</Button>
+		<Button color={'danger'} on:click={discard}>Cancel</Button>
 	</Form>
 {/if}
 
