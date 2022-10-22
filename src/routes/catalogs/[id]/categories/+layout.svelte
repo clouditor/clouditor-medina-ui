@@ -9,7 +9,7 @@ import { page } from '$app/stores';
 			<li class="nav-item">
 				<a
 					class="nav-link"
-					class:active={$page.routeId == 'cloud/[...id]/configuration'}
+					class:active={$page.params.name == category.name}
 					aria-current="page"
 					href="/catalogs/{data.catalog.id}/categories/{category.name}"
 				>

@@ -22,7 +22,7 @@ export interface Control {
     id: string
     name: string
     description: string
-    metricIds: string[]
+    metrics: Metric[]
     category: string
     controls: Control[]
 }
