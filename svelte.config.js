@@ -10,6 +10,9 @@ const config = {
 
 	kit: {
 		adapter: node()
+	},
+	env: {
+		dir: process.cwd
 	}
 };
 

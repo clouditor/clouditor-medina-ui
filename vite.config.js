@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { env } from '$env/dynamic/private';
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -6,11 +7,11 @@ const config = {
 
 	server: {
 		proxy: {
-			'/v1/auth/': 'http://localhost:8080',
-			'/v1/discovery/': 'http://localhost:8080',
-			'/v1/evidence_store/': 'http://localhost:8080',
-			'/v1/assessment/': 'http://localhost:8080',
-			'/v1/orchestrator/': 'http://localhost:8080'
+			'/v1/auth/': env.CLOUDITOR_URL,
+			'/v1/discovery/': env.CLOUDITOR_URL,
+			'/v1/evidence_store/': env.CLOUDITOR_URL,
+			'/v1/assessment/': env.CLOUDITOR_URL,
+			'/v1/orchestrator/': env.CLOUDITOR_URL
 		}
 	},
 };
