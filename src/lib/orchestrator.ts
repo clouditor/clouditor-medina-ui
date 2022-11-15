@@ -276,7 +276,7 @@ export function throwError(response: Response) {
  * @returns an array of {@link Requirement}s.
  */
 export async function listRequirements(): Promise<Requirement[]> {
-    const apiUrl = `/v1/orchestrator/requirements`
+    const apiUrl = `localhost:8080/v1/orchestrator/requirements`
 
     return fetch(apiUrl, {
         method: 'GET',

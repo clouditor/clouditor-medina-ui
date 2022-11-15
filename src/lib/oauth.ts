@@ -1,7 +1,7 @@
 import { browser } from "$app/env";
 import { goto } from "$app/navigation";
 import { redirect } from "@sveltejs/kit";
-import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 export interface TokenResponse {
     access_token: string
@@ -23,11 +23,11 @@ export async function exchange(code: string, sessionState: string | undefined = 
     if (sessionState != undefined) {
         params.append("session_state", sessionState);
     }
-    params.append("client_id", env.VITE_CLIENT_ID);
-    params.append("redirect_uri", env.VITE_REDIRECT_URI);
-    params.append("scope", env.VITE_SCOPE)
+    params.append("client_id", env.PUBLIC_CLIENT_ID);
+    params.append("redirect_uri", env.PUBLIC_REDIRECT_URI);
+    params.append("scope", env.PUBLIC_SCOPE)
 
-    return fetch(env.VITE_TOKEN_URL, {
+    return fetch(env.PUBLIC_TOKEN_URL, {
         method: 'POST',
         body: params,
     })
@@ -57,10 +57,10 @@ export async function redirectLogin(backTo = '/') {
 
     const challenge = await generateChallenge(v);
 
-    const url = `${env.VITE_AUTH_URL}?response_type=code&client_id=${env.VITE_CLIENT_ID
+    const url = `${env.PUBLIC_AUTH_URL}?response_type=code&client_id=${env.PUBLIC_CLIENT_ID
         }&redirect_uri=${encodeURIComponent(
-            env.VITE_REDIRECT_URI
-        )}&code_challenge=${challenge}&code_challenge_method=S256&scope=${env.VITE_SCOPE}`;
+            env.PUBLIC_REDIRECT_URI
+        )}&code_challenge=${challenge}&code_challenge_method=S256&scope=${env.PUBLIC_SCOPE}`;
 
     return workaroundRedirect(url);
 }
