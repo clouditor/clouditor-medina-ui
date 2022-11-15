@@ -1,11 +1,11 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-    readonly VITE_AUTH_URL: string
-    readonly VITE_TOKEN_URL: string
-    readonly VITE_CLIENT_ID: string
-    readonly VITE_REDIRECT_URI: string
-    readonly VITE_SCOPE: string
+    readonly AUTH_URL: string
+    readonly TOKEN_URL: string
+    readonly CLIENT_ID: string
+    readonly REDIRECT_URI: string
+    readonly SCOPE: string
 }
 
 interface ImportMeta {
