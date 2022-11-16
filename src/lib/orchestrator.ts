@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/public';
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
 
 export interface CloudService {
@@ -276,7 +277,7 @@ export function throwError(response: Response) {
  * @returns an array of {@link Requirement}s.
  */
 export async function listRequirements(): Promise<Requirement[]> {
-    const apiUrl = `localhost:8080/v1/orchestrator/requirements`
+    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/requirements`
 
     return fetch(apiUrl, {
         method: 'GET',
