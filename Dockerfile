@@ -12,4 +12,6 @@ COPY --from=build /app/build .
 COPY --from=build /app/package.json .
 COPY --from=build /app/node_modules ./node_modules
 EXPOSE 5173
+# TODO: Make it configurable , e.g with "--build-arg"
+ENV PORT=5173
 CMD ["node", "index.js"]
