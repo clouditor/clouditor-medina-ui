@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/public';
 export interface StartDiscoveryResponse {
     successful: boolean
 }
@@ -31,7 +32,7 @@ export interface Resource {
 }
 
 export async function startDiscovery(): Promise<boolean> {
-    const apiUrl = `/v1/discovery/start`;
+    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/discovery/start`;
     const providers = prompt("Enter providers (seperated with comma)", "").split(",");
 
     return fetch(apiUrl, {
@@ -53,7 +54,7 @@ export async function queryDiscovery(
     filteredServiceId?: string,
     orderBy = "",
     fetch = window.fetch): Promise<Resource[]> {
-    const apiUrl = `/v1/discovery/query`;
+    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/discovery/query`;
 
     const req: QueryRequest = {};
 

@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/public';
 import { throwError } from "$lib/orchestrator";
 
 export interface Evidence {
@@ -12,7 +13,7 @@ export interface Evidence {
  * @returns 
  */
 export async function getEvidence(id: string): Promise<Evidence> {
-    const apiUrl = `/v1/evidence_store/evidences/${id}`
+    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/evidence_store/evidences/${id}`
 
     return fetch(apiUrl, {
         method: 'GET',
