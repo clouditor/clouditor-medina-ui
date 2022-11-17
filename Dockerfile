@@ -12,6 +12,14 @@ COPY --from=build /app/build .
 COPY --from=build /app/package.json .
 COPY --from=build /app/node_modules ./node_modules
 EXPOSE 5173
-# TODO: Make it configurable , e.g with "--build-arg"
+
+# Default Port
 ENV PORT=5173
+# Default ENV variables for communication with clouditor engine
+ENV PUBLIC_AUTH_URL=http://localhost:8080/v1/auth/authorize
+ENV PUBLIC_TOKEN_URL=http://localhost:8080/v1/auth/token
+ENV PUBLIC_CLIENT_ID=dashboard
+ENV PUBLIC_REDIRECT_URI=http://localhost:5173/callback
+ENV PUBLIC_SCOPE="profile email"
+ENV PUBLIC_CLOUDITOR_URL=http://localhost:8080
 CMD ["node", "index.js"]
