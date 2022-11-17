@@ -23,11 +23,11 @@ export async function exchange(code: string, sessionState: string | undefined = 
     if (sessionState != undefined) {
         params.append("session_state", sessionState);
     }
-    params.append("client_id", env.PUBLIC_CLIENT_ID);
-    params.append("redirect_uri", env.PUBLIC_REDIRECT_URI);
-    params.append("scope", env.PUBLIC_SCOPE)
+    params.append("client_id", env.OAUTH_CLIENT_ID);
+    params.append("redirect_uri", env.OAUTH_REDIRECT_URI);
+    params.append("scope", env.OAUTH_SCOPE)
 
-    return fetch(env.PUBLIC_TOKEN_URL, {
+    return fetch(env.OAUTH_TOKEN_URL, {
         method: 'POST',
         body: params,
     })
@@ -57,10 +57,10 @@ export async function redirectLogin(backTo = '/') {
 
     const challenge = await generateChallenge(v);
 
-    const url = `${env.PUBLIC_AUTH_URL}?response_type=code&client_id=${env.PUBLIC_CLIENT_ID
+    const url = `${env.OAUTH_URL}?response_type=code&client_id=${env.OAUTH_CLIENT_ID
         }&redirect_uri=${encodeURIComponent(
-            env.PUBLIC_REDIRECT_URI
-        )}&code_challenge=${challenge}&code_challenge_method=S256&scope=${env.PUBLIC_SCOPE}`;
+            env.OAUTH_REDIRECT_URI
+        )}&code_challenge=${challenge}&code_challenge_method=S256&scope=${env.OAUTH_SCOPE}`;
 
     return workaroundRedirect(url);
 }

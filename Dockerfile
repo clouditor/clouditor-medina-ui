@@ -16,10 +16,10 @@ EXPOSE 5173
 # Default Port
 ENV PORT=5173
 # Default ENV variables for communication with clouditor engine
-ENV PUBLIC_AUTH_URL=http://localhost:8080/v1/auth/authorize
-ENV PUBLIC_TOKEN_URL=http://localhost:8080/v1/auth/token
-ENV PUBLIC_CLIENT_ID=dashboard
-ENV PUBLIC_REDIRECT_URI=http://localhost:5173/callback
-ENV PUBLIC_SCOPE="profile email"
-ENV PUBLIC_CLOUDITOR_URL=http://localhost:8080
+ENV OAUTH_AUTH_URL=http://localhost:8080/v1/auth/authorize
+ENV OAUTH_TOKEN_URL=http://localhost:8080/v1/auth/token
+ENV OAUTH_CLIENT_ID=dashboard
+ENV OAUTH_REDIRECT_URI=http://localhost:5173/callback
+ENV OAUTH_SCOPE="profile email"
+ENV OAUTH_CLOUDITOR_URL=http://localhost:8080
 CMD ["node", "index.js"]

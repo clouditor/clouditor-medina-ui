@@ -70,7 +70,7 @@ export interface ListRequirementsResponse {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listAssessmentResults(): Promise<AssessmentResult[]> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/assessment_results?pageSize=1000`;
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/assessment_results?pageSize=1000`;
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -91,7 +91,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`;
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`;
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -113,7 +113,7 @@ export async function listCloudServiceAssessmentResults(serviceId: string, fetch
  * @returns 
  */
 export async function getMetric(id: string): Promise<Metric> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/metrics/${id}`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/metrics/${id}`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -135,7 +135,7 @@ export async function getMetric(id: string): Promise<Metric> {
  * @returns 
  */
 export async function getMetricImplemenation(id: string): Promise<MetricImplementation> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/metrics/${id}/implementation`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/metrics/${id}/implementation`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -157,7 +157,7 @@ export async function getMetricImplemenation(id: string): Promise<MetricImplemen
  * @returns 
  */
 export async function listMetricConfigurations(serviceId: string, skipDefault = false): Promise<Map<string, MetricConfiguration>> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -186,7 +186,7 @@ export async function listMetricConfigurations(serviceId: string, skipDefault = 
  * @returns an array of {@link CloudService}s.
  */
 export async function listCloudServices(): Promise<CloudService[]> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/cloud_services`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -207,7 +207,7 @@ export async function listCloudServices(): Promise<CloudService[]> {
  * @returns the cloud service
  */
 export async function getCloudService(id: string, fetch = window.fetch): Promise<CloudService> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${id}`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${id}`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -220,7 +220,7 @@ export async function getCloudService(id: string, fetch = window.fetch): Promise
 }
 
 export async function updateCloudService(service: CloudService, fetch = window.fetch): Promise<CloudService> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${service.id}`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${service.id}`
 
     return fetch(apiUrl, {
         method: 'PUT',
@@ -242,7 +242,7 @@ export async function updateCloudService(service: CloudService, fetch = window.f
  * @returns an array of {@link Metric}s.
  */
 export async function listMetrics(): Promise<Metric[]> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/metrics?pageSize=200`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/metrics?pageSize=200`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -277,7 +277,7 @@ export function throwError(response: Response) {
  * @returns an array of {@link Requirement}s.
  */
 export async function listRequirements(): Promise<Requirement[]> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/requirements`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/requirements`
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -298,7 +298,7 @@ export async function listRequirements(): Promise<Requirement[]> {
  * @returns an array of {@link Certificate}s.
  */
 export async function listCertificates(): Promise<Certificate[]> {
-    const apiUrl = env.PUBLIC_CLOUDITOR_URL + `/v1/orchestrator/certificates`
+    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/certificates`
 
     return fetch(apiUrl, {
         method: 'GET',
