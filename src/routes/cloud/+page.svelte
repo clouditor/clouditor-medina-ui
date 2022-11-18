@@ -10,26 +10,6 @@ export let data: PageData;
 
 const { services } = data;
 
-function addRequirement(e: CustomEvent<CloudServiceEvent>) {
-	const reqId = e.detail.requirementId;
-
-	var requirements = services[e.detail.serviceIdx].requirements?.requirementIds ?? [];
-
-	if (services[e.detail.serviceIdx].requirements == null) {
-		services[e.detail.serviceIdx].requirements = { requirementIds: [] };
-	}
-
-	services[e.detail.serviceIdx].requirements.requirementIds = [...requirements, reqId];
-}
-
-function removeRequirement(e: CustomEvent<CloudServiceEvent>) {
-	var requirements = services[e.detail.serviceIdx].requirements.requirementIds;
-
-	services[e.detail.serviceIdx].requirements.requirementIds = requirements.filter(
-		(_r, idx) => idx != e.detail.requirementIdx
-	);
-}
-
 function save(e: CustomEvent<CloudServiceEvent>) {
 	updateCloudService(services[e.detail.serviceIdx]);
 }
@@ -45,8 +25,6 @@ The following page can be used to configure Cloud services.
 			<Col>
 				<CloudServiceCard
 					{service}
-					on:add-requirement={addRequirement}
-					on:remove-requirement={removeRequirement}
 					on:save={save}
 				/>
 			</Col>

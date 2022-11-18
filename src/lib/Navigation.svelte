@@ -39,6 +39,10 @@ let routes = [
 		name: 'Metrics'
 	},
 	{
+		url: '/catalogs',
+		name: 'Catalogs'
+	},
+	{
 		url: '/certificates',
 		name: 'Certificates'
 	}
