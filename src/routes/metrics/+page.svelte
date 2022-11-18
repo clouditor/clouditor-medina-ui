@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Table } from 'sveltestrap';
 	import MetricImplementationBlock from '$lib/MetricImplementationBlock.svelte';
-	import { getMetricImplemenation } from '$lib/orchestrator';
+	import { getMetricImplementation } from '$lib/orchestrator';
 	import type { Metric, MetricImplementation } from '$lib/assessment';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
 	async function fetchImplementation(metric: Metric): Promise<MetricImplementation> {
-		return await getMetricImplemenation(metric.id);
+		return await getMetricImplementation(metric.id);
 	}
 </script>
 
