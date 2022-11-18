@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/public';
 import { throwError } from "$lib/orchestrator";
+import { clouditorize } from './util';
 
 export interface Evidence {
     id: string
@@ -13,12 +14,12 @@ export interface Evidence {
  * @returns 
  */
 export async function getEvidence(id: string): Promise<Evidence> {
-    const apiUrl = clouditorize(/v1/evidence_store / evidences / ${ id }`)
+    const apiUrl = clouditorize(`/v1/evidence_store/evidences/${id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${ localStorage.token }`,
+            'Authorization': `Bearer ${localStorage.token}`,
         }
     })
         .then(throwError)
