@@ -11,10 +11,10 @@ import Fa from 'svelte-fa';
 
 export let data: import('./$types').LayoutData;
 
-$: overviewActive = $page.routeId == 'cloud/[...id]';
-$: configurationActive = $page.routeId.startsWith('cloud/[...id]/configuration');
-$: discoveryActive = $page.routeId == 'cloud/[...id]/discovery';
-$: assessmentActive = $page.routeId == 'cloud/[...id]/assessment';
+$: overviewActive = $page.route.id == 'cloud/[...id]';
+$: configurationActive = $page.route.id.startsWith('cloud/[...id]/configuration');
+$: discoveryActive = $page.route.id == 'cloud/[...id]/discovery';
+$: assessmentActive = $page.route.id == 'cloud/[...id]/assessment';
 </script>
 
 <div class="pt-3 pb-0 bg-light">

@@ -11,9 +11,10 @@ services:
       - CLOUDITOR_DISCOVERY_AUTO_START=false
       - CLOUDITOR_DISCOVERY_PROVIDER=azure
       - CLOUDITOR_DASHBOARD_URL=http://localhost:5173
+      - CLOUDITOR_API_CORS_ALLOWED_ORIGINS=http://localhost:5173
     # Put cloud service credentials in the following env file (ignored by git)
-    # E.g., for Azure put in the following ENV variables: AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET
-    env_file: .cloud_credentials.env
+    # e.g., for Azure put in the following ENV variables: AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET
+    #env_file: .cloud_credentials.env
   ui:
     build:
       context: .

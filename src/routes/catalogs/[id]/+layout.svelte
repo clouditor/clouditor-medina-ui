@@ -2,8 +2,8 @@
 import { page } from '$app/stores';
 export let data: import('./$types').LayoutData;
 
-$: overviewActive = $page.routeId == 'catalogs/[...id]';
-$: categoriesActive = $page.routeId == 'catalogs/[...id]/categories';
+$: overviewActive = $page.route.id == 'catalogs/[...id]';
+$: categoriesActive = $page.route.id == 'catalogs/[...id]/categories';
 </script>
 
 <div class="pt-3 pb-0 bg-light">
