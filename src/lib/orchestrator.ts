@@ -1,4 +1,3 @@
-import { env } from '$env/dynamic/public';
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
 import { clouditorize } from './util';
 

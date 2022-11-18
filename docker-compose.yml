@@ -15,7 +15,7 @@ services:
     # E.g., for Azure put in the following ENV variables: AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET
     env_file: .cloud_credentials.env
   ui:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     container_name: cl_ui

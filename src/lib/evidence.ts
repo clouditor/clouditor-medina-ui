@@ -1,4 +1,3 @@
-import { env } from '$env/dynamic/public';
 import { throwError } from "$lib/orchestrator";
 import { clouditorize } from './util';
 

@@ -1,4 +1,3 @@
-import { env } from '$env/dynamic/public';
 import { clouditorize } from './util';
 export interface StartDiscoveryResponse {
     successful: boolean
