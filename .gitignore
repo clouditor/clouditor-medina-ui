@@ -4,3 +4,4 @@ node_modules
 /.svelte-kit
 /package
 yarn-error.log
+cloud_credentials.env
