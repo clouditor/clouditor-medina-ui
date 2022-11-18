@@ -1,18 +1,57 @@
-<script>
-import { Card, CardBody, CardText } from 'sveltestrap';
-import Fa from 'svelte-fa';
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+<script type="ts">
+import { Button, Form, Card, CardBody, CardText, FormGroup, Input } from 'sveltestrap';
+import { editing } from '$lib/stores';
+import { registerCloudService, type CloudService } from './orchestrator';
+import { invalidate } from '$app/navigation';
+
+let service: CloudService = { id: undefined, name: undefined };
+
+let isEditing = false;
+editing.subscribe((value) => {
+	isEditing = value;
+});
+
+async function save() {
+	let _ = await registerCloudService(service);
+
+	// Invalidate the cloud services's list
+	invalidate(`/v1/orchestrator/cloud_services/`);
+	editing.set(false);
+}
+
+function discard() {
+	service = { id: undefined, name: undefined };
+	editing.set(false);
+}
 </script>
 
-<Card class="mb-3">
-	<CardBody>
-		<CardText>
-			<div class="sign">
-				<Fa icon={faCirclePlus} />
-			</div>
-		</CardText>
-	</CardBody>
-</Card>
+{#if !isEditing}
+	<Card class="mb-3">
+		<CardBody>
+			<CardText>
+				<div class="sign">
+					<Button on:click={() => editing.set(true)} class="mt-2">
+						<div value="true">Add service</div></Button
+					>
+				</div>
+			</CardText>
+		</CardBody>
+	</Card>
+{:else}
+	<Form>
+		<FormGroup floating label="Name">
+			<Input placeholder="Enter a name" bind:value={service.name} />
+		</FormGroup>
+
+		<FormGroup floating>
+			<Input type="textarea" placeholder="Enter a description" bind:value={service.description} />
+			<div slot="label">Description</div>
+		</FormGroup>
+
+		<Button color={'primary'} on:click={save}>Save</Button>
+		<Button color={'danger'} on:click={discard}>Cancel</Button>
+	</Form>
+{/if}
 
 <style lang="scss">
 @import 'node_modules/bootstrap/scss/functions';

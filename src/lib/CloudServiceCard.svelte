@@ -5,10 +5,16 @@ export interface CloudServiceEvent {
 	requirementId?: string;
 }
 
-export interface CloudServiceEventMap {
-	'add-requirement': CloudServiceEvent;
-	'remove-requirement': CloudServiceEvent;
-	save: CloudServiceEvent;
+export interface CatalogEvent {
+	catalogIdx: number;
+	controlIdx?: number;
+	controlId?: string;
+}
+
+export interface CatalogEventMap {
+	'add-control': CatalogEvent;
+	'remove-control': CatalogEvent;
+	save: CatalogEvent;
 }
 </script>
 
@@ -28,8 +34,7 @@ import {
 	ListGroup,
 	ListGroupItem
 } from 'sveltestrap';
-import { listMetricConfigurations, type CloudService, type Requirement } from '$lib/orchestrator';
-import { requirements } from '$lib/stores';
+import { listMetricConfigurations, type CloudService } from '$lib/orchestrator';
 import { createEventDispatcher, onMount } from 'svelte';
 import Fa from 'svelte-fa';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -44,48 +49,6 @@ onMount(async () => {
 	metricConfigurations = await listMetricConfigurations(service.id, true);
 });
 
-const dispatch = createEventDispatcher<CloudServiceEventMap>();
-
-var dirty = false;
-
-function groupBy(arr: Iterable<Requirement>, property) {
-	var grouped = new Map<String, Array<Requirement>>();
-	for (let value of arr) {
-		var p = value[property];
-		if (!grouped.has(p)) {
-			grouped.set(p, []);
-		}
-
-		grouped.get(p).push(value);
-	}
-	return grouped;
-}
-
-const sortedRequirements = derived(requirements, (map) => {
-	return groupBy(map.values(), 'category');
-});
-
-console.log($sortedRequirements);
-
-function addRequirement(req: Requirement) {
-	dispatch('add-requirement', { serviceIdx: 0, requirementId: req.id });
-	dirty = true;
-}
-
-function removeRequirement(reqIdx: number): void {
-	dispatch('remove-requirement', { serviceIdx: 0, requirementIdx: reqIdx });
-	dirty = true;
-}
-
-function isAlreadySelected(req: Requirement, service: CloudService) {
-	return service?.requirements?.requirementIds.includes(req.id) ?? false;
-}
-
-function save(): void {
-	dispatch('save', { serviceIdx: 0 });
-	dirty = false;
-}
-
 let category = '';
 </script>
 
@@ -97,56 +60,5 @@ let category = '';
 				{service.description}
 			</p>
 		</CardText>
-		<CardSubtitle>Selected Requirements for Customization</CardSubtitle>
-		<CardText>
-			<ListGroup class="mt-2">
-				{#each service.requirements?.requirementIds ?? [] as reqId, reqIdx}
-					<ListGroupItem class="d-flex">
-						<div class="ms-2 me-auto">
-							{reqId}: {trim($requirements.get(reqId)?.description ?? '')}
-						</div>
-
-						<Button on:click={(e) => removeRequirement(reqIdx)}>
-							<Fa icon={faTrash} />
-						</Button>
-					</ListGroupItem>
-				{/each}
-			</ListGroup>
-			<Dropdown>
-				<DropdownToggle caret class="mt-2">Add</DropdownToggle>
-				<DropdownMenu>
-					{#each [...$sortedRequirements] as [category, reqList], i}
-						{#if i != 0}
-							<DropdownItem divider />
-						{/if}
-						<DropdownItem header>{category}</DropdownItem>
-						{#each reqList as req}
-							<DropdownItem
-								on:click={(e) => addRequirement(req)}
-								disabled={isAlreadySelected(req, service)}
-							>
-								{req.id}: {trim(req.description)}
-							</DropdownItem>
-						{/each}
-					{/each}
-				</DropdownMenu>
-			</Dropdown>
-		</CardText>
-		{#if metricConfigurations.size > 0}
-			<CardSubtitle>Changed Metric Configurations</CardSubtitle>
-			<CardText>
-				<ListGroup class="mt-2">
-					{#each [...metricConfigurations] as [metricId, config]}
-						<ListGroupItem class="d-flex">
-							{metricId}
-							{config.operator}
-							{config.targetValue}
-						</ListGroupItem>
-					{/each}
-				</ListGroup>
-			</CardText>
-		{/if}
-		<Button disabled={!dirty} color="primary" on:click={(e) => save()} class="mt-2">Save</Button>
 	</CardBody>
-	<!--<CardFooter>{service.id}</CardFooter>-->
 </Card>

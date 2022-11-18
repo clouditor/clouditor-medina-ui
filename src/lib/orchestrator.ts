@@ -1,23 +1,32 @@
 import { env } from '$env/dynamic/public';
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
+import { clouditorize } from './util';
 
 export interface CloudService {
     id: string
     name: string
-    description: string
-    requirements: Requirements
+    description?: string
 }
 
-export interface Requirements {
-    requirementIds: string[]
-}
-
-export interface Requirement {
+export interface Catalog {
     id: string
     name: string
     description: string
-    metricIds: string[]
+    categories: Category[]
+    controls: Control[]
+}
+
+export interface Category {
+    name: string
+}
+
+export interface Control {
+    id: string
+    name: string
+    description: string
+    metrics: Metric[]
     category: string
+    controls: Control[]
 }
 
 export interface ListMetricsResponse {
@@ -48,6 +57,14 @@ export interface State {
     certificateId: string
 }
 
+export interface ListCatalogsResponse {
+    catalogs: Catalog[];
+}
+
+export interface ListControlsResponse {
+    controls: Control[];
+}
+
 export interface ListCertificatesResponse {
     certificates: Certificate[];
 }
@@ -60,17 +77,13 @@ export interface ListCloudServicesResponse {
     services: CloudService[]
 }
 
-export interface ListRequirementsResponse {
-    requirements: Requirement[]
-}
-
 /**
  * Requests a list of assessment results from the orchestrator service.
  * 
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listAssessmentResults(): Promise<AssessmentResult[]> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/assessment_results?pageSize=1000`;
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -91,7 +104,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`;
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -113,7 +126,7 @@ export async function listCloudServiceAssessmentResults(serviceId: string, fetch
  * @returns 
  */
 export async function getMetric(id: string): Promise<Metric> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/metrics/${id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics/${id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -134,8 +147,8 @@ export async function getMetric(id: string): Promise<Metric> {
  * @param id the metric id
  * @returns 
  */
-export async function getMetricImplemenation(id: string): Promise<MetricImplementation> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/metrics/${id}/implementation`
+export async function getMetricImplementation(id: string): Promise<MetricImplementation> {
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics/${id}/implementation`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -157,7 +170,7 @@ export async function getMetricImplemenation(id: string): Promise<MetricImplemen
  * @returns 
  */
 export async function listMetricConfigurations(serviceId: string, skipDefault = false): Promise<Map<string, MetricConfiguration>> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -181,12 +194,32 @@ export async function listMetricConfigurations(serviceId: string, skipDefault = 
 }
 
 /**
+ * Creates a new cloud service
+ */
+export async function registerCloudService(service: CloudService): Promise<CloudService> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services`)
+
+    return fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(service),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: CloudService) => {
+            return response;
+        });
+}
+
+/**
  * Retrieves a list of cloud services from the orchestrator service.
  * 
  * @returns an array of {@link CloudService}s.
  */
 export async function listCloudServices(): Promise<CloudService[]> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -202,12 +235,72 @@ export async function listCloudServices(): Promise<CloudService[]> {
 }
 
 /**
+ * Retrieves a list of catalogs from the orchestrator service.
+ * 
+ * @returns an array of {@link Catalog}s.
+ */
+export async function listCatalogs(): Promise<Catalog[]> {
+    const apiUrl = clouditorize(`/v1/orchestrator/catalogs`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListCatalogsResponse) => {
+            return response.catalogs;
+        });
+}
+
+/**
+ * Retrieves a catalog from the orchestrator service.
+ * 
+ * @returns a {@link Catalog}s.
+ */
+export async function getCatalog(id: string, fetch = window.fetch): Promise<Catalog> {
+    const apiUrl = clouditorize(`/v1/orchestrator/catalogs/${id}`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+/**
+ * Retrieves controls from the orchestrator service.
+ * 
+ * @returns a list of {@link Control}s.
+ */
+export async function listControls(catalogId: string, categoryName: string, fetch = window.fetch): Promise<Control[]> {
+    const apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListControlsResponse) => {
+            return response.controls;
+        });
+}
+
+/**
  * Retrieve a cloud service from the orchestrator service using its ID.
  * 
  * @returns the cloud service
  */
 export async function getCloudService(id: string, fetch = window.fetch): Promise<CloudService> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -220,7 +313,7 @@ export async function getCloudService(id: string, fetch = window.fetch): Promise
 }
 
 export async function updateCloudService(service: CloudService, fetch = window.fetch): Promise<CloudService> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/cloud_services/${service.id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${service.id}`)
 
     return fetch(apiUrl, {
         method: 'PUT',
@@ -242,7 +335,7 @@ export async function updateCloudService(service: CloudService, fetch = window.f
  * @returns an array of {@link Metric}s.
  */
 export async function listMetrics(): Promise<Metric[]> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/metrics?pageSize=200`
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics?pageSize=200`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -272,33 +365,12 @@ export function throwError(response: Response) {
 }
 
 /**
- * Retrieves a list of requirements from the orchestrator service.
- * 
- * @returns an array of {@link Requirement}s.
- */
-export async function listRequirements(): Promise<Requirement[]> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/requirements`
-
-    return fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${localStorage.token}`,
-        }
-    })
-        .then(throwError)
-        .then((res) => res.json())
-        .then((response: ListRequirementsResponse) => {
-            return response.requirements;
-        });
-}
-
-/**
  * Retrieves a list of certificates from the orchestrator service.
  * 
  * @returns an array of {@link Certificate}s.
  */
 export async function listCertificates(): Promise<Certificate[]> {
-    const apiUrl = env.OAUTH_CLOUDITOR_URL + `/v1/orchestrator/certificates`
+    const apiUrl = clouditorize(`/v1/orchestrator/certificates`)
 
     return fetch(apiUrl, {
         method: 'GET',

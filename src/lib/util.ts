@@ -1,3 +1,5 @@
+import { env } from "$env/dynamic/public";
+
 export function trim(s: string, maxLength = 200): string {
     if (s.length < maxLength) {
         return s;
@@ -11,4 +13,22 @@ export function short(resourceID: string) {
     const rr = resourceID.split('/');
 
     return rr[rr.length - 1];
+}
+
+/**
+ * Combines the relative URL resource with the Clouditor URL.
+ * 
+ * @param url the relative URL resource
+ */
+export function clouditorize(url: string): string {
+    let backend = env.PUBLIC_CLOUDITOR_URL;
+    if (backend.endsWith("/")) {
+        backend = backend.substring(0, backend.length)
+    }
+
+    if (!url.startsWith("/")) {
+        url = `/${url}`
+    }
+
+    return backend + url;
 }

@@ -11,8 +11,8 @@ const config = {
 	kit: {
 		adapter: node(),
 		env: {
-			publicPrefix: 'OAUTH_'
-		} 
+			publicPrefix: 'PUBLIC_'
+		}
 	}
 };
 

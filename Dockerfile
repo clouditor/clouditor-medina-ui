@@ -21,5 +21,5 @@ ENV OAUTH_TOKEN_URL=http://localhost:8080/v1/auth/token
 ENV OAUTH_CLIENT_ID=dashboard
 ENV OAUTH_REDIRECT_URI=http://localhost:5173/callback
 ENV OAUTH_SCOPE="profile email"
-ENV OAUTH_CLOUDITOR_URL=http://localhost:8080
+ENV CLOUDITOR_URL=http://localhost:8080
 CMD ["node", "index.js"]

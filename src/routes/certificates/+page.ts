@@ -1,5 +1,4 @@
 import { listCertificates } from '$lib/orchestrator';
-import type { Certificate } from '$lib/orchestrator';
 import { redirectLogin } from '$lib/oauth';
 
 /**
