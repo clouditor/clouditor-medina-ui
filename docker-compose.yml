@@ -8,14 +8,16 @@ services:
     # Arguments for Clouditor's Engine
     environment:
       - CLOUDITOR_DB_IN_MEMORY=true
-      - CLOUDITOR_DISCOVERY_AUTO_START=true
+      - CLOUDITOR_DISCOVERY_AUTO_START=false
       - CLOUDITOR_DISCOVERY_PROVIDER=azure
       - CLOUDITOR_DASHBOARD_URL=http://localhost:5173
     # Put cloud service credentials in the following env file (ignored by git)
     # E.g., for Azure put in the following ENV variables: AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET
     env_file: .cloud_credentials.env
   ui:
-    image: clouditor-ui-test
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: cl_ui
     ports:
       - 5173:5173
