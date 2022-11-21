@@ -1,3 +1,4 @@
+import { clouditorize } from './util';
 export interface StartDiscoveryResponse {
     successful: boolean
 }
@@ -31,8 +32,8 @@ export interface Resource {
 }
 
 export async function startDiscovery(): Promise<boolean> {
-    const apiUrl = `/v1/discovery/start`;
-    const providers = prompt("Enter providers (seperated with comma)", "").split(",");
+    const apiUrl = clouditorize(`/v1/discovery/start`)
+    const providers = prompt("Enter providers (separated with comma)", "").split(",");
 
     return fetch(apiUrl, {
         method: 'POST',
@@ -53,7 +54,7 @@ export async function queryDiscovery(
     filteredServiceId?: string,
     orderBy = "",
     fetch = window.fetch): Promise<Resource[]> {
-    const apiUrl = `/v1/discovery/query`;
+    const apiUrl = clouditorize(`/v1/discovery/query`);
 
     const req: QueryRequest = {};
 

@@ -1,4 +1,5 @@
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
+import { clouditorize } from './util';
 
 export interface CloudService {
     id: string
@@ -81,7 +82,7 @@ export interface ListCloudServicesResponse {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listAssessmentResults(): Promise<AssessmentResult[]> {
-    const apiUrl = `/v1/orchestrator/assessment_results?pageSize=1000`;
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -102,7 +103,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = `/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`;
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -124,7 +125,7 @@ export async function listCloudServiceAssessmentResults(serviceId: string, fetch
  * @returns 
  */
 export async function getMetric(id: string): Promise<Metric> {
-    const apiUrl = `/v1/orchestrator/metrics/${id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics/${id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -146,7 +147,7 @@ export async function getMetric(id: string): Promise<Metric> {
  * @returns 
  */
 export async function getMetricImplementation(id: string): Promise<MetricImplementation> {
-    const apiUrl = `/v1/orchestrator/metrics/${id}/implementation`
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics/${id}/implementation`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -168,7 +169,7 @@ export async function getMetricImplementation(id: string): Promise<MetricImpleme
  * @returns 
  */
 export async function listMetricConfigurations(serviceId: string, skipDefault = false): Promise<Map<string, MetricConfiguration>> {
-    const apiUrl = `/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/metric_configurations`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -195,7 +196,7 @@ export async function listMetricConfigurations(serviceId: string, skipDefault = 
  * Creates a new cloud service
  */
 export async function registerCloudService(service: CloudService): Promise<CloudService> {
-    const apiUrl = `/v1/orchestrator/cloud_services`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services`)
 
     return fetch(apiUrl, {
         method: 'POST',
@@ -217,7 +218,7 @@ export async function registerCloudService(service: CloudService): Promise<Cloud
  * @returns an array of {@link CloudService}s.
  */
 export async function listCloudServices(): Promise<CloudService[]> {
-    const apiUrl = `/v1/orchestrator/cloud_services`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -238,7 +239,7 @@ export async function listCloudServices(): Promise<CloudService[]> {
  * @returns an array of {@link Catalog}s.
  */
 export async function listCatalogs(): Promise<Catalog[]> {
-    const apiUrl = `/v1/orchestrator/catalogs`
+    const apiUrl = clouditorize(`/v1/orchestrator/catalogs`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -259,7 +260,7 @@ export async function listCatalogs(): Promise<Catalog[]> {
  * @returns a {@link Catalog}s.
  */
 export async function getCatalog(id: string, fetch = window.fetch): Promise<Catalog> {
-    const apiUrl = `/v1/orchestrator/catalogs/${id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/catalogs/${id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -277,7 +278,7 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
  * @returns a list of {@link Control}s.
  */
 export async function listControls(catalogId: string, categoryName: string, fetch = window.fetch): Promise<Control[]> {
-    const apiUrl = `/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`
+    const apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -298,7 +299,7 @@ export async function listControls(catalogId: string, categoryName: string, fetc
  * @returns the cloud service
  */
 export async function getCloudService(id: string, fetch = window.fetch): Promise<CloudService> {
-    const apiUrl = `/v1/orchestrator/cloud_services/${id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -311,7 +312,7 @@ export async function getCloudService(id: string, fetch = window.fetch): Promise
 }
 
 export async function updateCloudService(service: CloudService, fetch = window.fetch): Promise<CloudService> {
-    const apiUrl = `/v1/orchestrator/cloud_services/${service.id}`
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${service.id}`)
 
     return fetch(apiUrl, {
         method: 'PUT',
@@ -333,7 +334,7 @@ export async function updateCloudService(service: CloudService, fetch = window.f
  * @returns an array of {@link Metric}s.
  */
 export async function listMetrics(): Promise<Metric[]> {
-    const apiUrl = `/v1/orchestrator/metrics?pageSize=200`
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics?pageSize=200`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -368,7 +369,7 @@ export function throwError(response: Response) {
  * @returns an array of {@link Certificate}s.
  */
 export async function listCertificates(): Promise<Certificate[]> {
-    const apiUrl = `/v1/orchestrator/certificates`
+    const apiUrl = clouditorize(`/v1/orchestrator/certificates`)
 
     return fetch(apiUrl, {
         method: 'GET',

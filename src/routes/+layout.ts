@@ -16,3 +16,6 @@ export const load: LayoutLoad = async () => {
             // ignore, we will catch it later
         });
 }
+
+// Disable SSR
+export const ssr = false;

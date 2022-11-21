@@ -10,7 +10,7 @@ export let data: PageData;
 		<li class="nav-item">
 			<a
 				class="nav-link"
-				class:active={$page.routeId == 'cloud/[...id]/configuration'}
+				class:active={$page.route.id == 'cloud/[...id]/configuration'}
 				aria-current="page"
 				href="/cloud/{data.service.id}/configuration"
 			>
@@ -20,7 +20,7 @@ export let data: PageData;
 		<li class="nav-item">
 			<a
 				class="nav-link"
-				class:active={$page.routeId == 'cloud/[...id]/configuration/toe'}
+				class:active={$page.route.id == 'cloud/[...id]/configuration/toe'}
 				href="/cloud/{data.service.id}/configuration/toe"
 			>
 				Target of Evaluation

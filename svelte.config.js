@@ -9,7 +9,10 @@ const config = {
 	],
 
 	kit: {
-		adapter: node()
+		adapter: node(),
+		env: {
+			publicPrefix: 'PUBLIC_'
+		}
 	}
 };
 

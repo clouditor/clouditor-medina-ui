@@ -1,0 +1,26 @@
+version: '3'
+services:
+  engine:
+    image: ghcr.io/clouditor/engine:latest
+    container_name: cl_engine
+    ports:
+      - 8080:8080
+    # Arguments for Clouditor's Engine
+    environment:
+      - CLOUDITOR_DB_IN_MEMORY=true
+      - CLOUDITOR_DISCOVERY_AUTO_START=false
+      - CLOUDITOR_DISCOVERY_PROVIDER=azure
+      - CLOUDITOR_DASHBOARD_URL=http://localhost:5173
+      - CLOUDITOR_API_CORS_ALLOWED_ORIGINS=http://localhost:5173
+    # Put cloud service credentials in the following env file (ignored by git)
+    # e.g., for Azure put in the following ENV variables: AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET
+    #env_file: .cloud_credentials.env
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cl_ui
+    ports:
+      - 5173:5173
+    depends_on:
+      - engine
