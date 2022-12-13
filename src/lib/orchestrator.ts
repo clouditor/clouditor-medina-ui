@@ -7,6 +7,13 @@ export interface CloudService {
     description?: string
 }
 
+export interface TargetOfEvaluation {
+    cloudServiceId: string
+    catalogId: string
+    assuranceLevel?: string
+    controlsInScope?: Control[]
+}
+
 export interface Catalog {
     id: string
     name: string
@@ -74,6 +81,10 @@ export interface ListAssessmentResultsResponse {
 
 export interface ListCloudServicesResponse {
     services: CloudService[]
+}
+
+export interface ListTargetsOfEvaluationResponse {
+    targetOfEvaluation: TargetOfEvaluation[]
 }
 
 /**
@@ -234,11 +245,52 @@ export async function listCloudServices(): Promise<CloudService[]> {
 }
 
 /**
+ * Creates a new target of evaluation.
+ */
+export async function createTargetOfEvaluation(target: TargetOfEvaluation): Promise<TargetOfEvaluation> {
+    const apiUrl = clouditorize(`/v1/orchestrator/toes`)
+
+    return fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(target),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: TargetOfEvaluation) => {
+            return response;
+        });
+}
+
+/**
+ * Retrieves a list of targets of evaluation from the orchestrator service.
+ * 
+ * @returns an array of {@link TargetOfEvaluation}s.
+ */
+export async function listTargetsOfEvaluation(serviceId: string, fetch = window.fetch): Promise<TargetOfEvaluation[]> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListTargetsOfEvaluationResponse) => {
+            return response.targetOfEvaluation;
+        });
+}
+
+/**
  * Retrieves a list of catalogs from the orchestrator service.
  * 
  * @returns an array of {@link Catalog}s.
  */
-export async function listCatalogs(): Promise<Catalog[]> {
+export async function listCatalogs(fetch = window.fetch): Promise<Catalog[]> {
     const apiUrl = clouditorize(`/v1/orchestrator/catalogs`)
 
     return fetch(apiUrl, {
@@ -333,7 +385,7 @@ export async function updateCloudService(service: CloudService, fetch = window.f
  * 
  * @returns an array of {@link Metric}s.
  */
-export async function listMetrics(): Promise<Metric[]> {
+export async function listMetrics(fetch = window.fetch): Promise<Metric[]> {
     const apiUrl = clouditorize(`/v1/orchestrator/metrics?pageSize=200`)
 
     return fetch(apiUrl, {

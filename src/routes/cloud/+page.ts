@@ -1,12 +1,8 @@
-import { controls } from '$lib/stores';
-import { listCloudServices, updateCloudService } from '$lib/orchestrator';
-import type { CloudService } from '$lib/orchestrator';
+import { listCloudServices } from '$lib/orchestrator';
 import { redirectLogin } from '$lib/oauth';
+import type { LayoutLoad } from '../$types';
 
-/**
- * @type {import('@sveltejs/kit').PageLoad}
- */
- export async function load({ params, fetch, context }) {
+export const load: LayoutLoad = async () => {
 	return listCloudServices()
 		.then((services) => {
 			return {

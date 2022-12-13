@@ -1,12 +1,10 @@
 import type { AssessmentResult, Metric, MetricImplementation } from '$lib/assessment';
-import { listMetrics, listAssessmentResults, getMetricImplemenation } from '$lib/orchestrator';
+import { listMetrics, listAssessmentResults } from '$lib/orchestrator';
 import { redirectLogin } from '$lib/oauth';
+import type { PageLoad } from './$types';
 
-/**
- * @type {import('@sveltejs/kit').PageLoad}
- */
-export async function load({ params, fetch, context }) {
-	return listMetrics()
+export const load: PageLoad = async ({ fetch }) => {
+	return listMetrics(fetch)
 		.then((results) => {
 			return {
 				metrics: results
