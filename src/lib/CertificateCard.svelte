@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem, Table } from 'sveltestrap';
-	import type { Certificate } from '$lib/orchestrator';
+import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem, Table } from 'sveltestrap';
+import type { Certificate } from '$lib/orchestrator';
 
-	export let certificate: Certificate;
+export let certificate: Certificate;
 </script>
 
 <Card class="mb-3 me-3">
@@ -34,25 +34,25 @@
 		<b>State History</b>
 		<Table>
 			<thead>
-			  <tr>
-				<th>State</th>
-				<th>Deviation</th>
-				<th>Timestamp</th>
-				<th>Tree ID</th>
-			  </tr>
+				<tr>
+					<th>State</th>
+					<th>Deviation</th>
+					<th>Timestamp</th>
+					<th>Tree ID</th>
+				</tr>
 			</thead>
 			<tbody>
-			{#each certificate.states as state}
-			  <tr>
-				<td>{state.state}</td>
-				<td>
-					{#if state.state == "continued"}Minor{/if}
-					{#if state.state == "suspended"}Major{/if}
-				</td>
-				<td>{state.timestamp}</td>
-				<td>{state.treeId}</td>
-			  </tr>
-			{/each}
+				{#each certificate.states as state}
+					<tr>
+						<td>{state.state}</td>
+						<td>
+							{#if state.state == 'continued'}Minor{/if}
+							{#if state.state == 'suspended'}Major{/if}
+						</td>
+						<td>{state.timestamp}</td>
+						<td>{state.treeId}</td>
+					</tr>
+				{/each}
 			</tbody>
 		</Table>
 	</CardBody>
