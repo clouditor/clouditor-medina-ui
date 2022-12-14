@@ -1,7 +1,7 @@
-<script type="ts">
+<script lang="ts">
 import { Button, Form, Card, CardBody, CardText, FormGroup, Input } from 'sveltestrap';
 import { editing } from '$lib/stores';
-import { registerCloudService, type CloudService } from './orchestrator';
+import { registerCloudService, type CloudService } from '$lib/orchestrator';
 import { invalidate } from '$app/navigation';
 
 let service: CloudService = { id: undefined, name: undefined };

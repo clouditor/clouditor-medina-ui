@@ -31,7 +31,7 @@
     "sass": "^1.56.2",
     "svelte-check": "^2.10.2",
     "svelte-fa": "^3.0.3",
-    "svelte-preprocess": "^4.10.7",
+    "svelte-preprocess": "^5.0.0",
     "svelte-toast": "^1.0.0",
     "sveltestrap": "^5.9.0",
     "tslib": "^2.4.1",
