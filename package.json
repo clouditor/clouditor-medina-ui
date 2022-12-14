@@ -14,7 +14,7 @@
   "dependencies": {
     "@sveltejs/adapter-node": "^1.0.0-next.104",
     "@sveltejs/kit": "^1.0.0-next.578",
-    "svelte": "^3.49.0"
+    "svelte": "^3.55.0"
   },
   "devDependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
