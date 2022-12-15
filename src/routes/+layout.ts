@@ -1,5 +1,5 @@
-import { listMetrics } from "$lib/orchestrator";
-import { metrics } from "$lib/stores";
+import { listCatalogs, listControls, listMetrics } from "$lib/orchestrator";
+import { metrics, controls } from "$lib/stores";
 import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async ({ fetch }) => {
@@ -15,6 +15,18 @@ export const load: LayoutLoad = async ({ fetch }) => {
         .catch(() => {
             // ignore, we will catch it later
         });
+
+    listControls(null, null, fetch).then((list) => {
+        controls.set(list);
+    })
+        .catch(() => {
+            // ignore, we will catch it later
+        });
+
+    const catalogs = await listCatalogs(fetch);
+    return {
+        catalogs: catalogs
+    }
 }
 
 // Disable SSR
