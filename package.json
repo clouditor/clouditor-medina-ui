@@ -29,7 +29,7 @@
     "prettier": "~2.8.1",
     "prettier-plugin-svelte": "^2.9.0",
     "sass": "^1.56.2",
-    "svelte-check": "^2.10.2",
+    "svelte-check": "^3.0.1",
     "svelte-fa": "^3.0.3",
     "svelte-preprocess": "^5.0.0",
     "svelte-toast": "^1.0.0",
