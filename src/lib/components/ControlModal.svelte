@@ -3,6 +3,11 @@ export interface ControlListDetail {
 	target: TargetOfEvaluation;
 	controlUrls: string[];
 }
+
+export interface ControlInScopeDetail {
+	target: TargetOfEvaluation;
+	controlInScope: ControlInScope;
+}
 </script>
 
 <script lang="ts">
@@ -19,10 +24,22 @@ export let controlsInScope: ControlInScope[];
 
 $: controlsInScopeUrls = controlsInScope.map((cis) => controlUrl2(cis, target.catalogId));
 
+$: controls1 = $controls.filter((c) => {
+	return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
+});
+
+$: controls2 = $controls.filter((c) => {
+	return !controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
+});
+
 let controlsToAdd = [];
 let controlsToRemove = [];
 
-const dispatch = createEventDispatcher<{ add: ControlListDetail; remove: ControlListDetail }>();
+const dispatch = createEventDispatcher<{
+	add: ControlListDetail;
+	remove: ControlListDetail;
+	change: ControlInScopeDetail;
+}>();
 
 function add() {
 	dispatch('add', { target: target, controlUrls: controlsToAdd });
@@ -31,10 +48,13 @@ function add() {
 function remove() {
 	dispatch('remove', { target: target, controlUrls: controlsToRemove });
 }
+
+function change(idx: number) {
+	dispatch('change', { target: target, controlInScope: controlsInScope[idx] });
+}
 </script>
 
 <Modal isOpen={open} {toggle} size="xl">
-	{JSON.stringify(controlsInScope)}
 	<ModalHeader {toggle}>Controls in Scope</ModalHeader>
 	<ModalBody>
 		<div class="container">
@@ -47,9 +67,7 @@ function remove() {
 						multiple
 						bind:value={controlsToAdd}
 					>
-						{#each $controls.filter((c) => {
-							return !controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-						}) as control}
+						{#each controls2 as control}
 							<option value={controlUrl(control, target.catalogId)}>
 								{#if control.parentControlId != null}&nbsp;{/if}
 								{control.id}: {control.name}
@@ -69,9 +87,7 @@ function remove() {
 						multiple
 						bind:value={controlsToRemove}
 					>
-						{#each $controls.filter((c) => {
-							return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-						}) as control}
+						{#each controls1 as control}
 							<option value={controlUrl(control, target.catalogId)}>
 								{#if control.parentControlId != null}&nbsp;{/if}
 								{control.id}: {control.name}
@@ -83,9 +99,7 @@ function remove() {
 			<hr />
 			<div class="row">
 				<div class="col-sm">
-					{#each $controls.filter((c) => {
-						return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-					}) as control}
+					{#each controls1 as control}
 						<Input
 							type="text"
 							name="control"
@@ -97,15 +111,21 @@ function remove() {
 					{/each}
 				</div>
 				<div class="col-sm">
-					{#each $controls.filter((c) => {
-						return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-					}) as control}
-						<Input type="select" name="select" id="exampleSelect" class="mb-3">
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-							<option>5</option>
+					{#each controls1 as control, idx}
+						<Input
+							type="select"
+							name="select"
+							id="exampleSelect"
+							class="mb-3"
+							bind:value={controlsInScope[idx].monitoringStatus}
+							on:change={() => change(idx)}
+						>
+							<option value="MONITORING_STATUS_UNSPECIFIED">unspecified</option>
+							<option value="MONITORING_STATUS_CONTINUOUSLY_MONITORED">
+								continuously monitored
+							</option>
+							<option value="MONITORING_STATUS_MANUALLY_MONITORED">manually monitored</option>
+							<option value="MONITORING_STATUS_DELEGATED">delegated</option>
 						</Input>
 					{/each}
 				</div>

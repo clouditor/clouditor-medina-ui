@@ -1,12 +1,16 @@
 <script lang="ts">
 import { invalidate } from '$app/navigation';
-import ControlModal, { type ControlListDetail } from '$lib/components/ControlModal.svelte';
+import ControlModal, {
+	type ControlInScopeDetail,
+	type ControlListDetail
+} from '$lib/components/ControlModal.svelte';
 import NewTargetOfEvaluation from '$lib/components/NewTargetOfEvaluation.svelte';
 import {
 	addControlToScope,
 	createTargetOfEvaluation,
 	parseControlUrl,
 	removeControlFromScope,
+	updateControlInScope,
 	type ControlInScope,
 	type TargetOfEvaluation
 } from '$lib/orchestrator';
@@ -67,6 +71,16 @@ async function removeSelectedControls(event: CustomEvent<ControlListDetail>) {
 	}
 }
 
+async function changeControl(event: CustomEvent<ControlInScopeDetail>) {
+	const scope = event.detail.controlInScope;
+
+	await updateControlInScope(scope);
+
+	invalidate(
+		`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope/categories/${scope.controlCategoryName}/controls/${scope.controlId}`
+	);
+}
+
 let open = false;
 const toggle = () => (open = !open);
 </script>
@@ -86,6 +100,7 @@ const toggle = () => (open = !open);
 				{target}
 				on:add={addSelectedControls}
 				on:remove={removeSelectedControls}
+				on:change={changeControl}
 			/>
 		</CardBody>
 	</Card>
