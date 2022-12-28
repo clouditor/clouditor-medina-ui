@@ -49,8 +49,18 @@ function remove() {
 	dispatch('remove', { target: target, controlUrls: controlsToRemove });
 }
 
-function change(idx: number) {
-	dispatch('change', { target: target, controlInScope: controlsInScope[idx] });
+function change(idx: number, ev: Event) {
+	const select = ev.target as HTMLSelectElement;
+	let scope = {
+		targetOfEvaluationCloudServiceId: controlsInScope[idx].targetOfEvaluationCloudServiceId,
+		targetOfEvaluationCatalogId: controlsInScope[idx].targetOfEvaluationCatalogId,
+		controlId: controlsInScope[idx].controlId,
+		controlCategoryName: controlsInScope[idx].controlCategoryName,
+		controlCategoryCatalogId: controlsInScope[idx].controlCategoryCatalogId,
+		monitoringStatus: select.value
+	};
+
+	dispatch('change', { target: target, controlInScope: scope });
 }
 </script>
 
@@ -118,7 +128,7 @@ function change(idx: number) {
 							id="exampleSelect"
 							class="mb-3"
 							bind:value={controlsInScope[idx].monitoringStatus}
-							on:change={() => change(idx)}
+							on:change={(e) => change(idx, e)}
 						>
 							<option value="MONITORING_STATUS_UNSPECIFIED">unspecified</option>
 							<option value="MONITORING_STATUS_CONTINUOUSLY_MONITORED">
