@@ -143,7 +143,6 @@ function change(idx: number, ev: Event) {
 		</div>
 	</ModalBody>
 	<ModalFooter>
-		<Button color="primary" on:click={toggle}>Do Something</Button>
-		<Button color="secondary" on:click={toggle}>Cancel</Button>
+		<Button color="primary" on:click={toggle}>Close</Button>
 	</ModalFooter>
 </Modal>

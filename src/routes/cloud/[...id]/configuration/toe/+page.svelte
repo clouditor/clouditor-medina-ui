@@ -10,11 +10,14 @@ import {
 	createTargetOfEvaluation,
 	parseControlUrl,
 	removeControlFromScope,
+	removeTargetOfEvaluation,
 	updateControlInScope,
 	type ControlInScope,
 	type TargetOfEvaluation
 } from '$lib/orchestrator';
-import { Button, Card, CardBody, CardHeader } from 'sveltestrap';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import Fa from 'svelte-fa';
+import { Button, Card, CardBody, CardHeader, Icon } from 'sveltestrap';
 
 export let data: import('./$types').PageData;
 
@@ -24,6 +27,18 @@ $: availableCatalogs = data.catalogs.filter((catalog) => {
 
 async function add(event: CustomEvent<TargetOfEvaluation>) {
 	let target = await createTargetOfEvaluation(event.detail);
+
+	// invalidate the cloud services's target of evaluation list
+	invalidate(`/v1/orchestrator/cloud_services/${target.cloudServiceId}/toes`);
+}
+
+async function remove(target: TargetOfEvaluation) {
+	const ok = confirm('Do you really want to delete this target of evaluation?');
+	if (!ok) {
+		return;
+	}
+
+	await removeTargetOfEvaluation(target);
 
 	// invalidate the cloud services's target of evaluation list
 	invalidate(`/v1/orchestrator/cloud_services/${target.cloudServiceId}/toes`);
@@ -89,10 +104,14 @@ const toggle = () => (open = !open);
 	<Card>
 		<CardHeader>{target.catalogId}</CardHeader>
 		<CardBody>
-			<p>Configured with assurance level {target.assuranceLevel}</p>
-
+			{#if target.assuranceLevel != ''}
+				<p>Configured with assurance level "{target.assuranceLevel}".</p>
+			{/if}
 			<p>{target.controlsInScope.length} control(s) are in scope.</p>
-			<Button color="danger" on:click={toggle}>Open Modal</Button>
+
+			<Button color="primary" on:click={toggle}>Configure Controls in Scope</Button>
+			<Button color="danger" on:click={() => remove(target)}><Fa icon={faTrash} /></Button>
+
 			<ControlModal
 				controlsInScope={data.scopes[idx]}
 				{toggle}
@@ -106,8 +125,8 @@ const toggle = () => (open = !open);
 	</Card>
 {/each}
 
-<hr />
 {#if availableCatalogs.length > 0}
+	<hr />
 	<h4>Create new evaluation target</h4>
 
 	<NewTargetOfEvaluation service={data.service} catalogs={availableCatalogs} on:add={add} />

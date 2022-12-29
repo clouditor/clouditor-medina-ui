@@ -293,6 +293,23 @@ export async function createTargetOfEvaluation(target: TargetOfEvaluation): Prom
 }
 
 /**
+ * Removes a target of evaluation.
+ */
+export async function removeTargetOfEvaluation(target: TargetOfEvaluation): Promise<TargetOfEvaluation> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${target.cloudServiceId}/toes/${target.catalogId}`)
+
+    return fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(target),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+/**
  * Adds a control to the scope of a target of evaluation.
  */
 export async function addControlToScope(scope: ControlInScope, fetch = window.fetch): Promise<ControlInScope> {
@@ -326,9 +343,6 @@ export async function removeControlFromScope(scope: ControlInScope, fetch = wind
     })
         .then(throwError)
         .then((res) => res.json())
-        .then((response: ControlInScope) => {
-            return response;
-        });
 }
 
 /**
