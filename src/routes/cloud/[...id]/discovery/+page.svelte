@@ -1,16 +1,16 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faBoxArchive } from '@fortawesome/free-solid-svg-icons';
-import { Table } from 'sveltestrap';
+import { Button, Table } from 'sveltestrap';
 import { Chart, type ChartConfiguration, type ChartData, registerables } from 'chart.js';
 import { onMount } from 'svelte';
-import type { Resource } from '$lib/discovery';
-Chart.register(...registerables);
+import { startDiscovery, type Resource } from '$lib/discovery';
 
 export let data: import('./$types').PageData;
 
 let ctx: HTMLCanvasElement;
 
+Chart.register(...registerables);
 Chart.defaults.font.family =
 	'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif';
 const config: ChartConfiguration<'bar'> = {
@@ -71,7 +71,13 @@ function chart(resources: Resource[]): ChartData<'bar', number[], unknown> {
 		]
 	};
 }
+
+function discover() {
+	startDiscovery();
+}
 </script>
+
+<Button color="primary" class="mb-2" on:click={discover}>Start Discovery</Button>
 
 <canvas id="myChart" style="max-height: 100px" bind:this={ctx} />
 

@@ -33,13 +33,9 @@ export interface Resource {
 
 export async function startDiscovery(): Promise<boolean> {
     const apiUrl = clouditorize(`/v1/discovery/start`)
-    const providers = prompt("Enter providers (separated with comma)", "").split(",");
 
     return fetch(apiUrl, {
         method: 'POST',
-        body: JSON.stringify({
-            'providers': providers,
-        }),
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         }

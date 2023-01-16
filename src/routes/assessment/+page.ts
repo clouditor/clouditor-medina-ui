@@ -2,12 +2,10 @@ import { metrics } from '$lib/stores';
 import type { AssessmentResult } from '$lib/assessment';
 import { listMetrics, listAssessmentResults } from '$lib/orchestrator';
 import { redirectLogin } from '$lib/oauth';
+import type { PageLoad } from './$types';
 
-/**
- * @type {import('@sveltejs/kit').PageLoad}
- */
-export async function load({ params, fetch, context }) {
-	listMetrics()
+export const load: PageLoad = async ({ fetch }) => {
+	listMetrics(fetch)
 		.then((list) => {
 			for (const metric of list) {
 				// update metrics store

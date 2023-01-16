@@ -7,6 +7,22 @@ export interface CloudService {
     description?: string
 }
 
+export interface TargetOfEvaluation {
+    cloudServiceId: string
+    catalogId: string
+    assuranceLevel?: string
+    controlsInScope?: Control[]
+}
+
+export interface ControlInScope {
+    targetOfEvaluationCloudServiceId: string
+    targetOfEvaluationCatalogId: string
+    controlId: string
+    controlCategoryName: string
+    controlCategoryCatalogId: string
+    monitoringStatus: string
+}
+
 export interface Catalog {
     id: string
     name: string
@@ -21,11 +37,26 @@ export interface Category {
 
 export interface Control {
     id: string
-    name: string
-    description: string
-    metrics: Metric[]
-    category: string
-    controls: Control[]
+    name?: string
+    description?: string
+    metrics?: Metric[]
+    categoryName?: string
+    controls?: Control[]
+    parentControlId?: string
+}
+
+export function controlUrl(control: Control, catalogId: string): string {
+    return `${catalogId}/${control.categoryName}/${control.id}`
+}
+
+export function controlUrl2(cis: ControlInScope, catalogId: string): string {
+    return `${catalogId}/${cis.controlCategoryName}/${cis.controlId}`
+}
+
+export function parseControlUrl(url: string): [string, string, string?] {
+    const parts = url.split("/");
+
+    return [parts[0], parts[1], parts[2]];
 }
 
 export interface ListMetricsResponse {
@@ -74,6 +105,14 @@ export interface ListAssessmentResultsResponse {
 
 export interface ListCloudServicesResponse {
     services: CloudService[]
+}
+
+export interface ListTargetsOfEvaluationResponse {
+    targetOfEvaluation: TargetOfEvaluation[]
+}
+
+export interface ListControlsInScopeResponse {
+    controlsInScope: ControlInScope[]
 }
 
 /**
@@ -234,11 +273,126 @@ export async function listCloudServices(): Promise<CloudService[]> {
 }
 
 /**
+ * Creates a new target of evaluation.
+ */
+export async function createTargetOfEvaluation(target: TargetOfEvaluation): Promise<TargetOfEvaluation> {
+    const apiUrl = clouditorize(`/v1/orchestrator/toes`)
+
+    return fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(target),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: TargetOfEvaluation) => {
+            return response;
+        });
+}
+
+/**
+ * Removes a target of evaluation.
+ */
+export async function removeTargetOfEvaluation(target: TargetOfEvaluation): Promise<TargetOfEvaluation> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${target.cloudServiceId}/toes/${target.catalogId}`)
+
+    return fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(target),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+/**
+ * Adds a control to the scope of a target of evaluation.
+ */
+export async function addControlToScope(scope: ControlInScope, fetch = window.fetch): Promise<ControlInScope> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`)
+
+    return fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(scope),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ControlInScope) => {
+            return response;
+        });
+}
+
+/**
+ * Remove a control from the scope of a target of evaluation.
+ */
+export async function removeControlFromScope(scope: ControlInScope, fetch = window.fetch): Promise<ControlInScope> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope/categories/${scope.controlCategoryName}/controls/${scope.controlId}`)
+
+    return fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+/**
+ * Retrieves a list of targets of evaluation from the orchestrator service.
+ * 
+ * @returns an array of {@link TargetOfEvaluation}s.
+ */
+export async function listTargetsOfEvaluation(serviceId: string, fetch = window.fetch): Promise<TargetOfEvaluation[]> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListTargetsOfEvaluationResponse) => {
+            return response.targetOfEvaluation;
+        });
+}
+
+/**
+ * Retrieves a list of controls in scope of a particular target of evaluation from the orchestrator service.
+ * 
+ * @returns an array of {@link ControlInScope} objects.
+ */
+export async function listControlsInScope(serviceId: string, catalogId: string, fetch = window.fetch): Promise<ControlInScope[]> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListControlsInScopeResponse) => {
+            return response.controlsInScope;
+        });
+}
+
+/**
  * Retrieves a list of catalogs from the orchestrator service.
  * 
  * @returns an array of {@link Catalog}s.
  */
-export async function listCatalogs(): Promise<Catalog[]> {
+export async function listCatalogs(fetch = window.fetch): Promise<Catalog[]> {
     const apiUrl = clouditorize(`/v1/orchestrator/catalogs`)
 
     return fetch(apiUrl, {
@@ -277,8 +431,13 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
  * 
  * @returns a list of {@link Control}s.
  */
-export async function listControls(catalogId: string, categoryName: string, fetch = window.fetch): Promise<Control[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`)
+export async function listControls(catalogId?: string, categoryName?: string, fetch = window.fetch): Promise<Control[]> {
+    let apiUrl: string;
+    if (catalogId != null && categoryName != null) {
+        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`)
+    } else {
+        apiUrl = clouditorize(`/v1/orchestrator/controls`)
+    }
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -328,12 +487,29 @@ export async function updateCloudService(service: CloudService, fetch = window.f
         });
 }
 
+export async function updateControlInScope(scope: ControlInScope, fetch = window.fetch): Promise<CloudService> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope/categories/${scope.controlCategoryName}/controls/${scope.controlId}`)
+
+    return fetch(apiUrl, {
+        method: 'PUT',
+        body: JSON.stringify(scope),
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: CloudService) => {
+            return response;
+        });
+}
+
 /**
  * Retrieves a list of metrics from the orchestrator service.
  * 
  * @returns an array of {@link Metric}s.
  */
-export async function listMetrics(): Promise<Metric[]> {
+export async function listMetrics(fetch = window.fetch): Promise<Metric[]> {
     const apiUrl = clouditorize(`/v1/orchestrator/metrics?pageSize=200`)
 
     return fetch(apiUrl, {
