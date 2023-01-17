@@ -9,8 +9,15 @@ export async function load({ fetch, params }: LoadEvent) {
                 results: results,
             };
         })
-        .catch(() => {
-            redirectLogin(`/cloud/${params.id}/assessment`);
+        .catch((error) => {
+            console.log("DEBUG:", error.message)
+            if (error.message == "Not Found") { 
+                // TODO(lebogg): View some hinting message 
+                console.log("In If")             
+            } else {
+                console.log("In Else")
+                // redirectLogin(`/cloud/${params.id}/assessment`);
+            }
         });
 }
 
