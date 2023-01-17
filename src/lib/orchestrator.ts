@@ -142,7 +142,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/assessment_results?pageSize=100`);
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=100&filteredCloudServiceId=${serviceId}`);
 
     return fetch(apiUrl, {
         method: 'GET',
