@@ -142,7 +142,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=100&filteredCloudServiceId=${serviceId}`);
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000&filteredCloudServiceId=${serviceId}`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -372,7 +372,7 @@ export async function listTargetsOfEvaluation(serviceId: string, fetch = window.
  * @returns an array of {@link ControlInScope} objects.
  */
 export async function listControlsInScope(serviceId: string, catalogId: string, fetch = window.fetch): Promise<ControlInScope[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope`)
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1000`)
 
     return fetch(apiUrl, {
         method: 'GET',
