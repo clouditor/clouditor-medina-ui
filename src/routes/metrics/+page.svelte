@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { Table } from 'sveltestrap';
 	import MetricImplementationBlock from '$lib/MetricImplementationBlock.svelte';
-	import { getMetricImplementation } from '$lib/orchestrator';
-	import type { Metric, MetricImplementation } from '$lib/assessment';
+	import MetricConfigurationBlock from '$lib/MetricConfigurationBlock.svelte';
+	import { getMetricImplementation, getMetricConfiguration, type CloudService } from '$lib/orchestrator';
+	import type { Metric, MetricImplementation, MetricConfiguration} from '$lib/assessment';
 	import type { PageData } from './$types';
+import CloudServiceCard from '$lib/CloudServiceCard.svelte';
 
 	export let data: PageData;
+	export let cloudService: CloudService;
 
 	async function fetchImplementation(metric: Metric): Promise<MetricImplementation> {
 		return await getMetricImplementation(metric.id);
+	}
+
+	async function fetchConfiguration(metric: Metric): Promise<MetricConfiguration> {
+		return await getMetricConfiguration("00000000-0000-0000-0000-000000000000", metric.id);
 	}
 </script>
 
@@ -23,6 +30,7 @@ The following metrics are configued in the Clouditor orchestrator.
 				<th>#</th>
 				<th>Description</th>
 				<th>Implementation</th>
+				<th>Configuration</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,6 +41,15 @@ The following metrics are configued in the Clouditor orchestrator.
 					<td>
 						{#await fetchImplementation(metric) then impl}
 							<MetricImplementationBlock {impl} />
+						{/await}
+					</td>
+					<td>
+						<!-- svelte-ignore empty-block -->
+						{#await fetchConfiguration(metric)}
+						{:then config}
+							<MetricConfigurationBlock {config} />
+						{:catch}
+						<p>No configuration available</p>
 						{/await}
 					</td>
 				</tr>

@@ -9,8 +9,8 @@ export interface AssessmentResult {
 }
 
 export interface MetricConfiguration {
-    targetValue: object
     operator: string
+    targetValue: object
     isDefault: boolean
 }
 
