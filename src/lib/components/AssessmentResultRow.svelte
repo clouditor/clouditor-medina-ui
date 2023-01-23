@@ -43,4 +43,7 @@ export let index: number;
 	<td>
 		{$metrics.get(result.metricId)?.category ?? 'Unknown'}
 	</td>
+	<td>
+		{result.nonComplianceComments ?? 'Unknown'}
+	</td>
 </tr>

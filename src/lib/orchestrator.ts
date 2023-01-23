@@ -37,11 +37,12 @@ export interface Category {
 
 export interface Control {
     id: string
+    categoryName?: string
+    categoryCatalogId: string
     name?: string
     description?: string
-    metrics?: Metric[]
-    categoryName?: string
     controls?: Control[]
+    metrics?: Metric[]
     parentControlId?: string
 }
 
