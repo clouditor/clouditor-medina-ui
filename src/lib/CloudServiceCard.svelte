@@ -57,6 +57,7 @@ let category = '';
 	<CardBody>
 		<CardText>
 			<p>
+				({service.id}) <br/>
 				{service.description}
 			</p>
 		</CardText>

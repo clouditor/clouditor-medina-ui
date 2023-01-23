@@ -5,6 +5,7 @@ export let data: import('./$types').PageData;
 <div class="h-100 p-5 bg-light border rounded-3">
 	<h2>{data.service.name}</h2>
 	<p>
+		({data.service.id}) <br/>
 		{data.service.description}
 	</p>
 	<p>
