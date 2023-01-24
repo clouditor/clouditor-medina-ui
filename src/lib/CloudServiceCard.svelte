@@ -34,7 +34,8 @@ import {
 	ListGroup,
 	ListGroupItem
 } from 'sveltestrap';
-import { listMetricConfigurations, type CloudService } from '$lib/orchestrator';
+import { invalidate } from '$app/navigation';
+import { listMetricConfigurations, removeCloudService, type CloudService } from '$lib/orchestrator';
 import { createEventDispatcher, onMount } from 'svelte';
 import Fa from 'svelte-fa';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -44,6 +45,18 @@ import { trim } from './util';
 
 export let service: CloudService;
 let metricConfigurations: Map<string, MetricConfiguration> = new Map<string, MetricConfiguration>();
+
+async function remove(target: string) {
+	const ok = confirm('Do you really want to delete this cloud service?');
+	if (!ok) {
+		return;
+	}
+
+	await removeCloudService(target);
+
+	// invalidate the cloud service
+	invalidate(`/v1/orchestrator/cloud_services/${target}`);
+}
 
 onMount(async () => {
 	metricConfigurations = await listMetricConfigurations(service.id, true);
@@ -57,8 +70,9 @@ let category = '';
 	<CardBody>
 		<CardText>
 			<p>
-				({service.id}) <br/>
-				{service.description}
+				{service.id} <br/>
+				{service.description}<br/>
+				<Button color="danger" on:click={() => remove(service.id)}><Fa icon={faTrash} /></Button>
 			</p>
 		</CardText>
 	</CardBody>

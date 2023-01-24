@@ -277,6 +277,24 @@ export async function registerCloudService(service: CloudService): Promise<Cloud
 }
 
 /**
+ * Removes a cloud service.
+ */
+export async function removeCloudService(target: string): Promise<CloudService> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${target}`)
+
+    return fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+        body: JSON.stringify(target),
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+
+/**
  * Retrieves a list of cloud services from the orchestrator service.
  * 
  * @returns an array of {@link CloudService}s.
