@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	import { controls } from '$lib/stores';
 	import { listCloudServices, updateCloudService, type Catalog } from '$lib/orchestrator';
 	import type { CloudService } from '$lib/orchestrator';
 	import { redirectLogin } from '$lib/oauth';

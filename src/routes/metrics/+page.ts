@@ -1,5 +1,4 @@
-import type { AssessmentResult, Metric, MetricImplementation } from '$lib/assessment';
-import { listMetrics, listAssessmentResults } from '$lib/orchestrator';
+import { listMetrics } from '$lib/orchestrator';
 import { redirectLogin } from '$lib/oauth';
 import type { PageLoad } from './$types';
 
