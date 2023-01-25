@@ -1,6 +1,9 @@
 <script lang="ts">
 export let data: import('./$types').PageData;
 import { Button} from 'sveltestrap';
+import Fa from 'svelte-fa';
+import { faTrash} from '@fortawesome/free-solid-svg-icons';
+import { removeCloudService } from '$lib/orchestrator';
 </script>
 
 <div class="h-100 p-5 bg-light border rounded-3">
@@ -8,8 +11,6 @@ import { Button} from 'sveltestrap';
 	<p>
 		{data.service.id} <br/>
 		{data.service.description}
-		<!-- TODO(all): How to call the remove() from CloudServiceCard.svelte? Or do we have to write a separate remove-function? -->
-		<!-- <Button color="danger" on:click={() => remove(service.id)}><Fa icon={faTrash} /></Button> -->
 	</p>
 	<p>
 		<a href="./{data.service.id}/discovery">
@@ -19,4 +20,5 @@ import { Button} from 'sveltestrap';
 	<a href="./{data.service.id}/configuration">
 		<button class="btn btn-outline-secondary" type="button">Configure</button>
 	</a>
+		<Button color="danger" on:click={() => removeCloudService(data.service.id)}><Fa icon={faTrash} /></Button>
 </div>
