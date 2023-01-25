@@ -210,7 +210,7 @@ export async function getMetricImplementation(id: string): Promise<MetricImpleme
  * @returns metric configuration
  */
 export async function getMetricConfiguration(cloud_service_id: string, metric_id: string): Promise<MetricConfiguration> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/00000000-0000-0000-0000-000000000000/metric_configurations/${metric_id}`)
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${cloud_service_id}/metric_configurations/${metric_id}`)
 
     return fetch(apiUrl, {
         method: 'GET',
