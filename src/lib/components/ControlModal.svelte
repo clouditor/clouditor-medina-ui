@@ -68,6 +68,9 @@ function change(idx: number, ev: Event) {
 	<ModalHeader {toggle}>Controls in Scope</ModalHeader>
 	<ModalBody>
 		<div class="container">
+			<!-- Hide add/remove of controls if catalog is EUCS  -->
+			<!-- TODO(all): Use catalog.inScope or something else for checking the scope -->
+			{#if target.catalogId != "EUCS"}
 			<div class="row">
 				<div class="col-sm">
 					<select
@@ -106,7 +109,8 @@ function change(idx: number, ev: Event) {
 					</select>
 				</div>
 			</div>
-			<hr />
+ 			<hr />
+			{/if}
 			<div class="row">
 				<div class="col-sm">
 					{#each controls1 as control}

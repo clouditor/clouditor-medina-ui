@@ -13,7 +13,7 @@ import {
 	removeTargetOfEvaluation,
 	updateControlInScope,
 	type ControlInScope,
-	type TargetOfEvaluation
+	type TargetOfEvaluation,
 } from '$lib/orchestrator';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Fa from 'svelte-fa';
@@ -112,6 +112,7 @@ const toggle = () => (open = !open);
 			<Button color="primary" on:click={toggle}>Configure Controls in Scope</Button>
 			<Button color="danger" on:click={() => remove(target)}><Fa icon={faTrash} /></Button>
 
+			<!-- svelte-ignore empty-block -->
 			<ControlModal
 				controlsInScope={data.scopes[idx]}
 				{toggle}

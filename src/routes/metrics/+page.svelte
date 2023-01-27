@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Table } from 'sveltestrap';
 	import MetricImplementationBlock from '$lib/MetricImplementationBlock.svelte';
-	import { getMetricImplementation, type CloudService } from '$lib/orchestrator';
+	import { getMetricImplementation} from '$lib/orchestrator';
 	import type { Metric, MetricImplementation} from '$lib/assessment';
 	import type { PageData } from './$types';
 

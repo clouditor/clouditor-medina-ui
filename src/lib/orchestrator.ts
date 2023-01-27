@@ -29,6 +29,7 @@ export interface Catalog {
     description: string
     categories: Category[]
     controls: Control[]
+    allInScope: boolean
 }
 
 export interface Category {
