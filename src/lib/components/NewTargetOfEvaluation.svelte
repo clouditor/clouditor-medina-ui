@@ -13,12 +13,16 @@ let target: TargetOfEvaluation = {
 
 const dispatch = createEventDispatcher<{ add: TargetOfEvaluation }>();
 
-function submit() {
+function add() {
 	dispatch('add', target);
+}
+
+function discard() {
+	target.assuranceLevel = ""
 }
 </script>
 
-<form on:submit|preventDefault={submit}>
+<form>
 	<FormGroup floating label="Target Catalog">
 		<Input type="select" name="select" id="exampleSelect" bind:value={target.catalogId}>
 			{#each catalogs as catalog}
@@ -41,6 +45,6 @@ function submit() {
 		</Input>
 	</FormGroup>
 
-	<Button color={'primary'} type="submit">Add</Button>
-	<Button color={'danger'}>Cancel</Button>
+	<Button color={'primary'} on:click={add}>Add</Button>
+	<Button color={'danger'} on:click={discard}>Cancel</Button>
 </form>
