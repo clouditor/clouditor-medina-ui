@@ -11,7 +11,7 @@ export interface ControlInScopeDetail {
 </script>
 
 <script lang="ts">
-import { controlUrl, controlUrl2, type ControlInScope } from '$lib/orchestrator';
+import { controlUrl, controlUrl2, type Catalog, type ControlInScope } from '$lib/orchestrator';
 import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'sveltestrap';
 import { controls } from '$lib/stores';
 import type { TargetOfEvaluation } from '$lib/orchestrator';
@@ -21,6 +21,7 @@ export let open;
 export let toggle;
 export let target: TargetOfEvaluation;
 export let controlsInScope: ControlInScope[];
+export let catalog:Catalog;
 
 $: controlsInScopeUrls = controlsInScope.map((cis) => controlUrl2(cis, target.catalogId));
 
@@ -65,12 +66,11 @@ function change(idx: number, ev: Event) {
 </script>
 
 <Modal isOpen={open} {toggle} size="xl">
-	<ModalHeader {toggle}>Controls in Scope</ModalHeader>
+	<ModalHeader {toggle}>Controls in Scope {catalog.name}</ModalHeader>
 	<ModalBody>
 		<div class="container">
-			<!-- Hide add/remove of controls if catalog is EUCS  -->
-			<!-- TODO(all): Use catalog.inScope or something else for checking the scope -->
-			{#if target.catalogId != "EUCS"}
+			<!-- Hide add/remove of controls if catalog has all controls in scope  -->
+			{#if  !catalog.allInScope}
 			<div class="row">
 				<div class="col-sm">
 					<select
