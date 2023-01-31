@@ -280,15 +280,14 @@ export async function registerCloudService(service: CloudService): Promise<Cloud
 /**
  * Removes a cloud service.
  */
-export async function removeCloudService(target: string): Promise<CloudService> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${target}`)
+export async function removeCloudService(serviceId: string): Promise<void> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}`)
 
     return fetch(apiUrl, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         },
-        body: JSON.stringify(target),
     })
         .then(throwError)
         .then((res) => res.json())
@@ -300,7 +299,7 @@ export async function removeCloudService(target: string): Promise<CloudService> 
  * 
  * @returns an array of {@link CloudService}s.
  */
-export async function listCloudServices(): Promise<CloudService[]> {
+export async function listCloudServices(fetch = window.fetch): Promise<CloudService[]> {
     const apiUrl = clouditorize(`/v1/orchestrator/cloud_services`)
 
     return fetch(apiUrl, {

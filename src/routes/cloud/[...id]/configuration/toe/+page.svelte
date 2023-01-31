@@ -14,7 +14,7 @@ import {
 	updateControlInScope,
 	type Catalog,
 	type ControlInScope,
-	type TargetOfEvaluation,
+	type TargetOfEvaluation
 } from '$lib/orchestrator';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Fa from 'svelte-fa';

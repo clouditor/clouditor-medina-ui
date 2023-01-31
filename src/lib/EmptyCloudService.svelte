@@ -1,8 +1,9 @@
 <script lang="ts">
 import { Button, Form, Card, CardBody, CardText, FormGroup, Input } from 'sveltestrap';
 import { editing } from '$lib/stores';
-import { registerCloudService, type CloudService } from '$lib/orchestrator';
-import { invalidate } from '$app/navigation';
+import type { CloudServiceDetail } from './CloudServiceCard.svelte';
+import { createEventDispatcher } from 'svelte';
+import type { CloudService } from './orchestrator';
 
 let service: CloudService = { id: undefined, name: undefined };
 
@@ -11,11 +12,10 @@ editing.subscribe((value) => {
 	isEditing = value;
 });
 
-async function save() {
-	let _ = await registerCloudService(service);
+const dispatch = createEventDispatcher<{ save: CloudServiceDetail }>();
 
-	// Invalidate the cloud services's list
-	invalidate(`/v1/orchestrator/cloud_services/`);
+async function save() {
+	dispatch('save', { service: service });
 	editing.set(false);
 }
 
@@ -31,7 +31,7 @@ function discard() {
 			<CardText>
 				<div class="sign">
 					<Button on:click={() => editing.set(true)} class="mt-2">
-						<div value="true">Add service</div></Button
+						<div>Add service</div></Button
 					>
 				</div>
 			</CardText>
