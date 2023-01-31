@@ -16,6 +16,7 @@ const dispatch = createEventDispatcher<{ save: CloudServiceDetail }>();
 
 async function save() {
 	dispatch('save', { service: service });
+	service = { id: undefined, name: undefined };
 	editing.set(false);
 }
 
@@ -40,7 +41,7 @@ function discard() {
 {:else}
 	<Form>
 		<FormGroup floating label="Name">
-			<Input placeholder="Enter a name" bind:value={service.name} />
+			<Input placeholder="Enter a name" bind:value={service.name}  />
 		</FormGroup>
 
 		<FormGroup floating>
