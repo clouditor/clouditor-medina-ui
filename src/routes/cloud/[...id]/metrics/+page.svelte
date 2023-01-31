@@ -2,7 +2,7 @@
 	import { Table } from 'sveltestrap';
 	import MetricImplementationBlock from '$lib/MetricImplementationBlock.svelte';
 	import MetricConfigurationBlock from '$lib/MetricConfigurationBlock.svelte';
-	import { getMetricImplementation, getMetricConfiguration, type CloudService } from '$lib/orchestrator';
+	import { getMetricImplementation, getMetricConfiguration } from '$lib/orchestrator';
 	import type { Metric, MetricImplementation, MetricConfiguration} from '$lib/assessment';
 	import type { PageData } from './$types';
 

@@ -13,7 +13,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 			};
 		})
 		.catch(() => {
-			redirectLogin(`/cloud/${data.service.id}/metric`);
+			redirectLogin(`/cloud/${data.service.id}/metrics`);
 		});
 
     return {
