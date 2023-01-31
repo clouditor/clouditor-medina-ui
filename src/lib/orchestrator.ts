@@ -206,12 +206,12 @@ export async function getMetricImplementation(id: string): Promise<MetricImpleme
 /**
  * Retrieves a particular metric configuration from the orchestrator service.
  * 
- * @param cloud_service_id the Cloud Service ID
- * @param metric_id the metric id
+ * @param serviceId the Cloud Service ID
+ * @param metricId the metric id
  * @returns metric configuration
  */
-export async function getMetricConfiguration(cloud_service_id: string, metric_id: string): Promise<MetricConfiguration> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${cloud_service_id}/metric_configurations/${metric_id}`)
+export async function getMetricConfiguration(serviceId: string, metricId: string): Promise<MetricConfiguration> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/metric_configurations/${metricId}`)
 
     return fetch(apiUrl, {
         method: 'GET',

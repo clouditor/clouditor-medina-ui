@@ -3,18 +3,10 @@
 	import MetricImplementationBlock from '$lib/MetricImplementationBlock.svelte';
 	import MetricConfigurationBlock from '$lib/MetricConfigurationBlock.svelte';
 	import { getMetricImplementation, getMetricConfiguration } from '$lib/orchestrator';
-	import type { Metric, MetricImplementation, MetricConfiguration} from '$lib/assessment';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 	
-	async function fetchImplementation(metric: Metric): Promise<MetricImplementation> {
-		return await getMetricImplementation(metric.id);
-	}
-
-	async function fetchConfiguration(cloud_service_id: string, metric: Metric): Promise<MetricConfiguration> {
-		return await getMetricConfiguration(cloud_service_id, metric.id);
-	}
 </script>
 
 <h2>Configured Metrics</h2>
@@ -37,13 +29,13 @@ The following metrics are configured for the Cloud Service.
 					<td>{metric.id}</td>
 					<td>{metric.description}</td>
 					<td>
-						{#await fetchImplementation(metric) then impl}
+						{#await getMetricImplementation(metric.id) then impl}
 							<MetricImplementationBlock {impl} />
 						{/await}
 					</td>
 					<td>
 						<!-- svelte-ignore empty-block -->
-						{#await fetchConfiguration(data.service.id, metric)}
+						{#await getMetricConfiguration(data.service.id, metric.id)}
 						{:then config}
 							<MetricConfigurationBlock {config} />
 						{:catch}
