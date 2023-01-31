@@ -1,16 +1,17 @@
 export interface AssessmentResult {
+    timestamp: string
+    metricId: string
+    metricConfiguration: MetricConfiguration
     evidenceId: string
+    compliant: boolean
     resourceId: string
     resourceTypes: string[]
-    compliant: boolean
-    metricId: string
-    timestamp: string
-    metricConfiguration: MetricConfiguration
+    nonComplianceComments: string
 }
 
 export interface MetricConfiguration {
-    targetValue: object
     operator: string
+    targetValue: object
     isDefault: boolean
 }
 

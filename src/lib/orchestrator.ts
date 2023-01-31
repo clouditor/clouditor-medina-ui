@@ -29,6 +29,7 @@ export interface Catalog {
     description: string
     categories: Category[]
     controls: Control[]
+    allInScope: boolean
 }
 
 export interface Category {
@@ -37,11 +38,12 @@ export interface Category {
 
 export interface Control {
     id: string
+    categoryName?: string
+    categoryCatalogId: string
     name?: string
     description?: string
-    metrics?: Metric[]
-    categoryName?: string
     controls?: Control[]
+    metrics?: Metric[]
     parentControlId?: string
 }
 
@@ -142,7 +144,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=100&filteredCloudServiceId=${serviceId}`);
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000&filteredCloudServiceId=${serviceId}`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -202,6 +204,30 @@ export async function getMetricImplementation(id: string): Promise<MetricImpleme
 }
 
 /**
+ * Retrieves a particular metric configuration from the orchestrator service.
+ * 
+ * @param serviceId the Cloud Service ID
+ * @param metricId the metric id
+ * @returns metric configuration
+ */
+export async function getMetricConfiguration(serviceId: string, metricId: string): Promise<MetricConfiguration> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/metric_configurations/${metricId}`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: MetricConfiguration) => {
+            return response;
+        });
+}
+
+
+/**
  * Retrieves a particular metric implementation from the orchestrator service.
  * 
  * @param id the metric id
@@ -252,11 +278,28 @@ export async function registerCloudService(service: CloudService): Promise<Cloud
 }
 
 /**
+ * Removes a cloud service.
+ */
+export async function removeCloudService(serviceId: string): Promise<void> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}`)
+
+    return fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        },
+    })
+        .then(throwError)
+        .then((res) => res.json())
+}
+
+
+/**
  * Retrieves a list of cloud services from the orchestrator service.
  * 
  * @returns an array of {@link CloudService}s.
  */
-export async function listCloudServices(): Promise<CloudService[]> {
+export async function listCloudServices(fetch = window.fetch): Promise<CloudService[]> {
     const apiUrl = clouditorize(`/v1/orchestrator/cloud_services`)
 
     return fetch(apiUrl, {
@@ -372,7 +415,7 @@ export async function listTargetsOfEvaluation(serviceId: string, fetch = window.
  * @returns an array of {@link ControlInScope} objects.
  */
 export async function listControlsInScope(serviceId: string, catalogId: string, fetch = window.fetch): Promise<ControlInScope[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope`)
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1000`)
 
     return fetch(apiUrl, {
         method: 'GET',

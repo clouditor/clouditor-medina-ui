@@ -106,6 +106,7 @@ The following list contains all assessment results, sorted by timestamp.
 				<th>Resource Type</th>
 				<th>Metric</th>
 				<th>Metric Category</th>
+				<th>Non-compliance comment</th>
 			</tr>
 		</thead>
 		<tbody>

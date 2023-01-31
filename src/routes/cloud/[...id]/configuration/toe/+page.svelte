@@ -12,12 +12,13 @@ import {
 	removeControlFromScope,
 	removeTargetOfEvaluation,
 	updateControlInScope,
+	type Catalog,
 	type ControlInScope,
 	type TargetOfEvaluation
 } from '$lib/orchestrator';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Fa from 'svelte-fa';
-import { Button, Card, CardBody, CardHeader, Icon } from 'sveltestrap';
+import { Button, Card, CardBody, CardHeader } from 'sveltestrap';
 
 export let data: import('./$types').PageData;
 
@@ -96,6 +97,17 @@ async function changeControl(event: CustomEvent<ControlInScopeDetail>) {
 	);
 }
 
+// Find catalog for given catalog_id
+function getUsedCatalog(catalogID: string): Catalog {
+	for (var catalog of data.catalogs) {
+		if (catalog.id == catalogID) {
+			return catalog
+		}
+	}
+
+	return {} as any;
+}
+
 let open = false;
 const toggle = () => (open = !open);
 </script>
@@ -117,6 +129,7 @@ const toggle = () => (open = !open);
 				{toggle}
 				{open}
 				{target}
+				catalog={getUsedCatalog(target.catalogId)}
 				on:add={addSelectedControls}
 				on:remove={removeSelectedControls}
 				on:change={changeControl}
