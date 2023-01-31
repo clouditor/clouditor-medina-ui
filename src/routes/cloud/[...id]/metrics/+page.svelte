@@ -38,8 +38,6 @@ The following metrics are configured for the Cloud Service.
 						{#await getMetricConfiguration(data.service.id, metric.id)}
 						{:then config}
 							<MetricConfigurationBlock {config} />
-						{:catch}
-						<p>No configuration available</p>
 						{/await}
 					</td>
 				</tr>
