@@ -477,9 +477,9 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
 export async function listControls(catalogId?: string, categoryName?: string, fetch = window.fetch): Promise<Control[]> {
     let apiUrl: string;
     if (catalogId != null && categoryName != null) {
-        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=500`)
+        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=1000`)
     } else {
-        apiUrl = clouditorize(`/v1/orchestrator/controls`)
+        apiUrl = clouditorize(`/v1/orchestrator/controls?pageSize=1000`)
     }
 
     return fetch(apiUrl, {
