@@ -6,7 +6,7 @@ import { Button, FormGroup, Input } from 'sveltestrap';
 
 export let data: import('./$types').PageData;
 
-async function save(event) {
+async function save() {
 	try {
 		data.service = await updateCloudService(data.service);
 		toast.push('Cloud service updated.', { classes: ['toast-success'] });

@@ -21,7 +21,7 @@ export let open;
 export let toggle;
 export let target: TargetOfEvaluation;
 export let controlsInScope: ControlInScope[];
-export let catalog:Catalog;
+export let catalog: Catalog;
 
 $: controlsInScopeUrls = controlsInScope.map((cis) => controlUrl2(cis, target.catalogId));
 
@@ -70,46 +70,46 @@ function change(idx: number, ev: Event) {
 	<ModalBody>
 		<div class="container">
 			<!-- Hide add/remove of controls if catalog has all controls in scope  -->
-			{#if  !catalog.allInScope}
-			<div class="row">
-				<div class="col-sm">
-					<select
-						class="form-control"
-						name="controls"
-						id="controls"
-						multiple
-						bind:value={controlsToAdd}
-					>
-						{#each controls2 as control}
-							<option value={controlUrl(control, target.catalogId)}>
-								{#if control.parentControlId != null}&nbsp;{/if}
-								{control.id}: {control.name}
-							</option>
-						{/each}
-					</select>
+			{#if !catalog.allInScope}
+				<div class="row">
+					<div class="col-sm">
+						<select
+							class="form-control"
+							name="controls"
+							id="controls"
+							multiple
+							bind:value={controlsToAdd}
+						>
+							{#each controls2 as control}
+								<option value={controlUrl(control, target.catalogId)}>
+									{#if control.parentControlId != null}&nbsp;{/if}
+									{control.id}: {control.name}
+								</option>
+							{/each}
+						</select>
+					</div>
+					<div class="col-sm">
+						<Button on:click={add}>add</Button>
+						<Button on:click={remove}>remove</Button>
+					</div>
+					<div class="col-sm">
+						<select
+							class="form-control"
+							name="selected-controls"
+							id="selected-controls"
+							multiple
+							bind:value={controlsToRemove}
+						>
+							{#each controls1 as control}
+								<option value={controlUrl(control, target.catalogId)}>
+									{#if control.parentControlId != null}&nbsp;{/if}
+									{control.id}: {control.name}
+								</option>
+							{/each}
+						</select>
+					</div>
 				</div>
-				<div class="col-sm">
-					<Button on:click={add}>add</Button>
-					<Button on:click={remove}>remove</Button>
-				</div>
-				<div class="col-sm">
-					<select
-						class="form-control"
-						name="selected-controls"
-						id="selected-controls"
-						multiple
-						bind:value={controlsToRemove}
-					>
-						{#each controls1 as control}
-							<option value={controlUrl(control, target.catalogId)}>
-								{#if control.parentControlId != null}&nbsp;{/if}
-								{control.id}: {control.name}
-							</option>
-						{/each}
-					</select>
-				</div>
-			</div>
- 			<hr />
+				<hr />
 			{/if}
 			<div class="row">
 				<div class="col-sm">
@@ -135,8 +135,8 @@ function change(idx: number, ev: Event) {
 							on:change={(e) => change(idx, e)}
 						>
 							<option value="MONITORING_STATUS_UNSPECIFIED">unspecified</option>
-							<option value="MONITORING_STATUS_CONTINUOUSLY_MONITORED">
-								continuously monitored
+							<option value="MONITORING_STATUS_AUTOMATICALLY_MONITORED">
+								automatically monitored
 							</option>
 							<option value="MONITORING_STATUS_MANUALLY_MONITORED">manually monitored</option>
 							<option value="MONITORING_STATUS_DELEGATED">delegated</option>
