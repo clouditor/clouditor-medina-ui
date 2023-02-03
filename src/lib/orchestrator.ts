@@ -415,7 +415,7 @@ export async function listTargetsOfEvaluation(serviceId: string, fetch = window.
  * @returns an array of {@link ControlInScope} objects.
  */
 export async function listControlsInScope(serviceId: string, catalogId: string, fetch = window.fetch): Promise<ControlInScope[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1000`)
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1000&orderBy=control_id&asc=true`)
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -477,9 +477,9 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
 export async function listControls(catalogId?: string, categoryName?: string, fetch = window.fetch): Promise<Control[]> {
     let apiUrl: string;
     if (catalogId != null && categoryName != null) {
-        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=1000`)
+        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=1000&orderBy=id&asc=true`)
     } else {
-        apiUrl = clouditorize(`/v1/orchestrator/controls?pageSize=1000`)
+        apiUrl = clouditorize(`/v1/orchestrator/controls?pageSize=1000&orderBy=id&asc=true`)
     }
 
     return fetch(apiUrl, {
