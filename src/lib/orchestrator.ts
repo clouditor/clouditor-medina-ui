@@ -30,6 +30,8 @@ export interface Catalog {
     categories: Category[]
     controls: Control[]
     allInScope: boolean
+    assuranceLevels: string[]
+    assuranceLevel: string
 }
 
 export interface Category {

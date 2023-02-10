@@ -8,7 +8,7 @@ export let service: CloudService;
 
 let target: TargetOfEvaluation = {
 	cloudServiceId: service.id,
-	catalogId: catalogs[0].id
+	catalogId: catalogs[0].id,
 };
 
 const dispatch = createEventDispatcher<{ add: TargetOfEvaluation }>();
@@ -19,6 +19,16 @@ function add() {
 
 function discard() {
 	target.assuranceLevel = ""
+}
+
+function getAssuranceLevels(catalogId: string): string[] {
+	for (var catalog of catalogs) {
+		if (catalog.id == catalogId) {
+			return catalog.assuranceLevels
+		}
+	}
+
+	return {} as any;
 }
 </script>
 
@@ -39,9 +49,9 @@ function discard() {
 			bind:value={target.assuranceLevel}
 		>
 			<option value="">-</option>
-			<option value="basic">basic</option>
-			<option value="substantial">substantial</option>
-			<option value="high">high</option>
+			<option value="{getAssuranceLevels(target.catalogId)[0]}">{getAssuranceLevels(target.catalogId)[0]}</option>
+			<option value="{getAssuranceLevels(target.catalogId)[1]}">{getAssuranceLevels(target.catalogId)[1]}</option>
+			<option value="{getAssuranceLevels(target.catalogId)[2]}">{getAssuranceLevels(target.catalogId)[2]}</option>
 		</Input>
 	</FormGroup>
 
