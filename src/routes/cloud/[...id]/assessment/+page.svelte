@@ -14,6 +14,7 @@ export let data: import('./$types').PageData;
 			<th>Resource Type</th>
 			<th>Metric</th>
 			<th>Metric Category</th>
+			<th>Non-compliance comment</th>
 		</tr>
 	</thead>
 	<tbody>
