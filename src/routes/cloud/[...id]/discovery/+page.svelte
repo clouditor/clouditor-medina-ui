@@ -1,7 +1,7 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faBoxArchive } from '@fortawesome/free-solid-svg-icons';
-import { Button, Table } from 'sveltestrap';
+import { Button, Table, FormGroup, Input } from 'sveltestrap';
 import { Chart, type ChartConfiguration, type ChartData, registerables } from 'chart.js';
 import { onMount } from 'svelte';
 import { startDiscovery, type Resource } from '$lib/discovery';
@@ -73,9 +73,12 @@ function chart(resources: Resource[]): ChartData<'bar', number[], unknown> {
 }
 
 function discover() {
-	startDiscovery();
+	startDiscovery(data.resourceGroup);
 }
 </script>
+<FormGroup floating label="Resource Group (Optional. If a resource group is added only evidences from that resource group are discovered.)">
+	<Input placeholder="Resource Group" bind:value={data.resourceGroup} />
+</FormGroup>
 
 <Button color="primary" class="mb-2" on:click={discover}>Start Discovery</Button>
 

@@ -12,6 +12,10 @@ export interface QueryRequest {
     orderBy?: string
 }
 
+export interface StartRequest {
+    resourceGroup?: string
+}
+
 export interface HttpEndpoint {
     transportEncryption?: TransportEncryption
 }
@@ -31,11 +35,17 @@ export interface Resource {
     creationTime: number
 }
 
-export async function startDiscovery(): Promise<boolean> {
-    const apiUrl = clouditorize(`/v1/discovery/start`)
+export async function startDiscovery(resourceGroup: string, fetch = window.fetch): Promise<boolean> {
+    const apiUrl = clouditorize(`/v1/discovery/start?resourceGroup=${resourceGroup}`)
+
+    const req: StartRequest = {};
+    if (resourceGroup) {
+        req.resourceGroup = resourceGroup;
+    }
 
     return fetch(apiUrl, {
         method: 'POST',
+        body: JSON.stringify(req),
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         }
