@@ -49,9 +49,12 @@ function getAssuranceLevels(catalogId: string): string[] {
 			bind:value={target.assuranceLevel}
 		>
 			<option value="">-</option>
-			<option value="{getAssuranceLevels(target.catalogId)[0]}">{getAssuranceLevels(target.catalogId)[0]}</option>
-			<option value="{getAssuranceLevels(target.catalogId)[1]}">{getAssuranceLevels(target.catalogId)[1]}</option>
-			<option value="{getAssuranceLevels(target.catalogId)[2]}">{getAssuranceLevels(target.catalogId)[2]}</option>
+			
+			{#if getAssuranceLevels(target.catalogId).length > 0}
+				<option value="{getAssuranceLevels(target.catalogId)[0]}">{getAssuranceLevels(target.catalogId)[0]}</option>
+				<option value="{getAssuranceLevels(target.catalogId)[1]}">{getAssuranceLevels(target.catalogId)[1]}</option>
+				<option value="{getAssuranceLevels(target.catalogId)[2]}">{getAssuranceLevels(target.catalogId)[2]}</option>
+			{/if}
 		</Input>
 	</FormGroup>
 
