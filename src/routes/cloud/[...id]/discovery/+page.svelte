@@ -73,13 +73,9 @@ function chart(resources: Resource[]): ChartData<'bar', number[], unknown> {
 }
 
 function discover() {
-	startDiscovery(data.resourceGroup);
+	startDiscovery();
 }
 </script>
-<FormGroup floating label="Resource Group (Optional. If a resource group is added only evidences from that resource group are discovered.)">
-	<Input placeholder="Resource Group" bind:value={data.resourceGroup} />
-</FormGroup>
-
 <Button color="primary" class="mb-2" on:click={discover}>Start Discovery</Button>
 
 <canvas id="myChart" style="max-height: 100px" bind:this={ctx} />
