@@ -68,6 +68,7 @@ function change(idx: number, ev: Event) {
 <Modal isOpen={open} {toggle} size="xl">
 	<ModalHeader {toggle}>Controls in Scope {catalog.name}</ModalHeader>
 	<ModalBody>
+		To Add {controlsToAdd}
 		<div class="container">
 			<!-- Hide add/remove of controls if catalog has all controls in scope  -->
 			{#if !catalog.allInScope}
