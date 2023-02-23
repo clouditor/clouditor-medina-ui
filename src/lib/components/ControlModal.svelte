@@ -26,11 +26,11 @@ export let catalog: Catalog;
 $: controlsInScopeUrls = controlsInScope.map((cis) => controlUrl2(cis, target.catalogId));
 
 $: controls1 = $controls.filter((c) => {
-	return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
+	return controlsInScopeUrls.includes(controlUrl(c, c.categoryCatalogId));
 });
 
 $: controls2 = $controls.filter((c) => {
-	return !controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
+	return !controlsInScopeUrls.includes(controlUrl(c, c.categoryCatalogId));
 });
 
 let controlsToAdd = [];
@@ -66,6 +66,14 @@ function change(idx: number, ev: Event) {
 </script>
 
 <Modal isOpen={open} {toggle} size="xl">
+	<!--
+	Controls1: {controls1.length}
+	Controls2: {controls2.length}
+	Controls: {$controls.length}
+	controlsInScope: {controlsInScope.length}
+	Test: {JSON.stringify(controlsInScopeUrls)}
+	{target.catalogId}
+	-->
 	<ModalHeader {toggle}>Controls in Scope {catalog.name}</ModalHeader>
 	<ModalBody>
 		To Add {controlsToAdd}
@@ -127,12 +135,12 @@ function change(idx: number, ev: Event) {
 				</div>
 				<div class="col-sm">
 					{#each controls1 as control, idx}
+						{controlsInScope[idx]?.monitoringStatus}
 						<Input
 							type="select"
 							name="select"
 							id="exampleSelect"
 							class="mb-3"
-							bind:value={controlsInScope[idx].monitoringStatus}
 							on:change={(e) => change(idx, e)}
 						>
 							<option value="MONITORING_STATUS_UNSPECIFIED">unspecified</option>

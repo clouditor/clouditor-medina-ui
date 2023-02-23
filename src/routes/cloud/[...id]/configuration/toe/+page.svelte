@@ -133,7 +133,6 @@ const toggle = () => (open = !open);
 
 			<Button color="primary" on:click={toggle}>Configure Controls in Scope</Button>
 			<Button color="danger" on:click={() => remove(target)}><Fa icon={faTrash} /></Button>
-
 			<ControlModal
 				controlsInScope={data.scopes[idx]}
 				{toggle}
