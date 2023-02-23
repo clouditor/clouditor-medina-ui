@@ -8,7 +8,7 @@ export let service: CloudService;
 
 let target: TargetOfEvaluation = {
 	cloudServiceId: service.id,
-	catalogId: catalogs[0].id,
+	catalogId: catalogs[0].id
 };
 
 const dispatch = createEventDispatcher<{ add: TargetOfEvaluation }>();
@@ -18,18 +18,20 @@ function add() {
 }
 
 function discard() {
-	target.assuranceLevel = ""
+	target.assuranceLevel = '';
 }
 
 function getAssuranceLevels(catalogId: string): string[] {
 	for (var catalog of catalogs) {
 		if (catalog.id == catalogId) {
-			return catalog.assuranceLevels
+			return catalog.assuranceLevels;
 		}
 	}
 
-	return {} as any;
+	return [];
 }
+
+$: assuranceLevels = getAssuranceLevels(target.catalogId);
 </script>
 
 <form>
@@ -49,11 +51,11 @@ function getAssuranceLevels(catalogId: string): string[] {
 			bind:value={target.assuranceLevel}
 		>
 			<option value="">-</option>
-			
-			{#if getAssuranceLevels(target.catalogId).length > 0}
-				<option value="{getAssuranceLevels(target.catalogId)[0]}">{getAssuranceLevels(target.catalogId)[0]}</option>
-				<option value="{getAssuranceLevels(target.catalogId)[1]}">{getAssuranceLevels(target.catalogId)[1]}</option>
-				<option value="{getAssuranceLevels(target.catalogId)[2]}">{getAssuranceLevels(target.catalogId)[2]}</option>
+
+			{#if assuranceLevels.length > 0}
+				<option value={assuranceLevels[0]}>{assuranceLevels[0]}</option>
+				<option value={assuranceLevels[1]}>{assuranceLevels[1]}</option>
+				<option value={assuranceLevels[2]}>{assuranceLevels[2]}</option>
 			{/if}
 		</Input>
 	</FormGroup>

@@ -31,7 +31,6 @@ export interface Catalog {
     controls: Control[]
     allInScope: boolean
     assuranceLevels: string[]
-    assuranceLevel: string
 }
 
 export interface Category {
@@ -47,6 +46,7 @@ export interface Control {
     controls?: Control[]
     metrics?: Metric[]
     parentControlId?: string
+    assuranceLevel: string
 }
 
 export function controlUrl(control: Control, catalogId: string): string {
