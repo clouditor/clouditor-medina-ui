@@ -97,6 +97,7 @@ export interface ListCatalogsResponse {
 
 export interface ListControlsResponse {
     controls: Control[];
+    nextPageToken: string
 }
 
 export interface ListCertificatesResponse {
@@ -477,25 +478,35 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
  * @returns a list of {@link Control}s.
  */
 export async function listControls(catalogId?: string, categoryName?: string, fetch = window.fetch): Promise<Control[]> {
-    let apiUrl: string;
+    let baseApiUrl: string;
     if (catalogId != null && categoryName != null) {
-        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=1500&orderBy=id&asc=true`)
+        baseApiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=1500&orderBy=id&asc=true`)
     } else {
-        apiUrl = clouditorize(`/v1/orchestrator/controls?pageSize=1500&orderBy=id&asc=true`)
+        baseApiUrl = clouditorize(`/v1/orchestrator/controls?pageSize=1500&orderBy=id&asc=true`)
     }
 
-    return fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${localStorage.token}`,
+    const controls: Control[] = [];
+    let nextPageToken = undefined;
+    do {
+        let apiUrl = baseApiUrl;
+        if (nextPageToken != undefined) {
+            apiUrl = apiUrl + "&pageToken=" + nextPageToken;
         }
-    })
-        .then(throwError)
-        .then((res) => res.json())
-        .then((response: ListControlsResponse) => {
-            return response.controls;
-        });
+
+        const res = await throwError(await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.token}`,
+            }
+        })).json() as ListControlsResponse;
+
+        controls.push(...res.controls);
+        nextPageToken = res.nextPageToken;
+    } while (nextPageToken != "" && nextPageToken !== undefined && nextPageToken !== null)
+
+    return controls;
 }
+
 
 /**
  * Retrieve a cloud service from the orchestrator service using its ID.
