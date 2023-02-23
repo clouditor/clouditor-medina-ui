@@ -6,11 +6,6 @@ import { Button, FormGroup, Input } from 'sveltestrap';
 export let catalogs: Catalog[];
 export let service: CloudService;
 
-let target: TargetOfEvaluation = {
-	cloudServiceId: service.id,
-	catalogId: catalogs[0].id
-};
-
 const dispatch = createEventDispatcher<{ add: TargetOfEvaluation }>();
 
 function add() {
@@ -31,10 +26,35 @@ function getAssuranceLevels(catalogId: string): string[] {
 	return [];
 }
 
+let target = undefined;
+
+// Update the target if its undefined (at the beginning) or if the target is not
+// in the list of catalogs anymore. This happens, once we add a catalog.
+$: if (target === undefined || !isInCatalogs(catalogs, target.catalogId)) {
+	target = {
+		cloudServiceId: service.id,
+		catalogId: catalogs[0].id,
+		assuranceLevel: ''
+	} as TargetOfEvaluation;
+}
+
+// Update the assurance levels as soon as our target changes
 $: assuranceLevels = getAssuranceLevels(target.catalogId);
+
+function isInCatalogs(catalogs: Catalog[], id: string): boolean {
+	for (let catalog of catalogs) {
+		if (catalog.id == id) {
+			return true;
+		}
+	}
+
+	return false;
+}
 </script>
 
 <form>
+	{catalogs}
+	{target.catalogId}
 	<FormGroup floating label="Target Catalog">
 		<Input type="select" name="select" id="exampleSelect" bind:value={target.catalogId}>
 			{#each catalogs as catalog}
@@ -52,10 +72,16 @@ $: assuranceLevels = getAssuranceLevels(target.catalogId);
 		>
 			<option value="">-</option>
 
-			{#if assuranceLevels.length > 0}
-				<option value={assuranceLevels[0]}>{assuranceLevels[0]}</option>
-				<option value={assuranceLevels[1]}>{assuranceLevels[1]}</option>
-				<option value={assuranceLevels[2]}>{assuranceLevels[2]}</option>
+			{#if getAssuranceLevels(target.catalogId).length > 0}
+				<option value={getAssuranceLevels(target.catalogId)[0]}
+					>{getAssuranceLevels(target.catalogId)[0]}</option
+				>
+				<option value={getAssuranceLevels(target.catalogId)[1]}
+					>{getAssuranceLevels(target.catalogId)[1]}</option
+				>
+				<option value={getAssuranceLevels(target.catalogId)[2]}
+					>{getAssuranceLevels(target.catalogId)[2]}</option
+				>
 			{/if}
 		</Input>
 	</FormGroup>
