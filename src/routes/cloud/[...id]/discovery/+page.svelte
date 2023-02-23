@@ -1,7 +1,7 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faBoxArchive } from '@fortawesome/free-solid-svg-icons';
-import { Button, Table, FormGroup, Input } from 'sveltestrap';
+import { Button, Table} from 'sveltestrap';
 import { Chart, type ChartConfiguration, type ChartData, registerables } from 'chart.js';
 import { onMount } from 'svelte';
 import { startDiscovery, type Resource } from '$lib/discovery';
