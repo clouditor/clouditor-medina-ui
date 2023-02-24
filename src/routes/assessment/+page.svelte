@@ -15,11 +15,7 @@ import {
 	Label,
 	Row,
 	Table,
-	Tooltip
 } from 'sveltestrap';
-import Fa from 'svelte-fa';
-import { faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { getEvidence } from '$lib/evidence';
 import type { PageData } from './$types';
 import { metrics } from '$lib/stores';
 import AssessmentResultRow from '$lib/components/AssessmentResultRow.svelte';

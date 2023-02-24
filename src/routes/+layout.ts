@@ -1,5 +1,4 @@
-import { redirectLogin } from "$lib/oauth";
-import { listCatalogs, listControls, listMetrics } from "$lib/orchestrator";
+import { getRuntimeInfo, listCatalogs, listControls, listMetrics } from "$lib/orchestrator";
 import { metrics, controls } from "$lib/stores";
 import type { LayoutLoad } from "./$types";
 
@@ -24,15 +23,13 @@ export const load: LayoutLoad = async ({ fetch }) => {
             // ignore, we will catch it later
         });
 
-    return listCatalogs(fetch)
-        .then((catalogs) => {
-            return {
-                catalogs: catalogs
-            }
-        })
-        .catch(() => {
-            return redirectLogin('/');
-        });
+    const runtime = await getRuntimeInfo(fetch);
+    const catalogs = await listCatalogs(fetch);
+
+    return {
+        runtime: runtime, 
+        catalogs: catalogs
+    }
 }
 
 // Disable SSR
