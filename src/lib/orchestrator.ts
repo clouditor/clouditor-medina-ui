@@ -1,6 +1,10 @@
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
 import { clouditorize } from './util';
 
+export interface Runtime {
+    releaseVersion: string
+    commitHash: string
+}
 export interface CloudService {
     id: string
     name: string
@@ -118,6 +122,27 @@ export interface ListTargetsOfEvaluationResponse {
 
 export interface ListControlsInScopeResponse {
     controlsInScope: ControlInScope[]
+}
+
+/**
+ * Requests the Clouditor runtime information.
+ * 
+ * @returns an array of {@link AssessmentResult}s.
+ */
+export async function getRuntimeInfo(fetch = window.fetch): Promise<Runtime> {
+    const apiUrl = clouditorize(`/v1/orchestrator/runtime_info`);
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: Runtime) => {
+            return response;
+        });
 }
 
 /**
