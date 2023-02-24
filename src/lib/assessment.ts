@@ -1,4 +1,5 @@
 export interface AssessmentResult {
+    id: string
     timestamp: string
     metricId: string
     metricConfiguration: MetricConfiguration
