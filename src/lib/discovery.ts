@@ -31,7 +31,7 @@ export interface Resource {
     creationTime: number
 }
 
-export async function startDiscovery(): Promise<boolean> {
+export async function startDiscovery(fetch = window.fetch): Promise<boolean> {
     const apiUrl = clouditorize(`/v1/discovery/start`)
 
     return fetch(apiUrl, {

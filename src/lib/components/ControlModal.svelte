@@ -20,18 +20,30 @@ import { createEventDispatcher } from 'svelte';
 export let open;
 export let toggle;
 export let target: TargetOfEvaluation;
-export let controlsInScope: ControlInScope[];
+export let scope: ControlInScope[];
 export let catalog: Catalog;
 
-$: controlsInScopeUrls = controlsInScope.map((cis) => controlUrl2(cis, target.catalogId));
+$: controlsInScopeUrls = scope.map((cis) => controlUrl2(cis, target.catalogId));
 
-$: controls1 = $controls.filter((c) => {
-	return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-});
+// Based on the list of all controls, we first need to filter
+//  - the ones that are in the target catalog
+//  - TODO: actually only filter those that are within the assurance level
+//  - are in scope
+$: controlsInScope = $controls
+	.filter((c) => c.categoryCatalogId == target.catalogId)
+	.filter((c) => {
+		return controlsInScopeUrls.includes(controlUrl(c, c.categoryCatalogId));
+	});
 
-$: controls2 = $controls.filter((c) => {
-	return !controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-});
+// Based on the list of all controls, we first need to filter
+//  - the ones that are in the target catalog
+//  - TODO: actually only filter those that are within the assurance level
+//  - are NOT in scope
+$: controlsNotInScope = $controls
+	.filter((c) => c.categoryCatalogId == target.catalogId)
+	.filter((c) => {
+		return !controlsInScopeUrls.includes(controlUrl(c, c.categoryCatalogId));
+	});
 
 let controlsToAdd = [];
 let controlsToRemove = [];
@@ -52,16 +64,16 @@ function remove() {
 
 function change(idx: number, ev: Event) {
 	const select = ev.target as HTMLSelectElement;
-	let scope = {
-		targetOfEvaluationCloudServiceId: controlsInScope[idx].targetOfEvaluationCloudServiceId,
-		targetOfEvaluationCatalogId: controlsInScope[idx].targetOfEvaluationCatalogId,
-		controlId: controlsInScope[idx].controlId,
-		controlCategoryName: controlsInScope[idx].controlCategoryName,
-		controlCategoryCatalogId: controlsInScope[idx].controlCategoryCatalogId,
+	let updatedScope = {
+		targetOfEvaluationCloudServiceId: scope[idx].targetOfEvaluationCloudServiceId,
+		targetOfEvaluationCatalogId: scope[idx].targetOfEvaluationCatalogId,
+		controlId: scope[idx].controlId,
+		controlCategoryName: scope[idx].controlCategoryName,
+		controlCategoryCatalogId: scope[idx].controlCategoryCatalogId,
 		monitoringStatus: select.value
 	};
 
-	dispatch('change', { target: target, controlInScope: scope });
+	dispatch('change', { target: target, controlInScope: updatedScope });
 }
 </script>
 
@@ -80,7 +92,7 @@ function change(idx: number, ev: Event) {
 							multiple
 							bind:value={controlsToAdd}
 						>
-							{#each controls2 as control}
+							{#each controlsNotInScope as control}
 								<option value={controlUrl(control, target.catalogId)}>
 									{#if control.parentControlId != null}&nbsp;{/if}
 									{control.id}: {control.name}
@@ -100,7 +112,7 @@ function change(idx: number, ev: Event) {
 							multiple
 							bind:value={controlsToRemove}
 						>
-							{#each controls1 as control}
+							{#each controlsInScope as control}
 								<option value={controlUrl(control, target.catalogId)}>
 									{#if control.parentControlId != null}&nbsp;{/if}
 									{control.id}: {control.name}
@@ -113,7 +125,7 @@ function change(idx: number, ev: Event) {
 			{/if}
 			<div class="row">
 				<div class="col-sm">
-					{#each controls1 as control}
+					{#each controlsInScope as control}
 						<Input
 							type="text"
 							name="control"
@@ -125,13 +137,13 @@ function change(idx: number, ev: Event) {
 					{/each}
 				</div>
 				<div class="col-sm">
-					{#each controls1 as control, idx}
+					{#each scope as scope, idx}
 						<Input
 							type="select"
 							name="select"
 							id="exampleSelect"
 							class="mb-3"
-							bind:value={controlsInScope[idx].monitoringStatus}
+							bind:value={scope.monitoringStatus}
 							on:change={(e) => change(idx, e)}
 						>
 							<option value="MONITORING_STATUS_UNSPECIFIED">unspecified</option>
