@@ -1,7 +1,7 @@
 <script lang="ts">
 import Fa from 'svelte-fa';
 import { faBoxArchive } from '@fortawesome/free-solid-svg-icons';
-import { Button, Table } from 'sveltestrap';
+import { Button, Table} from 'sveltestrap';
 import { Chart, type ChartConfiguration, type ChartData, registerables } from 'chart.js';
 import { onMount } from 'svelte';
 import { startDiscovery, type Resource } from '$lib/discovery';
@@ -76,7 +76,6 @@ function discover() {
 	startDiscovery();
 }
 </script>
-
 <Button color="primary" class="mb-2" on:click={discover}>Start Discovery</Button>
 
 <canvas id="myChart" style="max-height: 100px" bind:this={ctx} />
