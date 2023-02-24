@@ -5,7 +5,7 @@ function getVersionMessage(): string {
     if (data.runtime.releaseVersion === undefined || data.runtime.releaseVersion == "") {
         return " commit hash " + data.runtime.commitHash
     } else {
-        return " release version " + data.runtime.releaseVersion
+        return data.runtime.releaseVersion
     }
 }
 
