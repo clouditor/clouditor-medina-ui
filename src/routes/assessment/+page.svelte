@@ -103,6 +103,7 @@ The following list contains all assessment results, sorted by timestamp.
 				<th>Metric</th>
 				<th>Metric Category</th>
 				<th>Non-compliance comment</th>
+				<th>More info</th>
 			</tr>
 		</thead>
 		<tbody>

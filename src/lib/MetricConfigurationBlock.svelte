@@ -10,9 +10,9 @@
 	<Button color="primary" on:click={() => (isOpen = !isOpen)}>Show Cofiguration</Button>
 	<Collapse {isOpen}>
 		<Card body class="mt-2">
-			<pre><code>Operator:     {config.operator}</code></pre>
-			<pre><code>Target Value: {config.targetValue}</code></pre>
-			<pre><code>Is Default:   {config.isDefault}</code></pre>
+			<pre>Operator:     {config.operator}</pre>
+			<pre>Target Value: {config.targetValue}</pre>
+			<pre>Is Default:   {config.isDefault}</pre>
 		</Card>
 	</Collapse>
 {:else}
