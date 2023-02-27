@@ -4,7 +4,14 @@ import { clouditorize } from './util';
 export interface Runtime {
     releaseVersion: string
     commitHash: string
+    dependencies: Dependency[]
 }
+
+export interface Dependency {
+    path: string
+    version: string
+}
+
 export interface CloudService {
     id: string
     name: string

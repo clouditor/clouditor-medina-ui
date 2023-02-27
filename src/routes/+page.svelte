@@ -1,7 +1,14 @@
 <script lang="ts">
 export let data: import('./$types').LayoutData;
 
+// Returns the release version or commit hash if Clouditor is started directly. If Clouditor is imported, than we have to use that version.
 function getVersionMessage(): string {
+    for (var d of data.runtime.dependencies) {
+        if (d.path == "clouditor.io/clouditor") {
+            return d.version
+        }
+    }
+
     if (data.runtime.releaseVersion === undefined || data.runtime.releaseVersion == "") {
         return " commit hash " + data.runtime.commitHash
     } else {
