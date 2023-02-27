@@ -53,8 +53,6 @@ function isInCatalogs(catalogs: Catalog[], id: string): boolean {
 </script>
 
 <form>
-	{catalogs}
-	{target.catalogId}
 	<FormGroup floating label="Target Catalog">
 		<Input type="select" name="select" id="exampleSelect" bind:value={target.catalogId}>
 			{#each catalogs as catalog}
