@@ -60,8 +60,13 @@ async function addSelectedControls(event: CustomEvent<ControlListDetail>) {
 
 		scope = await addControlToScope(scope);
 
+		// Invalidate the controls in scope. Note: it is important to only match
+		// the pathname, because otherwise we would need to specify the exact
+		// query parameters in the load function.
 		invalidate(
-			`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
+			(url) =>
+				url.pathname ===
+				`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
 		);
 	}
 }
@@ -81,8 +86,13 @@ async function removeSelectedControls(event: CustomEvent<ControlListDetail>) {
 
 		await removeControlFromScope(scope);
 
+		// Invalidate the controls in scope. Note: it is important to only match
+		// the pathname, because otherwise we would need to specify the exact
+		// query parameters in the load function.
 		invalidate(
-			`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
+			(url) =>
+				url.pathname ===
+				`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
 		);
 	}
 }
@@ -101,7 +111,7 @@ async function changeControl(event: CustomEvent<ControlInScopeDetail>) {
 function getUsedCatalog(catalogID: string): Catalog {
 	for (var catalog of data.catalogs) {
 		if (catalog.id == catalogID) {
-			return catalog
+			return catalog;
 		}
 	}
 
@@ -123,9 +133,8 @@ const toggle = () => (open = !open);
 
 			<Button color="primary" on:click={toggle}>Configure Controls in Scope</Button>
 			<Button color="danger" on:click={() => remove(target)}><Fa icon={faTrash} /></Button>
-
 			<ControlModal
-				controlsInScope={data.scopes[idx]}
+				scope={data.scopes[idx]}
 				{toggle}
 				{open}
 				{target}

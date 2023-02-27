@@ -2,7 +2,6 @@
 import type { Control } from '../orchestrator';
 
 export let control: Control;
-export let index: number;
 </script>
 
 <tr>
