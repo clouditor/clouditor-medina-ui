@@ -9,7 +9,7 @@
 	<Button color="primary" on:click={() => (isOpen = !isOpen)}>Show more info</Button>
 	<Collapse {isOpen}>
 		<Card body class="mt-2">
-			<pre><code>Assessment Result ID: {result.id}</code></pre>
-			<pre><code>Evidence ID:          {result.evidenceId}</code></pre>
+			<pre>Assessment Result ID: {result.id}</pre>
+			<pre>Evidence ID:          {result.evidenceId}</pre>
 		</Card>
 	</Collapse>
