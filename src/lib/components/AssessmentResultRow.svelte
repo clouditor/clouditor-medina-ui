@@ -5,6 +5,7 @@ import Fa from 'svelte-fa';
 import { short } from '$lib/util';
 import { Tooltip } from 'sveltestrap';
 import { metrics } from '$lib/stores';
+import AssessmentInfoBlock from '$lib/AssessmentInfoBlock.svelte';
 
 export let result: AssessmentResult;
 export let index: number;
@@ -24,11 +25,11 @@ export let index: number;
 			</Tooltip>
 		{/if}
 	</td>
-	<td
-		>{new Date(result.timestamp).toLocaleDateString()}&nbsp;{new Date(
+	<td>
+		{new Date(result.timestamp).toLocaleDateString()}&nbsp;{new Date(
 			result.timestamp
-		).toLocaleTimeString()}</td
-	>
+		).toLocaleTimeString()}
+	</td>
 	<td>
 		<span id={`resource-${index}`} style="cursor: pointer">{short(result.resourceId)}</span>
 		<Tooltip target={`resource-${index}`} placement="bottom">{result.resourceId}</Tooltip>
@@ -45,5 +46,7 @@ export let index: number;
 	</td>
 	<td>
 		{result.nonComplianceComments ?? 'Unknown'}
+	<td>
+		<AssessmentInfoBlock {result} />
 	</td>
 </tr>

@@ -11,7 +11,7 @@
 	<Button color="primary" on:click={() => (isOpen = !isOpen)}>Show Code</Button>
 	<Collapse {isOpen}>
 		<Card body class="mt-2">
-			<pre><code>{impl.code}</code></pre>
+			<pre>{impl.code}</pre>
 		</Card>
 	</Collapse>
 {:else}
