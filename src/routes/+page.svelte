@@ -6,7 +6,7 @@ function getVersionMessage(): string {
     // Check if Clouditor is used as dependency and return version depending on the the given version string
     for (var d of data.runtime.dependencies) {
         if (d.path == "clouditor.io/clouditor") {
-            var splitted = d.path.split("-") 
+            var splitted = d.version.split("-") 
             if (splitted[2] != undefined) {
                 // Version is 'v1.7.4-0.20230208082106-ee2836726aec' so we need only the last part (commit hash) 
                 return " commit hash " + splitted[2]
