@@ -70,5 +70,8 @@ export async function queryDiscovery(
         .then((res) => res.json())
         .then((response: QueryResponse) => {
             return response.results;
+        })
+        .catch(() => {
+            return {} as Resource[];
         });
 }
