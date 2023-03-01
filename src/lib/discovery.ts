@@ -31,7 +31,7 @@ export interface Resource {
     creationTime: number
 }
 
-export async function startDiscovery(fetch = window.fetch): Promise<boolean> {
+export async function startDiscovery(): Promise<boolean> {
     const apiUrl = clouditorize(`/v1/discovery/start`)
 
     return fetch(apiUrl, {
@@ -53,7 +53,7 @@ export async function queryDiscovery(
     const apiUrl = clouditorize(`/v1/discovery/query`);
 
     const req: QueryRequest = {};
-
+    let emptyResource: Resource[] = [];
     if (filteredServiceId) {
         req.filteredServiceId = filteredServiceId;
     }
@@ -69,6 +69,9 @@ export async function queryDiscovery(
     })
         .then((res) => res.json())
         .then((response: QueryResponse) => {
+            if (response.results == undefined) {
+                return emptyResource;
+            }
             return response.results;
         });
-}
+    }
