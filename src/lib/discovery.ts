@@ -73,5 +73,8 @@ export async function queryDiscovery(
                 return emptyResource;
             }
             return response.results;
+        })
+        .catch(() => {
+            return {} as Resource[];
         });
     }
