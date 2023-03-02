@@ -16,6 +16,6 @@ function toggle() {
 </main>
 <hr />
 <button on:click={() => toggle()}>
-    Show debug output
+    Debug output
 </button>
 {#if showDebug}<PageDebug />{/if}
