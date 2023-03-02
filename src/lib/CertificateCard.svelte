@@ -50,7 +50,7 @@ export let certificate: Certificate;
 							{#if state.state == 'suspended'}Major{/if}
 						</td>
 						<td>{state.timestamp}</td>
-						<td>{state.treeId}</td>
+						<td><a href="https://cce-test.k8s.medina.esilab.org/#/?treeStateId={state.treeId}">{state.treeId}</a></td>
 					</tr>
 				{/each}
 			</tbody>
