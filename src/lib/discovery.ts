@@ -66,12 +66,15 @@ export async function queryDiscovery(
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         }
-    })
-        .then((res) => res.json())
-        .then((response: QueryResponse) => {
-            if (response.results == undefined) {
-                return emptyResource;
-            }
-            return response.results;
-        });
+    }).then(res => {
+        if (!res.ok) {
+            return Promise.reject(res)
+        }
+        return res.json()
+    }).then((response: QueryResponse) => {
+        return response.results;
+    }).catch(error => {
+        console.log("Error calling endpoint 'v1/discovery/query':", error)
+        return emptyResource;
+    });
     }
