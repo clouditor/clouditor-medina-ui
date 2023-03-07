@@ -6,11 +6,6 @@ import { Button, FormGroup, Input } from 'sveltestrap';
 export let catalogs: Catalog[];
 export let service: CloudService;
 
-let target: TargetOfEvaluation = {
-	cloudServiceId: service.id,
-	catalogId: catalogs[0].id
-};
-
 const dispatch = createEventDispatcher<{ add: TargetOfEvaluation }>();
 
 function add() {
@@ -18,7 +13,42 @@ function add() {
 }
 
 function discard() {
-	target.assuranceLevel = ""
+	target.assuranceLevel = '';
+}
+
+function getAssuranceLevels(catalogId: string): string[] {
+	for (var catalog of catalogs) {
+		if (catalog.id == catalogId) {
+			return catalog.assuranceLevels;
+		}
+	}
+
+	return [];
+}
+
+let target = undefined;
+
+// Update the target if its undefined (at the beginning) or if the target is not
+// in the list of catalogs anymore. This happens, once we add a catalog.
+$: if (target === undefined || !isInCatalogs(catalogs, target.catalogId)) {
+	target = {
+		cloudServiceId: service.id,
+		catalogId: catalogs[0].id,
+		assuranceLevel: ''
+	} as TargetOfEvaluation;
+}
+
+// Update the assurance levels as soon as our target changes
+$: assuranceLevels = getAssuranceLevels(target.catalogId);
+
+function isInCatalogs(catalogs: Catalog[], id: string): boolean {
+	for (let catalog of catalogs) {
+		if (catalog.id == id) {
+			return true;
+		}
+	}
+
+	return false;
 }
 </script>
 
@@ -39,9 +69,18 @@ function discard() {
 			bind:value={target.assuranceLevel}
 		>
 			<option value="">-</option>
-			<option value="basic">basic</option>
-			<option value="substantial">substantial</option>
-			<option value="high">high</option>
+
+			{#if getAssuranceLevels(target.catalogId).length > 0}
+				<option value={getAssuranceLevels(target.catalogId)[0]}
+					>{getAssuranceLevels(target.catalogId)[0]}</option
+				>
+				<option value={getAssuranceLevels(target.catalogId)[1]}
+					>{getAssuranceLevels(target.catalogId)[1]}</option
+				>
+				<option value={getAssuranceLevels(target.catalogId)[2]}
+					>{getAssuranceLevels(target.catalogId)[2]}</option
+				>
+			{/if}
 		</Input>
 	</FormGroup>
 

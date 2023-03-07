@@ -7,7 +7,7 @@ export let data: import('./$types').PageData;
 	<p>
 		{data.catalog.description}
 	</p>
-	<a href="./{data.catalog.id}/controls">
-		<button class="btn btn-outline-secondary" type="button">Controls</button>
+	<a href="./{data.catalog.id}/categories">
+		<button class="btn btn-outline-secondary" type="button">Categories</button>
 	</a>
 </div>

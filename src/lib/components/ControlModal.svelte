@@ -11,7 +11,7 @@ export interface ControlInScopeDetail {
 </script>
 
 <script lang="ts">
-import { controlUrl, controlUrl2, type ControlInScope } from '$lib/orchestrator';
+import { controlUrl, controlUrl2, type Catalog, type ControlInScope } from '$lib/orchestrator';
 import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'sveltestrap';
 import { controls } from '$lib/stores';
 import type { TargetOfEvaluation } from '$lib/orchestrator';
@@ -20,17 +20,30 @@ import { createEventDispatcher } from 'svelte';
 export let open;
 export let toggle;
 export let target: TargetOfEvaluation;
-export let controlsInScope: ControlInScope[];
+export let scope: ControlInScope[];
+export let catalog: Catalog;
 
-$: controlsInScopeUrls = controlsInScope.map((cis) => controlUrl2(cis, target.catalogId));
+$: controlsInScopeUrls = scope.map((cis) => controlUrl2(cis, target.catalogId));
 
-$: controls1 = $controls.filter((c) => {
-	return controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-});
+// Based on the list of all controls, we first need to filter
+//  - the ones that are in the target catalog
+//  - TODO: actually only filter those that are within the assurance level
+//  - are in scope
+$: controlsInScope = $controls
+	.filter((c) => c.categoryCatalogId == target.catalogId)
+	.filter((c) => {
+		return controlsInScopeUrls.includes(controlUrl(c, c.categoryCatalogId));
+	});
 
-$: controls2 = $controls.filter((c) => {
-	return !controlsInScopeUrls.includes(controlUrl(c, target.catalogId));
-});
+// Based on the list of all controls, we first need to filter
+//  - the ones that are in the target catalog
+//  - TODO: actually only filter those that are within the assurance level
+//  - are NOT in scope
+$: controlsNotInScope = $controls
+	.filter((c) => c.categoryCatalogId == target.catalogId)
+	.filter((c) => {
+		return !controlsInScopeUrls.includes(controlUrl(c, c.categoryCatalogId));
+	});
 
 let controlsToAdd = [];
 let controlsToRemove = [];
@@ -51,69 +64,68 @@ function remove() {
 
 function change(idx: number, ev: Event) {
 	const select = ev.target as HTMLSelectElement;
-	let scope = {
-		targetOfEvaluationCloudServiceId: controlsInScope[idx].targetOfEvaluationCloudServiceId,
-		targetOfEvaluationCatalogId: controlsInScope[idx].targetOfEvaluationCatalogId,
-		controlId: controlsInScope[idx].controlId,
-		controlCategoryName: controlsInScope[idx].controlCategoryName,
-		controlCategoryCatalogId: controlsInScope[idx].controlCategoryCatalogId,
+	let updatedScope = {
+		targetOfEvaluationCloudServiceId: scope[idx].targetOfEvaluationCloudServiceId,
+		targetOfEvaluationCatalogId: scope[idx].targetOfEvaluationCatalogId,
+		controlId: scope[idx].controlId,
+		controlCategoryName: scope[idx].controlCategoryName,
+		controlCategoryCatalogId: scope[idx].controlCategoryCatalogId,
 		monitoringStatus: select.value
 	};
 
-	dispatch('change', { target: target, controlInScope: scope });
+	dispatch('change', { target: target, controlInScope: updatedScope });
 }
 </script>
 
 <Modal isOpen={open} {toggle} size="xl">
-	<ModalHeader {toggle}>Controls in Scope</ModalHeader>
+	<ModalHeader {toggle}>Controls in Scope {catalog.name}</ModalHeader>
 	<ModalBody>
 		<div class="container">
-			<!-- Hide add/remove of controls if catalog is EUCS  -->
-			<!-- TODO(all): Use catalog.inScope or something else for checking the scope -->
-			{#if target.catalogId != "EUCS"}
-			<div class="row">
-				<div class="col-sm">
-					<select
-						class="form-control"
-						name="controls"
-						id="controls"
-						multiple
-						bind:value={controlsToAdd}
-					>
-						{#each controls2 as control}
-							<option value={controlUrl(control, target.catalogId)}>
-								{#if control.parentControlId != null}&nbsp;{/if}
-								{control.id}: {control.name}
-							</option>
-						{/each}
-					</select>
+			<!-- Hide add/remove of controls if catalog has all controls in scope  -->
+			{#if !catalog.allInScope}
+				<div class="row">
+					<div class="col-sm">
+						<select
+							class="form-control"
+							name="controls"
+							id="controls"
+							multiple
+							bind:value={controlsToAdd}
+						>
+							{#each controlsNotInScope as control}
+								<option value={controlUrl(control, target.catalogId)}>
+									{#if control.parentControlId != null}&nbsp;{/if}
+									{control.id}: {control.name}
+								</option>
+							{/each}
+						</select>
+					</div>
+					<div class="col-sm">
+						<Button on:click={add}>add</Button>
+						<Button on:click={remove}>remove</Button>
+					</div>
+					<div class="col-sm">
+						<select
+							class="form-control"
+							name="selected-controls"
+							id="selected-controls"
+							multiple
+							bind:value={controlsToRemove}
+						>
+							{#each controlsInScope as control}
+								<option value={controlUrl(control, target.catalogId)}>
+									{#if control.parentControlId != null}&nbsp;{/if}
+									{control.id}: {control.name}
+								</option>
+							{/each}
+						</select>
+					</div>
 				</div>
-				<div class="col-sm">
-					<Button on:click={add}>add</Button>
-					<Button on:click={remove}>remove</Button>
-				</div>
-				<div class="col-sm">
-					<select
-						class="form-control"
-						name="selected-controls"
-						id="selected-controls"
-						multiple
-						bind:value={controlsToRemove}
-					>
-						{#each controls1 as control}
-							<option value={controlUrl(control, target.catalogId)}>
-								{#if control.parentControlId != null}&nbsp;{/if}
-								{control.id}: {control.name}
-							</option>
-						{/each}
-					</select>
-				</div>
-			</div>
- 			<hr />
+				<hr />
 			{/if}
 			<div class="row">
 				<div class="col-sm">
-					{#each controls1 as control}
+					{#each controlsInScope as control}
 						<Input
 							type="text"
 							name="control"
@@ -125,18 +137,18 @@ function change(idx: number, ev: Event) {
 					{/each}
 				</div>
 				<div class="col-sm">
-					{#each controls1 as control, idx}
+					{#each scope as scope, idx}
 						<Input
 							type="select"
 							name="select"
 							id="exampleSelect"
 							class="mb-3"
-							bind:value={controlsInScope[idx].monitoringStatus}
+							bind:value={scope.monitoringStatus}
 							on:change={(e) => change(idx, e)}
 						>
 							<option value="MONITORING_STATUS_UNSPECIFIED">unspecified</option>
-							<option value="MONITORING_STATUS_CONTINUOUSLY_MONITORED">
-								continuously monitored
+							<option value="MONITORING_STATUS_AUTOMATICALLY_MONITORED">
+								automatically monitored
 							</option>
 							<option value="MONITORING_STATUS_MANUALLY_MONITORED">manually monitored</option>
 							<option value="MONITORING_STATUS_DELEGATED">delegated</option>

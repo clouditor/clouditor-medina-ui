@@ -15,7 +15,11 @@ $: overviewActive = $page.route.id == '/cloud/[...id]';
 $: configurationActive = $page.route.id.startsWith('/cloud/[...id]/configuration');
 $: discoveryActive = $page.route.id == '/cloud/[...id]/discovery';
 $: assessmentActive = $page.route.id == '/cloud/[...id]/assessment';
+<<<<<<< HEAD
 $: metricActive = $page.route.id == '/cloud/[...id]/metric';
+=======
+$: metricActive = $page.route.id == '/cloud/[...id]/metrics';
+>>>>>>> main
 </script>
 
 <div class="pt-3 pb-0 bg-light">
@@ -44,8 +48,13 @@ $: metricActive = $page.route.id == '/cloud/[...id]/metric';
 			>
 		</li>
 		<li class="nav-item">
+<<<<<<< HEAD
 			<a class="nav-link" class:active={metricActive} href="/cloud/{data.service.id}/metric"
 				><Fa icon={faCircleCheck} /> Metric</a
+=======
+			<a class="nav-link" class:active={metricActive} href="/cloud/{data.service.id}/metrics"
+				><Fa icon={faCircleCheck} /> Metrics</a
+>>>>>>> main
 			>
 		</li>
 	</ul>

@@ -1,4 +1,3 @@
-import { redirect } from '@sveltejs/kit';
 import { exchange, isError, workaroundRedirect } from '$lib/oauth';
 
 export async function load({ params, url }) {

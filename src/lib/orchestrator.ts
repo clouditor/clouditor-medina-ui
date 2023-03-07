@@ -1,6 +1,17 @@
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
 import { clouditorize } from './util';
 
+export interface Runtime {
+    releaseVersion: string
+    commitHash: string
+    dependencies: Dependency[]
+}
+
+export interface Dependency {
+    path: string
+    version: string
+}
+
 export interface CloudService {
     id: string
     name: string
@@ -30,6 +41,10 @@ export interface Catalog {
     categories: Category[]
     controls: Control[]
     allInScope: boolean
+<<<<<<< HEAD
+=======
+    assuranceLevels: string[]
+>>>>>>> main
 }
 
 export interface Category {
@@ -45,6 +60,7 @@ export interface Control {
     controls?: Control[]
     metrics?: Metric[]
     parentControlId?: string
+    assuranceLevel: string
 }
 
 export function controlUrl(control: Control, catalogId: string): string {
@@ -95,6 +111,7 @@ export interface ListCatalogsResponse {
 
 export interface ListControlsResponse {
     controls: Control[];
+    nextPageToken: string
 }
 
 export interface ListCertificatesResponse {
@@ -118,12 +135,33 @@ export interface ListControlsInScopeResponse {
 }
 
 /**
+ * Requests the Clouditor runtime information.
+ * 
+ * @returns an array of {@link AssessmentResult}s.
+ */
+export async function getRuntimeInfo(fetch = window.fetch): Promise<Runtime> {
+    const apiUrl = clouditorize(`/v1/orchestrator/runtime_info`);
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.token}`,
+        }
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: Runtime) => {
+            return response;
+        });
+}
+
+/**
  * Requests a list of assessment results from the orchestrator service.
  * 
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listAssessmentResults(): Promise<AssessmentResult[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000`);
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1500&orderBy=timestamp&asc=true`);
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -144,7 +182,11 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
+<<<<<<< HEAD
     const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000&filteredCloudServiceId=${serviceId}`);
+=======
+    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000&filteredCloudServiceId=${serviceId}&orderBy=id&asc=true`);
+>>>>>>> main
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -206,12 +248,21 @@ export async function getMetricImplementation(id: string): Promise<MetricImpleme
 /**
  * Retrieves a particular metric configuration from the orchestrator service.
  * 
+<<<<<<< HEAD
  * @param cloud_service_id the Cloud Service ID
  * @param metric_id the metric id
  * @returns metric configuration
  */
 export async function getMetricConfiguration(cloud_service_id: string, metric_id: string): Promise<MetricConfiguration> {
     const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${cloud_service_id}/metric_configurations/${metric_id}`)
+=======
+ * @param serviceId the Cloud Service ID
+ * @param metricId the metric id
+ * @returns metric configuration
+ */
+export async function getMetricConfiguration(serviceId: string, metricId: string): Promise<MetricConfiguration> {
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/metric_configurations/${metricId}`)
+>>>>>>> main
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -415,7 +466,11 @@ export async function listTargetsOfEvaluation(serviceId: string, fetch = window.
  * @returns an array of {@link ControlInScope} objects.
  */
 export async function listControlsInScope(serviceId: string, catalogId: string, fetch = window.fetch): Promise<ControlInScope[]> {
+<<<<<<< HEAD
     const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1000`)
+=======
+    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1500&orderBy=control_id&asc=true`)
+>>>>>>> main
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -475,25 +530,35 @@ export async function getCatalog(id: string, fetch = window.fetch): Promise<Cata
  * @returns a list of {@link Control}s.
  */
 export async function listControls(catalogId?: string, categoryName?: string, fetch = window.fetch): Promise<Control[]> {
-    let apiUrl: string;
+    let baseApiUrl: string;
     if (catalogId != null && categoryName != null) {
-        apiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls`)
+        baseApiUrl = clouditorize(`/v1/orchestrator/catalogs/${catalogId}/categories/${categoryName}/controls?pageSize=1500&orderBy=id&asc=true`)
     } else {
-        apiUrl = clouditorize(`/v1/orchestrator/controls`)
+        baseApiUrl = clouditorize(`/v1/orchestrator/controls?pageSize=1500&orderBy=id&asc=true`)
     }
 
-    return fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${localStorage.token}`,
+    const controls: Control[] = [];
+    let nextPageToken = undefined;
+    do {
+        let apiUrl = baseApiUrl;
+        if (nextPageToken != undefined) {
+            apiUrl = apiUrl + "&pageToken=" + nextPageToken;
         }
-    })
-        .then(throwError)
-        .then((res) => res.json())
-        .then((response: ListControlsResponse) => {
-            return response.controls;
-        });
+
+        const res = await throwError(await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.token}`,
+            }
+        })).json() as ListControlsResponse;
+
+        controls.push(...res.controls);
+        nextPageToken = res.nextPageToken;
+    } while (nextPageToken != "" && nextPageToken !== undefined && nextPageToken !== null)
+
+    return controls;
 }
+
 
 /**
  * Retrieve a cloud service from the orchestrator service using its ID.

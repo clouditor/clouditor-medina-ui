@@ -12,12 +12,13 @@ import {
 	removeControlFromScope,
 	removeTargetOfEvaluation,
 	updateControlInScope,
+	type Catalog,
 	type ControlInScope,
 	type TargetOfEvaluation
 } from '$lib/orchestrator';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Fa from 'svelte-fa';
-import { Button, Card, CardBody, CardHeader, Icon } from 'sveltestrap';
+import { Button, Card, CardBody, CardHeader } from 'sveltestrap';
 
 export let data: import('./$types').PageData;
 
@@ -59,8 +60,13 @@ async function addSelectedControls(event: CustomEvent<ControlListDetail>) {
 
 		scope = await addControlToScope(scope);
 
+		// Invalidate the controls in scope. Note: it is important to only match
+		// the pathname, because otherwise we would need to specify the exact
+		// query parameters in the load function.
 		invalidate(
-			`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
+			(url) =>
+				url.pathname ===
+				`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
 		);
 	}
 }
@@ -80,8 +86,13 @@ async function removeSelectedControls(event: CustomEvent<ControlListDetail>) {
 
 		await removeControlFromScope(scope);
 
+		// Invalidate the controls in scope. Note: it is important to only match
+		// the pathname, because otherwise we would need to specify the exact
+		// query parameters in the load function.
 		invalidate(
-			`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
+			(url) =>
+				url.pathname ===
+				`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope`
 		);
 	}
 }
@@ -94,6 +105,17 @@ async function changeControl(event: CustomEvent<ControlInScopeDetail>) {
 	invalidate(
 		`/v1/orchestrator/cloud_services/${scope.targetOfEvaluationCloudServiceId}/toes/${scope.targetOfEvaluationCatalogId}/controls_in_scope/categories/${scope.controlCategoryName}/controls/${scope.controlId}`
 	);
+}
+
+// Find catalog for given catalog_id
+function getUsedCatalog(catalogID: string): Catalog {
+	for (var catalog of data.catalogs) {
+		if (catalog.id == catalogID) {
+			return catalog;
+		}
+	}
+
+	return {} as any;
 }
 
 let open = false;
@@ -111,13 +133,17 @@ const toggle = () => (open = !open);
 
 			<Button color="primary" on:click={toggle}>Configure Controls in Scope</Button>
 			<Button color="danger" on:click={() => remove(target)}><Fa icon={faTrash} /></Button>
+<<<<<<< HEAD
 
 			<!-- svelte-ignore empty-block -->
+=======
+>>>>>>> main
 			<ControlModal
-				controlsInScope={data.scopes[idx]}
+				scope={data.scopes[idx]}
 				{toggle}
 				{open}
 				{target}
+				catalog={getUsedCatalog(target.catalogId)}
 				on:add={addSelectedControls}
 				on:remove={removeSelectedControls}
 				on:change={changeControl}

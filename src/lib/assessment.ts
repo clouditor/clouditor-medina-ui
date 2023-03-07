@@ -1,4 +1,8 @@
 export interface AssessmentResult {
+<<<<<<< HEAD
+=======
+    id: string
+>>>>>>> main
     timestamp: string
     metricId: string
     metricConfiguration: MetricConfiguration
