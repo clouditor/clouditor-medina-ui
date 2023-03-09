@@ -41,10 +41,7 @@ export interface Catalog {
     categories: Category[]
     controls: Control[]
     allInScope: boolean
-<<<<<<< HEAD
-=======
     assuranceLevels: string[]
->>>>>>> main
 }
 
 export interface Category {
@@ -182,11 +179,7 @@ export async function listAssessmentResults(): Promise<AssessmentResult[]> {
  * @returns an array of {@link AssessmentResult}s.
  */
 export async function listCloudServiceAssessmentResults(serviceId: string, fetch = window.fetch): Promise<AssessmentResult[]> {
-<<<<<<< HEAD
-    const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000&filteredCloudServiceId=${serviceId}`);
-=======
     const apiUrl = clouditorize(`/v1/orchestrator/assessment_results?pageSize=1000&filteredCloudServiceId=${serviceId}&orderBy=id&asc=true`);
->>>>>>> main
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -248,21 +241,12 @@ export async function getMetricImplementation(id: string): Promise<MetricImpleme
 /**
  * Retrieves a particular metric configuration from the orchestrator service.
  * 
-<<<<<<< HEAD
- * @param cloud_service_id the Cloud Service ID
- * @param metric_id the metric id
- * @returns metric configuration
- */
-export async function getMetricConfiguration(cloud_service_id: string, metric_id: string): Promise<MetricConfiguration> {
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${cloud_service_id}/metric_configurations/${metric_id}`)
-=======
  * @param serviceId the Cloud Service ID
  * @param metricId the metric id
  * @returns metric configuration
  */
 export async function getMetricConfiguration(serviceId: string, metricId: string): Promise<MetricConfiguration> {
     const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/metric_configurations/${metricId}`)
->>>>>>> main
 
     return fetch(apiUrl, {
         method: 'GET',
@@ -466,11 +450,7 @@ export async function listTargetsOfEvaluation(serviceId: string, fetch = window.
  * @returns an array of {@link ControlInScope} objects.
  */
 export async function listControlsInScope(serviceId: string, catalogId: string, fetch = window.fetch): Promise<ControlInScope[]> {
-<<<<<<< HEAD
-    const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1000`)
-=======
     const apiUrl = clouditorize(`/v1/orchestrator/cloud_services/${serviceId}/toes/${catalogId}/controls_in_scope?pageSize=1500&orderBy=control_id&asc=true`)
->>>>>>> main
 
     return fetch(apiUrl, {
         method: 'GET',
