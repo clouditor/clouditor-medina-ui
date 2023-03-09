@@ -16,10 +16,13 @@ async function remove(e: CustomEvent<CloudServiceDetail>) {
 }
 
 async function add(e: CustomEvent<CloudServiceDetail>) {
-	await registerCloudService(e.detail.service);
+	let newService = await registerCloudService(e.detail.service);
 
 	// invalidate the cloud service list
 	invalidate(`/v1/orchestrator/cloud_services`);
+
+	// Show the user a popup with the newly created ID so it can be added to the user's OAuth claims
+	window.alert("Created new Cloud Service with ID " + newService.id);
 }
 </script>
 
