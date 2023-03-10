@@ -70,17 +70,9 @@ function isInCatalogs(catalogs: Catalog[], id: string): boolean {
 		>
 			<option value="">-</option>
 
-			{#if getAssuranceLevels(target.catalogId).length > 0}
-				<option value={getAssuranceLevels(target.catalogId)[0]}
-					>{getAssuranceLevels(target.catalogId)[0]}</option
-				>
-				<option value={getAssuranceLevels(target.catalogId)[1]}
-					>{getAssuranceLevels(target.catalogId)[1]}</option
-				>
-				<option value={getAssuranceLevels(target.catalogId)[2]}
-					>{getAssuranceLevels(target.catalogId)[2]}</option
-				>
-			{/if}
+			{#each getAssuranceLevels(target.catalogId) as level}
+				<option value={level}>{level}</option>
+			{/each}
 		</Input>
 	</FormGroup>
 
