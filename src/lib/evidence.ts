@@ -4,6 +4,7 @@ import { clouditorize } from './util';
 export interface Evidence {
     id: string
     resource: object
+    toolId: string
 }
 
 /**
