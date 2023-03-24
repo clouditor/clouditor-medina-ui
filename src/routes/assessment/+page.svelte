@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-console.log('hello?');
-</script>
-
 <script lang="ts">
 import {
 	Card,

@@ -26,14 +26,15 @@ let routes = [
 		url: '/cloud',
 		name: 'Cloud Services'
 	},
-	{
-		url: '/discovery',
-		name: 'Discovery'
-	},
-	{
-		url: '/assessment',
-		name: 'Assessment'
-	},
+	// We are hiding these paths for MEDINA, since they can be viewed on the service-specific views
+	// {
+	// 	url: '/discovery',
+	// 	name: 'Discovery'
+	// },
+	// {
+	// 	url: '/assessment',
+	// 	name: 'Assessment'
+	// },
 	{
 		url: '/metrics',
 		name: 'Metrics'
