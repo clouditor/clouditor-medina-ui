@@ -24,7 +24,7 @@
 			<tr>
 				<th scope="row">{i}</th>
 				<td><a href="{base}/discovery/{resource.id}">{resource.name}</a></td>
-				<td>{resource.type.join(', ')}</td>
+				<td>{resource.type && resource.type.join(', ')}</td>
 				<td><pre>{JSON.stringify(resource)}</pre></td>
 			</tr>
 		{/each}
