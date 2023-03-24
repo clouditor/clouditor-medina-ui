@@ -52,11 +52,11 @@ console.log($page.url);
 </script>
 
 <SvelteToast />
-<Navbar color="primary" dark expand="md">
-	<NavbarBrand href="{base}/">Clouditor</NavbarBrand>
+<Navbar class="medina" dark expand="md">
+	<!--<NavbarBrand href="{base}/">Clouditor</NavbarBrand>-->
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-		<Nav navbar>
+		<Nav class="me-auto" navbar>
 			{#each routes as route}
 				<NavItem>
 					<NavLink active={$page.url.pathname.startsWith(route.url)} href="{base}{route.url}">
@@ -66,10 +66,11 @@ console.log($page.url);
 			{/each}
 		</Nav>
 		<Nav class="ms-auto" navbar>
+			<!--TODO: if logged in, don't show-->
 			<NavItem>
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
-			<Dropdown nav inNavbar>
+			<!-- removed for medina: <Dropdown nav inNavbar>
 				<DropdownToggle nav caret>Account</DropdownToggle>
 				<DropdownMenu end>
 					<DropdownItem>Option 1</DropdownItem>
@@ -77,7 +78,13 @@ console.log($page.url);
 					<DropdownItem divider />
 					<DropdownItem>Reset</DropdownItem>
 				</DropdownMenu>
-			</Dropdown>
+			</Dropdown> -->
 		</Nav>
 	</Collapse>
 </Navbar>
+
+<style>
+	:global(.medina) {
+		background-color:#343a40;
+	}
+</style>

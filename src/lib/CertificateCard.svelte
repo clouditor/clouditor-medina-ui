@@ -15,7 +15,7 @@ export let certificate: Certificate;
 				<b>Name:</b>
 				{certificate.name} <br />
 				<b>Service ID:</b>
-				{certificate.serviceId} <br />
+				{certificate.cloudServiceId} <br />
 				<b>Issue Date:</b>
 				{certificate.issueDate} <br />
 				<b>Expiration Date:</b>
@@ -46,11 +46,15 @@ export let certificate: Certificate;
 					<tr>
 						<td>{state.state}</td>
 						<td>
-							{#if state.state == 'continued'}Minor{/if}
-							{#if state.state == 'suspended'}Major{/if}
+							{#if state.state == 'continued'}minor{/if}
+							{#if state.state == 'suspended'}major{/if}
 						</td>
 						<td>{state.timestamp}</td>
-						<td><a href="https://cce-test.k8s.medina.esilab.org/#/?treeStateId={state.treeId}">{state.treeId}</a></td>
+						<!-- When it is a new certificate, there is no tree yet -->
+						{#if state.state == 'new'}
+						{:else}
+							<td><a href="https://cce-test.k8s.medina.esilab.org/#/?treeStateId={state.treeId}">{state.treeId}</a></td>
+						{/if}
 					</tr>
 				{/each}
 			</tbody>

@@ -85,7 +85,7 @@ export interface ListMetricConfigurationsResponse {
 export interface Certificate {
     id: string
     name: string
-    serviceId: string
+    cloudServiceId: string
     issueDate: string
     expirationDate: string
     standard: string
