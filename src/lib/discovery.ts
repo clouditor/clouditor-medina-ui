@@ -25,10 +25,9 @@ export interface TransportEncryption {
 
 export interface Resource {
     id: string
-    name: string
-    type: string[]
-    httpEndpoint?: HttpEndpoint
-    creationTime: number
+    cloudServiceId: string
+    resourceType: string
+    properties: string
 }
 
 export async function startDiscovery(): Promise<boolean> {

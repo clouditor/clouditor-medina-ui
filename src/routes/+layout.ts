@@ -30,12 +30,12 @@ export const load: LayoutLoad = async ({ fetch }) => {
         
             return {
                 runtime: runtime, 
-                catalogs: catalogs
+                catalogs: catalogs,
+                redirect: '/cloud'
             }
         } catch (error) {
-            return redirectLogin('/');
+            return redirectLogin('/cloud');
         }
-   
 }
 
 // Disable SSR
