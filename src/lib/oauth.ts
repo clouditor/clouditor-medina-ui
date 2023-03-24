@@ -48,7 +48,7 @@ export async function generateChallenge(v: string): Promise<string> {
     return base64urlencode(String.fromCharCode(...new Uint8Array(digest)));
 }
 
-export async function redirectLogin(backTo = '/') {
+export async function redirectLogin(backTo = '/cloud') {
     // generate a new verifier
     const v = generateVerifier();
 
