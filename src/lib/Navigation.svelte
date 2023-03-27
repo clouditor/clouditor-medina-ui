@@ -49,6 +49,8 @@ let routes = [
 	}
 ];
 
+let loggedIn = localStorage.token ? true : false;
+
 console.log($page.url);
 </script>
 
@@ -57,7 +59,7 @@ console.log($page.url);
 	<!--<NavbarBrand href="{base}/">Clouditor</NavbarBrand>-->
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-		<Nav class="me-auto" navbar>
+		<Nav class="ms-auto" navbar>
 			{#each routes as route}
 				<NavItem>
 					<NavLink active={$page.url.pathname.startsWith(route.url)} href="{base}{route.url}">
@@ -65,12 +67,12 @@ console.log($page.url);
 					</NavLink>
 				</NavItem>
 			{/each}
-		</Nav>
-		<Nav class="ms-auto" navbar>
 			<!--TODO: if logged in, don't show-->
+			{#if !loggedIn}
 			<NavItem>
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
+			{/if}
 			<!-- removed for medina: <Dropdown nav inNavbar>
 				<DropdownToggle nav caret>Account</DropdownToggle>
 				<DropdownMenu end>
@@ -83,6 +85,7 @@ console.log($page.url);
 		</Nav>
 	</Collapse>
 </Navbar>
+<div style="clear: both;"></div>
 
 <style>
 	:global(.medina) {
