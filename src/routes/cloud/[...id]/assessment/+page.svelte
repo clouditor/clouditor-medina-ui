@@ -23,8 +23,19 @@ let { results } = data;
 let filterCompliant;
 let filterMetricCategory;
 let filterMetric;
+let filterResourceType;
+let filterStartTimestamp;
+// let dateFilterStartTimestamp = new Date(filterStartTimestamp);
+let filterEndTimestamp;
+// let dateFilterEndTimestamp = new Date(filterEndTimestamp);
 
 $: filteredResults = results.filter((r) => {
+	let dateFilterStartTimestamp = new Date(filterStartTimestamp);
+	let dateFilterEndTimestamp = new Date(filterEndTimestamp);
+	console.log(filterStartTimestamp)
+	console.log(dateFilterStartTimestamp)
+	console.log(filterStartTimestamp)
+	console.log(dateFilterEndTimestamp)
 	return (
 		(filterCompliant != '' ? (r.compliant == (filterCompliant == 'true') ? true : false) : true) &&
 		(filterMetricCategory != ''
@@ -35,6 +46,15 @@ $: filteredResults = results.filter((r) => {
 			: true) &&
 		(filterMetric != ''
 			? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
+			: true) && 
+		(filterResourceType != ''
+			? r.resourceTypes.map(name => name.toLocaleLowerCase()).includes(filterResourceType?.toLowerCase())
+			: true) && 
+		(filterStartTimestamp != ''
+		 	? new Date(r.timestamp) > dateFilterStartTimestamp
+			: true) &&
+		(filterEndTimestamp != ''
+		 	? new Date(r.timestamp) < dateFilterEndTimestamp
 			: true)
 	);
 });
@@ -75,6 +95,24 @@ $: filteredResults = results.filter((r) => {
 						<FormGroup>
 							<Label for="exampleEmail">Metric</Label>
 							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="resourceType">Resource Type</Label>
+							<Input type="text" name="resourceType" id="resourceType" bind:value={filterResourceType} />
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="startTimestamp">Start Time</Label>
+							<Input type="text" name="startTimestamp" id="startTimestamp" placeholder="2023-03-29" bind:value={filterStartTimestamp} />
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="endTimestamp">End Time</Label>
+							<Input type="text" name="endTimestamp" id="endTimestamp" placeholder="2024-02-01T10:01" bind:value={filterEndTimestamp} />
 						</FormGroup>
 					</Col>
 					<Col />
