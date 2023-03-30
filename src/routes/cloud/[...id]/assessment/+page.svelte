@@ -20,13 +20,13 @@ export let data: import('./$types').PageData;
 
 let { results } = data;
 
-let filterCompliant;
-let filterMetricCategory;
-let filterMetric;
-let filterResourceType;
-let filterStartTimestamp;
+let filterCompliant: string;
+let filterMetricCategory: string;
+let filterMetric: string;
+let filterResourceType: string;
+let filterStartTimestamp: string | number | Date;
 // let dateFilterStartTimestamp = new Date(filterStartTimestamp);
-let filterEndTimestamp;
+let filterEndTimestamp: string | number | Date;
 // let dateFilterEndTimestamp = new Date(filterEndTimestamp);
 
 $: filteredResults = results.filter((r) => {

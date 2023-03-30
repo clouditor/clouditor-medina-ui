@@ -73,7 +73,7 @@ export async function queryDiscovery(
     }).then((response: QueryResponse) => {
         return response.results;
     }).catch(error => {
-        console.log("Error calling endpoint 'v1/discovery/query':", error)
+        console.log("Error calling endpoint '/v1/discovery/query':", error)
         return emptyResource;
     });
     }

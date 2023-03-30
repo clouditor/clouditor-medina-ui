@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Button, Table, Tooltip} from 'sveltestrap';
+	import { Button,Table} from 'sveltestrap';
 	import { Chart, type ChartConfiguration, type ChartData, registerables } from 'chart.js';
 	import { onMount } from 'svelte';
 	import { startDiscovery, type Resource } from '$lib/discovery';
-	import { short } from '$lib/util';
+	import ResourceRow from '$lib/components/ResourceRow.svelte';
 	
 	export let data: import('./$types').PageData;
 	
@@ -89,14 +89,7 @@
 		</thead>
 		<tbody>
 			{#each data.resources as resource, i}
-				<tr>
-					<td>
-						<span id={`resource-${i}`} style="cursor: pointer">{short(resource.id)}</span>
-						<Tooltip target={`resource-${i}`} placement="bottom">{resource.id}</Tooltip>
-					</td>
-					<td>{resource.resourceType.split(",")[0]}</td>
-					<td><pre>{JSON.stringify(resource)}</pre></td>
-				</tr>
+				<ResourceRow {resource} {i} />
 			{/each}
 		</tbody>
 	</Table>
