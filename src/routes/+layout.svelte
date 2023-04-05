@@ -54,10 +54,13 @@ function getVersionMessage(): string {
 <main>
 	<slot />
 </main>
-<hr />
-<Button color="primary" on:click={() => toggle()}>
+
+<Button color="secondary" on:click={() => toggle()}>
     Debug/Version Info
 </Button>
+
+<hr />
+
 {#if showDebug}
 	<div>Orchestrator based on Clouditor framework {getVersionMessage()}.</div>
 	<div>The OpenAPI Spec can be found <a data-sveltekit-reload href="https://github.com/clouditor/clouditor/blob/{getVersion()}/openapi/orchestrator/openapi.yaml" target="_blank" rel="noreferrer">here</a>.</div>

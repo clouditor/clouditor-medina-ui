@@ -77,8 +77,9 @@ function change(idx: number, ev: Event) {
 }
 </script>
 
-<Modal isOpen={open} {toggle} size="xl">
-	<ModalHeader {toggle}>Controls in Scope {catalog.name}</ModalHeader>
+<Modal isOpen={open} toggle={toggle} scrollable size="xl">
+	<ModalHeader toggle={toggle}>Controls in Scope {catalog.name}
+	</ModalHeader>
 	<ModalBody>
 		<div class="container">
 			<!-- Hide add/remove of controls if catalog has all controls in scope  -->

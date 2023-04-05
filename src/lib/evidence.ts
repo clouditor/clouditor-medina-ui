@@ -3,17 +3,20 @@ import { clouditorize } from './util';
 
 export interface Evidence {
     id: string
-    resource: object
+    timestamp: string
+    cloudServiceId: string
     toolId: string
+    raw: string
+    resource: object
 }
 
 /**
- * Retrieves a particular metric from the orchestrator service.
+ * Retrieves a particular evidence from the orchestrator service.
  * 
- * @param id the metric id
+ * @param id the evidence id
  * @returns 
  */
-export async function getEvidence(id: string): Promise<Evidence> {
+export async function getEvidence(id: string): Promise<Evidence|null> {
     const apiUrl = clouditorize(`/v1/evidence_store/evidences/${id}`)
 
     return fetch(apiUrl, {
@@ -26,5 +29,9 @@ export async function getEvidence(id: string): Promise<Evidence> {
         .then((res) => res.json())
         .then((response: Evidence) => {
             return response;
+        })
+        .catch(error => {
+            console.log("Error getting evidence: ", error)
+            return null;
         });
 }

@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-console.log('hello?');
-</script>
-
 <script lang="ts">
 import {
 	Card,
@@ -27,6 +23,7 @@ let { results } = data;
 let filterCompliant;
 let filterMetricCategory;
 let filterMetric;
+let filterResourceType;
 
 $: filteredResults = results.filter((r) => {
 	return (
@@ -68,7 +65,7 @@ The following list contains all assessment results, sorted by timestamp.
 					</Col>
 					<Col>
 						<FormGroup>
-							<Label for="exampleEmail">Metric Category</Label>
+							<Label for="metricCategory">Metric Category</Label>
 							<Input
 								type="text"
 								name="metric-category"
@@ -81,8 +78,14 @@ The following list contains all assessment results, sorted by timestamp.
 				<Row>
 					<Col>
 						<FormGroup>
-							<Label for="exampleEmail">Metric</Label>
+							<Label for="metric">Metric</Label>
 							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="resourceType">Resource Type</Label>
+							<Input type="text" name="resourceType" id="resourceType" bind:value={filterResourceType} />
 						</FormGroup>
 					</Col>
 					<Col />

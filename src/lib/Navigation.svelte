@@ -26,14 +26,15 @@ let routes = [
 		url: '/cloud',
 		name: 'Cloud Services'
 	},
-	{
-		url: '/discovery',
-		name: 'Discovery'
-	},
-	{
-		url: '/assessment',
-		name: 'Assessment'
-	},
+	// We are hiding these paths for MEDINA, since they can be viewed on the service-specific views
+	// {
+	// 	url: '/discovery',
+	// 	name: 'Discovery'
+	// },
+	// {
+	// 	url: '/assessment',
+	// 	name: 'Assessment'
+	// },
 	{
 		url: '/metrics',
 		name: 'Metrics'
@@ -48,15 +49,17 @@ let routes = [
 	}
 ];
 
+let loggedIn = localStorage.token ? true : false;
+
 console.log($page.url);
 </script>
 
 <SvelteToast />
-<Navbar color="primary" dark expand="md">
-	<NavbarBrand href="{base}/">Clouditor</NavbarBrand>
+<Navbar class="medina" dark expand="md">
+	<!--<NavbarBrand href="{base}/">Clouditor</NavbarBrand>-->
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-		<Nav navbar>
+		<Nav class="ms-auto" navbar>
 			{#each routes as route}
 				<NavItem>
 					<NavLink active={$page.url.pathname.startsWith(route.url)} href="{base}{route.url}">
@@ -64,12 +67,13 @@ console.log($page.url);
 					</NavLink>
 				</NavItem>
 			{/each}
-		</Nav>
-		<Nav class="ms-auto" navbar>
+			<!--TODO: if logged in, don't show-->
+			{#if !loggedIn}
 			<NavItem>
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
-			<Dropdown nav inNavbar>
+			{/if}
+			<!-- removed for medina: <Dropdown nav inNavbar>
 				<DropdownToggle nav caret>Account</DropdownToggle>
 				<DropdownMenu end>
 					<DropdownItem>Option 1</DropdownItem>
@@ -77,7 +81,14 @@ console.log($page.url);
 					<DropdownItem divider />
 					<DropdownItem>Reset</DropdownItem>
 				</DropdownMenu>
-			</Dropdown>
+			</Dropdown> -->
 		</Nav>
 	</Collapse>
 </Navbar>
+<div style="clear: both;"></div>
+
+<style>
+	:global(.medina) {
+		background-color:#343a40;
+	}
+</style>

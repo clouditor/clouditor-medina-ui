@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Button, Table, Tooltip } from 'sveltestrap';
 	import { startDiscovery } from '$lib/discovery';
-	import { base } from '$app/paths';
 	import type { PageData } from './$types';
 import { short } from '$lib/util';
 
