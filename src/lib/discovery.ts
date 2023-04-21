@@ -7,9 +7,14 @@ export interface QueryResponse {
     results: Resource[]
 }
 
-export interface QueryRequest {
-    filteredServiceId?: string
+export interface ListResourcesRequest {
+    filter?: Filter
     orderBy?: string
+}
+
+export interface Filter {
+   cloudServiceId?:string
+   type?: string
 }
 
 export interface HttpEndpoint {
@@ -45,23 +50,21 @@ export async function startDiscovery(): Promise<boolean> {
         });
 }
 
-export async function queryDiscovery(
+export async function listResources(
     filteredServiceId?: string,
-    orderBy = "",
+    type = "",
     fetch = window.fetch): Promise<Resource[]> {
-    const apiUrl = clouditorize(`/v1/discovery/query`);
+    let apiUrl = clouditorize(`/v1/discovery/resources?filter.cloudServiceId=${filteredServiceId}&pageSize=1500&orderBy=resource_type&asc=true
+    `);
 
-    const req: QueryRequest = {};
-    let emptyResource: Resource[] = [];
-    if (filteredServiceId) {
-        req.filteredServiceId = filteredServiceId;
+    if (type != "") {
+        apiUrl += "&filter.type=${type}"
     }
 
-    req.orderBy = orderBy;
-
+    let emptyResource: Resource[] = [];
+    
     return fetch(apiUrl, {
-        method: 'POST',
-        body: JSON.stringify(req),
+        method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.token}`,
         }
@@ -73,7 +76,7 @@ export async function queryDiscovery(
     }).then((response: QueryResponse) => {
         return response.results;
     }).catch(error => {
-        console.log("Error calling endpoint '/v1/discovery/query':", error)
+        console.log("Error calling endpoint '/v1/discovery/resources':", error)
         return emptyResource;
     });
     }

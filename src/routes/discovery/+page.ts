@@ -1,11 +1,11 @@
-import { queryDiscovery } from '$lib/discovery';
+import { listResources } from '$lib/discovery';
 import { redirectLogin } from '$lib/oauth';
 
 /**
  * @type {import('@sveltejs/kit').PageLoad}
  */
 export async function load() {
-	return queryDiscovery()
+	return listResources()
 		.then((results) => {
 			return {
 				resources: results
