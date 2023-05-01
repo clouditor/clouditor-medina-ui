@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
-    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.46.1",
     "@zerodevx/svelte-toast": "^0.8.2",
     "chart.js": "^4.1.2",
