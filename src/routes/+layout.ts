@@ -40,3 +40,5 @@ export const load: LayoutLoad = async ({ fetch }) => {
 
 // Disable SSR
 export const ssr = false;
+// Disable pre-rendering
+export const prerender = false
