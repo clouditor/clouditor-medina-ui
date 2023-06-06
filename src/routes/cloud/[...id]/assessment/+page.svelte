@@ -32,10 +32,7 @@ let filterEndTimestamp: string | number | Date;
 $: filteredResults = results.filter((r) => {
 	let dateFilterStartTimestamp = new Date(filterStartTimestamp);
 	let dateFilterEndTimestamp = new Date(filterEndTimestamp);
-	console.log(filterStartTimestamp)
-	console.log(dateFilterStartTimestamp)
-	console.log(filterStartTimestamp)
-	console.log(dateFilterEndTimestamp)
+
 	return (
 		(filterCompliant != '' ? (r.compliant == (filterCompliant == 'true') ? true : false) : true) &&
 		(filterMetricCategory != ''

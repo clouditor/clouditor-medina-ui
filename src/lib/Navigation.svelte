@@ -3,15 +3,12 @@ import {
 	Collapse,
 	Navbar,
 	NavbarToggler,
-	NavbarBrand,
 	Nav,
 	NavItem,
 	NavLink,
-	Dropdown,
-	DropdownToggle,
-	DropdownMenu,
-	DropdownItem
 } from 'sveltestrap';
+import Fa from 'svelte-fa'
+import { faCloud, faRuler, faFile, faCertificate } from '@fortawesome/free-solid-svg-icons'
 import { SvelteToast } from '@zerodevx/svelte-toast';
 import { base } from '$app/paths';
 import { page } from '$app/stores';
@@ -60,13 +57,33 @@ console.log($page.url);
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
 		<Nav class="ms-auto" navbar>
-			{#each routes as route}
+			<!-- {#each routes as route}
 				<NavItem>
 					<NavLink active={$page.url.pathname.startsWith(route.url)} href="{base}{route.url}">
 						{route.name}
 					</NavLink>
 				</NavItem>
-			{/each}
+			{/each} -->
+			<NavItem>
+				<NavLink active={$page.url.pathname.startsWith("/cloud")} href="{base}{"/cloud"}">
+					<Fa icon={faCloud} /> Cloud Services
+				</NavLink>
+			</NavItem>
+			<NavItem>
+				<NavLink active={$page.url.pathname.startsWith("/metrics")} href="{base}{"/metrics"}">
+					<Fa icon={faRuler} /> Metrics
+				</NavLink>
+			</NavItem>
+			<NavItem>
+				<NavLink active={$page.url.pathname.startsWith("/catalogs")} href="{base}{"/catalogs"}">
+					<Fa icon={faFile} /> Catalogs
+				</NavLink>
+			</NavItem>
+			<NavItem>
+				<NavLink active={$page.url.pathname.startsWith("/certificates")} href="{base}{"/certificates"}">
+					<Fa icon={faCertificate} /> Certificates
+				</NavLink>
+			</NavItem>
 			<!--TODO: if logged in, don't show-->
 			{#if !loggedIn}
 			<NavItem>
