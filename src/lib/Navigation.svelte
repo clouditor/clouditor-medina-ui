@@ -41,7 +41,7 @@ let routes = [
 	},
 	{
 		url: '/catalogs',
-		name: 'Catalogs'
+		name: 'Catalogues'
 	},
 	{
 		url: '/certificates',
