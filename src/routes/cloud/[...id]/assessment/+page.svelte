@@ -85,9 +85,27 @@ function getListOfMetricIds(): String[] {
 	return metricsList
 }
 
+// getListOfResources returns a string list of all resource names of the given assessment_results
+function getListOfResources(): String[] {
+	let resourceList: string[] = [];
+
+	for (var val of results) {
+		const types = val.resourceTypes
+		console.log("types: ", types)
+		for (var elem of types) {
+			console.log("type: ", elem)
+			if (resourceList.includes(elem) == false) {
+				resourceList.push(elem)
+			}
+		}
+	}
+
+	return resourceList
+}
 
 const categoryList = getListOfControlCategories()
 const metricsList = getListOfMetricIds()
+const resourceList = getListOfResources()
 </script>
 
 <Card style="width: 800px" class="mt-2">
@@ -132,16 +150,15 @@ const metricsList = getListOfMetricIds()
 							</Input>
 						</FormGroup>
 					</Col>
-					<!-- <Col>
-						<FormGroup>
-							<Label for="exampleEmail">Metric</Label>
-							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
-						</FormGroup>
-					</Col> -->
 					<Col>
 						<FormGroup>
-							<Label for="resourceType">Resource Type</Label>
-							<Input type="text" name="resourceType" id="resourceType" bind:value={filterResourceType} />
+							<Label for="exampleEmail">Resource Type</Label>
+							<Input type="select" name="resourceType" id="resourceType" bind:value={filterResourceType}>
+								<option />
+								{#each resourceList as value}
+									<option value={value}>{value}</option>
+								{/each}
+							</Input>
 						</FormGroup>
 					</Col>
 					<Col>
