@@ -39,13 +39,13 @@ $: metricActive = $page.route.id == '/cloud/[...id]/metrics';
 			>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" class:active={assessmentActive} href="/cloud/{data.service.id}/assessment"
-				><Fa icon={faCircleCheck} /> Assessment</a
+			<a class="nav-link" class:active={metricActive} href="/cloud/{data.service.id}/metrics"
+				><Fa icon={faCircleCheck} /> Metrics</a
 			>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" class:active={metricActive} href="/cloud/{data.service.id}/metrics"
-				><Fa icon={faCircleCheck} /> Metrics</a
+			<a class="nav-link" class:active={assessmentActive} href="/cloud/{data.service.id}/assessment"
+				><Fa icon={faCircleCheck} /> Assessment</a
 			>
 		</li>
 	</ul>
