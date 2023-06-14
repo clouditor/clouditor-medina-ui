@@ -72,7 +72,22 @@ function getListOfControlCategories(): String[] {
 	return categoryList
 }
 
+// getListOfMetrics returns a string list of all metric_ids
+function getListOfMetricIds(): String[] {
+	let metricsList: string[] = [];
+
+	for (var val of $metrics.values()) {
+		if (metricsList.includes(val.id) == false) {
+			metricsList.push(val.id)
+		}
+	}
+
+	return metricsList
+}
+
+
 const categoryList = getListOfControlCategories()
+const metricsList = getListOfMetricIds()
 </script>
 
 <Card style="width: 800px" class="mt-2">
@@ -96,7 +111,7 @@ const categoryList = getListOfControlCategories()
 					<Col>
 						<FormGroup>
 							<Label for="exampleEmail">Metric Category</Label>
-							<Input type="select" name="select" id="metricCategory" bind:value={filterMetricCategory}>
+							<Input type="select" name="metricCategory" id="metricCategory" bind:value={filterMetricCategory}>
 								<option />
 								{#each categoryList as value}
 									<option value={value}>{value}</option>
@@ -109,9 +124,20 @@ const categoryList = getListOfControlCategories()
 					<Col>
 						<FormGroup>
 							<Label for="exampleEmail">Metric</Label>
-							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
+							<Input type="select" name="metric" id="metric" bind:value={filterMetric}>
+								<option />
+								{#each metricsList as value}
+									<option value={value}>{value}</option>
+								{/each}
+							</Input>
 						</FormGroup>
 					</Col>
+					<!-- <Col>
+						<FormGroup>
+							<Label for="exampleEmail">Metric</Label>
+							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
+						</FormGroup>
+					</Col> -->
 					<Col>
 						<FormGroup>
 							<Label for="resourceType">Resource Type</Label>
