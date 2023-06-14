@@ -12,7 +12,7 @@ import {
 	Row,
 	Table,
 } from 'sveltestrap';
-import { metrics } from '$lib/stores';
+import { metrics, controls } from '$lib/stores';
 import AssessmentResultRow from '$lib/components/AssessmentResultRow.svelte';
 
 export let data: import('./$types').PageData;
@@ -39,11 +39,11 @@ $: filteredResults = results.filter((r) => {
 	return (
 		(filterCompliant != '' ? (r.compliant == (filterCompliant == 'true') ? true : false) : true) &&
 		(filterMetricCategory != ''
-			? $metrics
-					.get(r.metricId)
-					?.category?.toLowerCase()
-					?.includes(filterMetricCategory?.toLowerCase())
-			: true) &&
+		? $metrics
+				.get(r.metricId)
+				?.category?.toLowerCase()
+				?.includes(filterMetricCategory?.toLowerCase())
+		: true) &&
 		(filterMetric != ''
 			? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
 			: true) && 
@@ -58,6 +58,21 @@ $: filteredResults = results.filter((r) => {
 			: true)
 	);
 });
+
+// getListOfControlCategories returns a string list of all metric categories
+function getListOfControlCategories(): String[] {
+	let categoryList: string[] = [];
+
+	for (var val of $controls) {
+		if (categoryList.includes(val.categoryName) == false) {
+			categoryList.push(val.categoryName)
+		}
+	}
+
+	return categoryList
+}
+
+const categoryList = getListOfControlCategories()
 </script>
 
 <Card style="width: 800px" class="mt-2">
@@ -81,12 +96,12 @@ $: filteredResults = results.filter((r) => {
 					<Col>
 						<FormGroup>
 							<Label for="exampleEmail">Metric Category</Label>
-							<Input
-								type="text"
-								name="metric-category"
-								id="metricCateglory"
-								bind:value={filterMetricCategory}
-							/>
+							<Input type="select" name="select" id="metricCategory" bind:value={filterMetricCategory}>
+								<option />
+								{#each categoryList as value}
+									<option value={value}>{value}</option>
+								{/each}
+							</Input>
 						</FormGroup>
 					</Col>
 				</Row>
