@@ -21,29 +21,29 @@ $: metricActive = $page.route.id == '/cloud/[...id]/metrics';
 <div class="pt-3 pb-0 bg-light">
 	<ServiceTopBar service={data.service} />
 	<ul class="nav nav-tabs">
-		<li class="nav-item ps-2">
+		<li title= "Overview shows general information of the given Cloud Service." class="nav-item ps-2">
 			<a class="nav-link" class:active={overviewActive} href="/cloud/{data.service.id}"
 				><Fa icon={faTableColumns} /> Overview</a
 			>
 		</li>
-		<li class="nav-item">
+		<li title= "Configuration shows the name and description of the Cloud Service as well as the corresponding Target of Evaluation (ToE). The ToE can be configured for all available Catalogs." class="nav-item">
 			<a
 				class="nav-link"
 				class:active={configurationActive}
 				href="/cloud/{data.service.id}/configuration"><Fa icon={faGear} /> Configuration</a
 			>
 		</li>
-		<li class="nav-item">
+		<li title= "Discovery shows all discovered Cloud Resources for the given Cloud Service." class="nav-item">
 			<a class="nav-link" class:active={discoveryActive} href="/cloud/{data.service.id}/discovery"
 				><Fa icon={faBinoculars} /> Discovery</a
 			>
 		</li>
-		<li class="nav-item">
+		<li title= "Metrics shows all available metrics in the Orchestrator." class="nav-item">
 			<a class="nav-link" class:active={metricActive} href="/cloud/{data.service.id}/metrics"
 				><Fa icon={faCircleCheck} /> Metrics</a
 			>
 		</li>
-		<li class="nav-item">
+		<li title= "Assessment shows all assessment results for the given Cloud Service." class="nav-item">
 			<a class="nav-link" class:active={assessmentActive} href="/cloud/{data.service.id}/assessment"
 				><Fa icon={faCircleCheck} /> Assessment</a
 			>
