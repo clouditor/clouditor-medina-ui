@@ -76,7 +76,7 @@ console.log($page.url);
 			</NavItem>
 			<NavItem>
 				<NavLink active={$page.url.pathname.startsWith("/catalogs")} href="{base}{"/catalogs"}">
-					<Fa icon={faFile} /> Catalogs
+					<Fa icon={faFile} /> Catalogues
 				</NavLink>
 			</NavItem>
 			<NavItem>
