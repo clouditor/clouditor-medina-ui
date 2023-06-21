@@ -12,7 +12,7 @@ import {
 	Row,
 	Table,
 } from 'sveltestrap';
-import { metrics } from '$lib/stores';
+import { metrics, controls } from '$lib/stores';
 import AssessmentResultRow from '$lib/components/AssessmentResultRow.svelte';
 
 export let data: import('./$types').PageData;
@@ -32,18 +32,15 @@ let filterEndTimestamp: string | number | Date;
 $: filteredResults = results.filter((r) => {
 	let dateFilterStartTimestamp = new Date(filterStartTimestamp);
 	let dateFilterEndTimestamp = new Date(filterEndTimestamp);
-	console.log(filterStartTimestamp)
-	console.log(dateFilterStartTimestamp)
-	console.log(filterStartTimestamp)
-	console.log(dateFilterEndTimestamp)
+
 	return (
 		(filterCompliant != '' ? (r.compliant == (filterCompliant == 'true') ? true : false) : true) &&
 		(filterMetricCategory != ''
-			? $metrics
-					.get(r.metricId)
-					?.category?.toLowerCase()
-					?.includes(filterMetricCategory?.toLowerCase())
-			: true) &&
+		? $metrics
+				.get(r.metricId)
+				?.category?.toLowerCase()
+				?.includes(filterMetricCategory?.toLowerCase())
+		: true) &&
 		(filterMetric != ''
 			? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
 			: true) && 
@@ -58,6 +55,54 @@ $: filteredResults = results.filter((r) => {
 			: true)
 	);
 });
+
+// getListOfControlCategories returns a string list of all metric categories
+function getListOfControlCategories(): String[] {
+	let categoryList: string[] = [];
+
+	for (var val of $controls) {
+		if (categoryList.includes(val.categoryName) == false) {
+			categoryList.push(val.categoryName)
+		}
+	}
+
+	return categoryList
+}
+
+// getListOfMetrics returns a string list of all metric_ids
+function getListOfMetricIds(): String[] {
+	let metricsList: string[] = [];
+
+	for (var val of $metrics.values()) {
+		if (metricsList.includes(val.id) == false) {
+			metricsList.push(val.id)
+		}
+	}
+
+	return metricsList
+}
+
+// getListOfResources returns a string list of all resource names of the given assessment_results
+function getListOfResources(): String[] {
+	let resourceList: string[] = [];
+
+	for (var val of results) {
+		const types = val.resourceTypes
+		console.log("types: ", types)
+		for (var elem of types) {
+			console.log("type: ", elem)
+			if (resourceList.includes(elem) == false) {
+				resourceList.push(elem)
+			}
+		}
+	}
+
+	return resourceList
+}
+
+const categoryList = getListOfControlCategories()
+const metricsList = getListOfMetricIds()
+const resourceList = getListOfResources()
 </script>
 
 <Card style="width: 800px" class="mt-2">
@@ -81,12 +126,12 @@ $: filteredResults = results.filter((r) => {
 					<Col>
 						<FormGroup>
 							<Label for="exampleEmail">Metric Category</Label>
-							<Input
-								type="text"
-								name="metric-category"
-								id="metricCateglory"
-								bind:value={filterMetricCategory}
-							/>
+							<Input type="select" name="metricCategory" id="metricCategory" bind:value={filterMetricCategory}>
+								<option />
+								{#each categoryList as value}
+									<option value={value}>{value}</option>
+								{/each}
+							</Input>
 						</FormGroup>
 					</Col>
 				</Row>
@@ -94,13 +139,23 @@ $: filteredResults = results.filter((r) => {
 					<Col>
 						<FormGroup>
 							<Label for="exampleEmail">Metric</Label>
-							<Input type="text" name="metric" id="metric" bind:value={filterMetric} />
+							<Input type="select" name="metric" id="metric" bind:value={filterMetric}>
+								<option />
+								{#each metricsList as value}
+									<option value={value}>{value}</option>
+								{/each}
+							</Input>
 						</FormGroup>
 					</Col>
 					<Col>
 						<FormGroup>
-							<Label for="resourceType">Resource Type</Label>
-							<Input type="text" name="resourceType" id="resourceType" bind:value={filterResourceType} />
+							<Label for="exampleEmail">Resource Type</Label>
+							<Input type="select" name="resourceType" id="resourceType" bind:value={filterResourceType}>
+								<option />
+								{#each resourceList as value}
+									<option value={value}>{value}</option>
+								{/each}
+							</Input>
 						</FormGroup>
 					</Col>
 					<Col>

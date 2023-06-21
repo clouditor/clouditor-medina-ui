@@ -7,7 +7,7 @@
 </script>
 
 {#if config}
-	<Button color="primary" on:click={() => (isOpen = !isOpen)}>Show Cofiguration</Button>
+	<Button color="primary" on:click={() => (isOpen = !isOpen)}>Show Configuration</Button>
 	<Collapse {isOpen}>
 		<Card body class="mt-2">
 			<pre>Operator:     {config.operator}</pre>

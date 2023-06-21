@@ -18,6 +18,7 @@ The following metrics are configured for the Cloud Service.
 		<thead>
 			<tr>
 				<th>#</th>
+				<th>Category</th>
 				<th>Description</th>
 				<th>Implementation</th>
 				<th>Configuration</th>
@@ -27,6 +28,7 @@ The following metrics are configured for the Cloud Service.
 			{#each data.metrics as metric, i}
 				<tr>
 					<td>{metric.id}</td>
+					<td>{metric.category}</td>
 					<td>{metric.description}</td>
 					<td>
 						{#await getMetricImplementation(metric.id) then impl}

@@ -16,6 +16,7 @@ The following metrics are configured in the Clouditor orchestrator.
 		<thead>
 			<tr>
 				<th>#</th>
+				<th>Category</th>
 				<th>Description</th>
 				<th>Implementation</th>
 			</tr>
@@ -24,6 +25,7 @@ The following metrics are configured in the Clouditor orchestrator.
 			{#each data.metrics as metric, i}
 				<tr>
 					<td>{metric.id}</td>
+					<td>{metric.category}</td>
 					<td>{metric.description}</td>
 					<td>
 						{#await getMetricImplementation(metric.id) then impl}
