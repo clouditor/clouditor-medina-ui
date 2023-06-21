@@ -12,6 +12,6 @@ export async function load({  }) {
 			};
 		})
 		.catch(() => {
-			redirectLogin('/certificates');
+			redirectLogin('/login');
 		});
 }
