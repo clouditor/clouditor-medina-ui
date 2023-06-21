@@ -118,8 +118,28 @@ function getUsedCatalog(catalogID: string): Catalog {
 	return {} as any;
 }
 
+// Get only sub-controls from controls_in_scope
+// Note: That is not a really good approach and only can be used for the EUCS catalog, because we have no hierarchy in the controls_in_scope list.
+function getSubControls(): ControlInScope[][] {
+	const subControls: ControlInScope[][] = []
+	var i = 0
+
+	for (var scope of data.scopes) {
+		subControls[i] = []
+		for (var s of scope) {
+			if (s.controlId.includes(".")) {
+				subControls[i].push(s)
+			}
+		}
+		i++
+	}
+
+	return subControls
+}
+
 let open = false;
 const toggle = () => (open = !open);
+const subControls = getSubControls()
 </script>
 
 {#each data.targets as target, idx}
@@ -134,7 +154,7 @@ const toggle = () => (open = !open);
 			<Button color="primary" on:click={toggle}>Configure Controls in Scope</Button>
 			<Button color="danger" on:click={() => remove(target)}><Fa icon={faTrash} /></Button>
 			<ControlModal
-				scope={data.scopes[idx]}
+				scope={subControls[idx]}
 				{toggle}
 				{open}
 				{target}
