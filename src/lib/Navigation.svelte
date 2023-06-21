@@ -43,6 +43,10 @@ let routes = [
 	{
 		url: '/certificates',
 		name: 'Certificates'
+	},
+	{
+		url: '/publicCertificates',
+		name: 'Public Certificates'
 	}
 ];
 
@@ -82,6 +86,11 @@ console.log($page.url);
 			<NavItem>
 				<NavLink active={$page.url.pathname.startsWith("/certificates")} href="{base}{"/certificates"}">
 					<Fa icon={faCertificate} /> Certificates
+				</NavLink>
+			</NavItem>
+			<NavItem>
+				<NavLink active={$page.url.pathname.startsWith("/publicCertificates")} href="{base}{"/publicCertificates"}">
+					<Fa icon={faCertificate} /> Public Certificates
 				</NavLink>
 			</NavItem>
 			<!--TODO: if logged in, don't show-->

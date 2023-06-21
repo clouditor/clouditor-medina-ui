@@ -115,6 +115,10 @@ export interface ListCertificatesResponse {
     certificates: Certificate[];
 }
 
+export interface ListPublicCertificatesResponse {
+    certificates: Certificate[];
+}
+
 export interface ListAssessmentResultsResponse {
     results: AssessmentResult[]
 }
@@ -652,3 +656,20 @@ export async function listCertificates(): Promise<Certificate[]> {
         });
 }
 
+/**
+ * Retrieves a list of public certificates from the orchestrator service.
+ * 
+ * @returns an array of {@link Certificate}s.
+ */
+export async function listPublicCertificates(): Promise<Certificate[]> {
+    const apiUrl = clouditorize(`/v1/orchestrator/certificates/public`)
+
+    return fetch(apiUrl, {
+        method: 'GET',
+    })
+        .then(throwError)
+        .then((res) => res.json())
+        .then((response: ListPublicCertificatesResponse) => {
+            return response.certificates;
+        });
+}
