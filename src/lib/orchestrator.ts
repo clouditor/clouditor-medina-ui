@@ -602,7 +602,7 @@ export async function updateControlInScope(scope: ControlInScope, fetch = window
  * @returns an array of {@link Metric}s.
  */
 export async function listMetrics(fetch = window.fetch): Promise<Metric[]> {
-    const apiUrl = clouditorize(`/v1/orchestrator/metrics?pageSize=200`)
+    const apiUrl = clouditorize(`/v1/orchestrator/metrics?pageSize=200&orderBy=id&asc=true`)
 
     return fetch(apiUrl, {
         method: 'GET',
