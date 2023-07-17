@@ -8,7 +8,7 @@ import {
 	NavLink,
 } from 'sveltestrap';
 import Fa from 'svelte-fa'
-import { faCloud, faRuler, faFile, faCertificate } from '@fortawesome/free-solid-svg-icons'
+import { faCloud, faRuler, faFile, faCertificate,  faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { SvelteToast } from '@zerodevx/svelte-toast';
 import { base } from '$app/paths';
 import { page } from '$app/stores';
@@ -43,6 +43,9 @@ let routes = [
 	{
 		url: '/certificates',
 		name: 'Certificates'
+	},
+	{
+		name: 'Help'
 	}
 ];
 
@@ -90,6 +93,11 @@ console.log($page.url);
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
 			{/if}
+			<NavItem>
+				<NavLink href="https://medina-project.eu/wp-content/uploads/MEDINA_User_Manuals/MEDINA_Orchestrator_UserManual.pdf" target="_blank">
+					<Fa icon={faQuestion} /> Help
+				</NavLink>
+			</NavItem>
 			<!-- removed for medina: <Dropdown nav inNavbar>
 				<DropdownToggle nav caret>Account</DropdownToggle>
 				<DropdownMenu end>
