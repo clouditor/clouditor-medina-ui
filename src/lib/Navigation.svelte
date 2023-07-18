@@ -18,40 +18,38 @@ function handleUpdate(event) {
 	isOpen = event.detail.isOpen;
 }
 
-let routes = [
-	{
-		url: '/cloud',
-		name: 'Cloud Services'
-	},
-	// We are hiding these paths for MEDINA, since they can be viewed on the service-specific views
-	// {
-	// 	url: '/discovery',
-	// 	name: 'Discovery'
-	// },
-	// {
-	// 	url: '/assessment',
-	// 	name: 'Assessment'
-	// },
-	{
-		url: '/metrics',
-		name: 'Metrics'
-	},
-	{
-		url: '/catalogs',
-		name: 'Catalogues'
-	},
-	{
-		url: '/certificates',
-		name: 'Certificates'
-	},
-	{
-		name: 'Help'
-	}
-];
+// let routes = [
+// 	{
+// 		url: '/cloud',
+// 		name: 'Cloud Services'
+// 	},
+// 	// We are hiding these paths for MEDINA, since they can be viewed on the service-specific views
+// 	// {
+// 	// 	url: '/discovery',
+// 	// 	name: 'Discovery'
+// 	// },
+// 	// {
+// 	// 	url: '/assessment',
+// 	// 	name: 'Assessment'
+// 	// },
+// 	{
+// 		url: '/metrics',
+// 		name: 'Metrics'
+// 	},
+// 	{
+// 		url: '/catalogs',
+// 		name: 'Catalogues'
+// 	},
+// 	{
+// 		url: '/certificates',
+// 		name: 'Certificates'
+// 	},
+// 	{
+// 		name: 'Help'
+// 	}
+// ];
 
 let loggedIn = localStorage.token ? true : false;
-
-console.log($page.url);
 </script>
 
 <SvelteToast />
@@ -96,7 +94,6 @@ console.log($page.url);
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
 			{/if}
-			
 			<NavItem>
 				<NavLink href="https://medina-project.eu/wp-content/uploads/MEDINA_User_Manuals/MEDINA_Orchestrator_UserManual.pdf" target="_blank">
 					<Fa icon={faQuestion} /> Help
