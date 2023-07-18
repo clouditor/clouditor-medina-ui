@@ -9,7 +9,7 @@
 
 <h3>Certificates</h3>
 
-{#if certificates}
+{#if certificates.length > 0}
 	<Container class="mt-4 ms-0 me-0">
 		<Row cols={2} noGutters>
 			{#each certificates as certificate, i}
