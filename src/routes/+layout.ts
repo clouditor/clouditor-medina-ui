@@ -15,6 +15,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
     })
         .catch(() => {
             // ignore, we will catch it later
+            console.error("error getting metrics")
+            return
         });
 
     listControls(null, null, fetch).then((list) => {
@@ -22,6 +24,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
     })
         .catch(() => {
             // ignore, we will catch it later
+            console.error("error getting controls")
+            return
         });
 
         try {
@@ -34,7 +38,9 @@ export const load: LayoutLoad = async ({ fetch }) => {
                 redirect: '/cloud'
             }
         } catch (error) {
-            return redirectLogin('/cloud');
+            console.warn("error start page load function")
+            return
+            // return redirectLogin('/cloud');
         }
 }
 

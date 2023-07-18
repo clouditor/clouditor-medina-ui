@@ -51,6 +51,7 @@ export let certificate: Certificate;
 						</td>
 						<td>{state.timestamp}</td>
 						<!-- When it is a new certificate, there is no tree yet -->
+						<!-- svelte-ignore empty-block -->
 						{#if state.state == 'new'}
 						{:else}
 							<td><a href="https://cce-test.k8s.medina.esilab.org/#/?treeStateId={state.treeId}">{state.treeId}</a></td>

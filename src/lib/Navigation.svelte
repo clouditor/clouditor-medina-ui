@@ -67,6 +67,8 @@ console.log($page.url);
 					</NavLink>
 				</NavItem>
 			{/each} -->
+			<!--TODO: if not logged in, don't show-->
+			{#if loggedIn}
 			<NavItem>
 				<NavLink active={$page.url.pathname.startsWith("/cloud")} href="{base}{"/cloud"}">
 					<Fa icon={faCloud} /> Cloud Services
@@ -87,12 +89,14 @@ console.log($page.url);
 					<Fa icon={faCertificate} /> Certificates
 				</NavLink>
 			</NavItem>
+			{/if}
 			<!--TODO: if logged in, don't show-->
 			{#if !loggedIn}
 			<NavItem>
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
 			{/if}
+			
 			<NavItem>
 				<NavLink href="https://medina-project.eu/wp-content/uploads/MEDINA_User_Manuals/MEDINA_Orchestrator_UserManual.pdf" target="_blank">
 					<Fa icon={faQuestion} /> Help
@@ -110,6 +114,7 @@ console.log($page.url);
 		</Nav>
 	</Collapse>
 </Navbar>
+
 <div style="clear: both;"></div>
 
 <style>
