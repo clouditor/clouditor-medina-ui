@@ -12,6 +12,6 @@ export async function load({ params, fetch, context }) {
 			};
 		})
 		.catch(() => {
-			redirectLogin('/public/certificates');
+			redirectLogin('/cloud');
 		});
 }
