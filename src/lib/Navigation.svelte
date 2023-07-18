@@ -96,7 +96,6 @@ console.log($page.url);
 				<NavLink href="{base}/login">Login</NavLink>
 			</NavItem>
 			{/if}
-			
 			<NavItem>
 				<NavLink href="https://medina-project.eu/wp-content/uploads/MEDINA_User_Manuals/MEDINA_Orchestrator_UserManual.pdf" target="_blank">
 					<Fa icon={faQuestion} /> Help
