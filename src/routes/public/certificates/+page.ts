@@ -4,7 +4,7 @@ import { redirectLogin } from '$lib/oauth';
 /**
  * @type {import('@sveltejs/kit').PageLoad}
  */
-export async function load({ params, fetch, context }) {
+export async function load({ params, fetch }) {
 	return listPublicCertificates()
 		.then((certificates) => {
 			return {
