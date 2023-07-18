@@ -1,4 +1,3 @@
-import { error } from "@sveltejs/kit";
 import type { AssessmentResult, Metric, MetricConfiguration, MetricImplementation } from "./assessment";
 import { clouditorize } from './util';
 

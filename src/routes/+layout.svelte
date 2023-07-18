@@ -52,7 +52,7 @@ function getVersionMessage(): string {
 <Navigation />
 
 <main>
-	<slot />
+    <slot />
 </main>
 
 <Button color="secondary" on:click={() => toggle()}>

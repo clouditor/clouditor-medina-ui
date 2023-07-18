@@ -7,7 +7,7 @@ export const load: LayoutLoad = async ({ fetch, url}) => {
 
     // If the the path '/public/certificates' was called, we return here without calling the other endpoints.
     if (url.pathname == "/public/certificates") {
-        console.info("public certificates endpoint called: ignore furhter load functionality")
+        console.info("public certificates endpoint called: ignore further load functionality")
         return
     }
     
