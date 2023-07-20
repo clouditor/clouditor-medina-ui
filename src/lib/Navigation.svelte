@@ -114,6 +114,8 @@ console.log($page.url);
 
 <style>
 	:global(.medina) {
-		background-color:#343a40;
+		height: 46px;
+		background:#212529;
+		color: #212529;
 	}
 </style>
