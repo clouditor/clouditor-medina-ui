@@ -66,7 +66,7 @@ const toggleScrollable = () => (openScrollable = !openScrollable);
 					<!-- When it is a new certificate, there is no tree yet -->
 					{#if state.state == 'new'}
 					{:else}
-						<td><a href="https://cce-test.k8s.medina.esilab.org/#/?treeStateId={state.treeId}">{state.treeId}</a></td>
+						<td><a href="https://cce-test.k8s.medina.esilab.org/evaluation-tree?treeStateId={state.treeId}">{state.treeId}</a></td>
 					{/if}
 				</tr>
 			{/each}
