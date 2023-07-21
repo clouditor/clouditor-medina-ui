@@ -4,7 +4,7 @@ import { redirectLogin } from '$lib/oauth';
 /**
  * @type {import('@sveltejs/kit').PageLoad}
  */
-export async function load({ params, fetch, context }) {
+export async function load({}) {
 	return listPublicCertificates()
 		.then((certificates) => {
 			return {
@@ -12,6 +12,7 @@ export async function load({ params, fetch, context }) {
 			};
 		})
 		.catch(() => {
-			redirectLogin('/public/certificates');
+			console.error("error listPublicCertificates")
+			redirectLogin('/cloud');
 		});
 }

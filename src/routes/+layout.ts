@@ -3,7 +3,14 @@ import { getRuntimeInfo, listCatalogs, listControls, listMetrics } from "$lib/or
 import { metrics, controls } from "$lib/stores";
 import type { LayoutLoad } from "./$types";
 
-export const load: LayoutLoad = async ({ fetch }) => {
+export const load: LayoutLoad = async ({ fetch, url}) => {
+
+    // If the the path '/public/certificates' was called, we return here without calling the other endpoints.
+    if (url.pathname == "/public/certificates") {
+        console.info("public certificates endpoint called: ignore further load functionality")
+        return
+    }
+    
     // Since we want a map for convenience, we need to use a store, rather than
     // exposing the metric through a layout data props. Layout data props need
     // to be JSON and thus, a real ES6 map cannot be used.
@@ -15,6 +22,7 @@ export const load: LayoutLoad = async ({ fetch }) => {
     })
         .catch(() => {
             // ignore, we will catch it later
+            console.error("error getting metrics")
         });
 
     listControls(null, null, fetch).then((list) => {
@@ -22,6 +30,7 @@ export const load: LayoutLoad = async ({ fetch }) => {
     })
         .catch(() => {
             // ignore, we will catch it later
+            console.error("error getting controls")
         });
 
         try {
@@ -34,6 +43,7 @@ export const load: LayoutLoad = async ({ fetch }) => {
                 redirect: '/cloud'
             }
         } catch (error) {
+            console.warn("error start page load function")
             return redirectLogin('/cloud');
         }
 }

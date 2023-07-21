@@ -1,5 +1,9 @@
 <script lang="ts">
+<<<<<<< HEAD
 	import { Col, Container, Row, Alert } from 'sveltestrap';
+=======
+	import { Col, Container, Row } from 'sveltestrap';
+>>>>>>> main
 	import PublicCertificateCard from '$lib/PublicCertificateCard.svelte';
 	import type { PageData } from './$types';
 

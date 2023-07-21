@@ -18,40 +18,38 @@ function handleUpdate(event) {
 	isOpen = event.detail.isOpen;
 }
 
-let routes = [
-	{
-		url: '/cloud',
-		name: 'Cloud Services'
-	},
-	// We are hiding these paths for MEDINA, since they can be viewed on the service-specific views
-	// {
-	// 	url: '/discovery',
-	// 	name: 'Discovery'
-	// },
-	// {
-	// 	url: '/assessment',
-	// 	name: 'Assessment'
-	// },
-	{
-		url: '/metrics',
-		name: 'Metrics'
-	},
-	{
-		url: '/catalogs',
-		name: 'Catalogues'
-	},
-	{
-		url: '/certificates',
-		name: 'Certificates'
-	},
-	{
-		name: 'Help'
-	}
-];
+// let routes = [
+// 	{
+// 		url: '/cloud',
+// 		name: 'Cloud Services'
+// 	},
+// 	// We are hiding these paths for MEDINA, since they can be viewed on the service-specific views
+// 	// {
+// 	// 	url: '/discovery',
+// 	// 	name: 'Discovery'
+// 	// },
+// 	// {
+// 	// 	url: '/assessment',
+// 	// 	name: 'Assessment'
+// 	// },
+// 	{
+// 		url: '/metrics',
+// 		name: 'Metrics'
+// 	},
+// 	{
+// 		url: '/catalogs',
+// 		name: 'Catalogues'
+// 	},
+// 	{
+// 		url: '/certificates',
+// 		name: 'Certificates'
+// 	},
+// 	{
+// 		name: 'Help'
+// 	}
+// ];
 
 let loggedIn = localStorage.token ? true : false;
-
-console.log($page.url);
 </script>
 
 <SvelteToast />
@@ -67,6 +65,8 @@ console.log($page.url);
 					</NavLink>
 				</NavItem>
 			{/each} -->
+			<!--TODO: if not logged in, don't show-->
+			{#if loggedIn}
 			<NavItem>
 				<NavLink active={$page.url.pathname.startsWith("/cloud")} href="{base}{"/cloud"}">
 					<Fa icon={faCloud} /> Cloud Services
@@ -87,6 +87,7 @@ console.log($page.url);
 					<Fa icon={faCertificate} /> Certificates
 				</NavLink>
 			</NavItem>
+			{/if}
 			<!--TODO: if logged in, don't show-->
 			{#if !loggedIn}
 			<NavItem>
@@ -110,6 +111,7 @@ console.log($page.url);
 		</Nav>
 	</Collapse>
 </Navbar>
+
 <div style="clear: both;"></div>
 
 <style>
