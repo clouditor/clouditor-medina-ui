@@ -88,12 +88,6 @@ let loggedIn = localStorage.token ? true : false;
 				</NavLink>
 			</NavItem>
 			{/if}
-			<!--TODO: if logged in, don't show-->
-			{#if !loggedIn}
-			<NavItem>
-				<NavLink href="{base}/login">Login</NavLink>
-			</NavItem>
-			{/if}
 			<NavItem>
 				<NavLink href="https://medina-project.eu/wp-content/uploads/MEDINA_User_Manuals/MEDINA_Orchestrator_UserManual.pdf" target="_blank">
 					<Fa icon={faQuestion} /> Help
