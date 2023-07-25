@@ -31,7 +31,7 @@ function discard() {
 		<CardBody>
 			<CardText>
 				<div class="sign">
-					<Button on:click={() => editing.set(true)} class="mt-2">
+					<Button on:click={() => editing.set(true)} class="mt-2" color="primary">
 						<div>Add service</div></Button
 					>
 				</div>

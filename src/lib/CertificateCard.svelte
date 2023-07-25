@@ -1,8 +1,14 @@
 <script lang="ts">
-import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem, Table } from 'sveltestrap';
+import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem, Table, Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'sveltestrap';
 import type { Certificate } from '$lib/orchestrator';
 
 export let certificate: Certificate;
+
+let open = false;
+let openScrollable = false;
+const toggle = () => (open = !open);
+const toggleScrollable = () => (openScrollable = !openScrollable);
+
 </script>
 
 <Card class="mb-3 me-3">
@@ -31,7 +37,14 @@ export let certificate: Certificate;
 			</p>
 			<hr />
 		</CardText>
-		<b>State History</b>
+		<!-- <b>State History</b> -->
+		<Button color="primary" on:click={toggleScrollable}>See State History</Button>
+	</CardBody>
+</Card>
+
+<Modal isOpen={openScrollable} toggle={toggleScrollable} scrollable>
+	<ModalHeader toggle={toggleScrollable}>Modal title</ModalHeader>
+	<ModalBody>
 		<Table>
 			<thead>
 				<tr>
@@ -42,23 +55,22 @@ export let certificate: Certificate;
 				</tr>
 			</thead>
 			<tbody>
-				{#each certificate.states as state}
-					<tr>
-						<td>{state.state}</td>
-						<td>
-							{#if state.state == 'continued'}minor{/if}
-							{#if state.state == 'suspended'}major{/if}
-						</td>
-						<td>{state.timestamp}</td>
-						<!-- When it is a new certificate, there is no tree yet -->
-						<!-- svelte-ignore empty-block -->
-						{#if state.state == 'new'}
-						{:else}
-							<td><a href="https://cce-test.k8s.medina.esilab.org/#/?treeStateId={state.treeId}">{state.treeId}</a></td>
-						{/if}
-					</tr>
-				{/each}
+			{#each certificate.states as state}
+				<tr>
+					<td>{state.state}</td>
+					<td>
+						{#if state.state == 'continued'}minor{/if}
+						{#if state.state == 'suspended'}major{/if}
+					</td>
+					<td>{state.timestamp}</td>
+					<!-- When it is a new certificate, there is no tree yet -->
+					{#if state.state == 'new'}
+					{:else}
+						<td><a href="https://cce-test.k8s.medina.esilab.org/evaluation-tree?treeStateId={state.treeId}">{state.treeId}</a></td>
+					{/if}
+				</tr>
+			{/each}
 			</tbody>
 		</Table>
-	</CardBody>
-</Card>
+	</ModalBody>
+</Modal>

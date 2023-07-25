@@ -55,7 +55,7 @@ function getVersionMessage(): string {
     <slot />
 </main>
 
-<Button color="secondary" on:click={() => toggle()}>
+<Button color="primary" on:click={() => toggle()}>
     Debug/Version Info
 </Button>
 
