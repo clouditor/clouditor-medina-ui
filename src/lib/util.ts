@@ -9,8 +9,13 @@ export function trim(s: string, maxLength = 200): string {
 }
 
 export function short(resourceID: string) {
-    // Split resource by / and take the last index
-    const rr = resourceID.split('/');
+    // For Azure split resource by / and take the last index
+    var rr = resourceID.split('/');
+
+    // For AWS split resources by : and take the last index
+    if (rr.length <= 1) {
+        rr = resourceID.split(':');
+    }
 
     return rr[rr.length - 1];
 }
