@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Card, CardBody, CardHeader, CardText, ListGroup, ListGroupItem, Table, Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'sveltestrap';
+import { Card, CardBody, CardHeader, CardText, Table, Button, Modal, ModalBody, ModalHeader } from 'sveltestrap';
 import type { Certificate } from '$lib/orchestrator';
 
 export let certificate: Certificate;
