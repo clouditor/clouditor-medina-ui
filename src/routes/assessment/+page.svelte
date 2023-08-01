@@ -24,6 +24,7 @@ let filterCompliant;
 let filterMetricCategory;
 let filterMetric;
 let filterResourceType;
+let filterResourceID;
 
 $: filteredResults = results.filter((r) => {
 	return (
@@ -36,6 +37,9 @@ $: filteredResults = results.filter((r) => {
 			: true) &&
 		(filterMetric != ''
 			? $metrics.get(r.metricId)?.name?.toLowerCase()?.includes(filterMetric?.toLowerCase())
+			: true) &&
+		(filterResourceID != ''
+			? r.resourceId.toLocaleLowerCase().includes(filterResourceID?.toLocaleLowerCase())
 			: true)
 	);
 });
@@ -86,6 +90,12 @@ The following list contains all assessment results, sorted by timestamp.
 						<FormGroup>
 							<Label for="resourceType">Resource Type</Label>
 							<Input type="text" name="resourceType" id="resourceType" bind:value={filterResourceType} />
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="resourceType">Resource ID</Label>
+							<Input type="text" name="resourceID" id="resourceID" bind:value={filterResourceID} />
 						</FormGroup>
 					</Col>
 					<Col />

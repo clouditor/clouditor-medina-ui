@@ -93,15 +93,6 @@ let loggedIn = localStorage.token ? true : false;
 					<Fa icon={faQuestion} /> Help
 				</NavLink>
 			</NavItem>
-			<!-- removed for medina: <Dropdown nav inNavbar>
-				<DropdownToggle nav caret>Account</DropdownToggle>
-				<DropdownMenu end>
-					<DropdownItem>Option 1</DropdownItem>
-					<DropdownItem>Option 2</DropdownItem>
-					<DropdownItem divider />
-					<DropdownItem>Reset</DropdownItem>
-				</DropdownMenu>
-			</Dropdown> -->
 		</Nav>
 	</Collapse>
 </Navbar>
