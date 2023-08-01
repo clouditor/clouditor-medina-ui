@@ -28,6 +28,8 @@ let filterStartTimestamp: string | number | Date;
 // let dateFilterStartTimestamp = new Date(filterStartTimestamp);
 let filterEndTimestamp: string | number | Date;
 // let dateFilterEndTimestamp = new Date(filterEndTimestamp);
+let filterResourceID: string;
+
 
 $: filteredResults = results.filter((r) => {
 	let dateFilterStartTimestamp = new Date(filterStartTimestamp);
@@ -52,6 +54,9 @@ $: filteredResults = results.filter((r) => {
 			: true) &&
 		(filterEndTimestamp != ''
 		 	? new Date(r.timestamp) < dateFilterEndTimestamp
+			: true) &&
+		(filterResourceID != ''
+			? r.resourceId.toLocaleLowerCase().includes(filterResourceID?.toLocaleLowerCase())
 			: true)
 	);
 });
@@ -168,6 +173,12 @@ const resourceList = getListOfResources()
 						<FormGroup>
 							<Label for="endTimestamp">End Time</Label>
 							<Input type="text" name="endTimestamp" id="endTimestamp" placeholder="2024-02-01T10:01" bind:value={filterEndTimestamp} />
+						</FormGroup>
+					</Col>
+					<Col>
+						<FormGroup>
+							<Label for="resourceType">Resource ID</Label>
+							<Input type="text" name="resourceID" id="resourceID" bind:value={filterResourceID} />
 						</FormGroup>
 					</Col>
 					<Col />
