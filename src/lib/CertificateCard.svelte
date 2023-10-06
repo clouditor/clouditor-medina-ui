@@ -55,7 +55,7 @@ const toggleScrollable = () => (openScrollable = !openScrollable);
 				</tr>
 			</thead>
 			<tbody>
-			{#each certificate.states as state}
+			{#each certificate.states.reverse() as state}
 				<tr>
 					<td>{state.state}</td>
 					<td>
