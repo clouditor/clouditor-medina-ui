@@ -1,8 +1,18 @@
 <script lang="ts">
 import { Card, CardBody, CardHeader, CardText, Table, Button, Modal, ModalBody, ModalHeader } from 'sveltestrap';
-import type { Certificate } from '$lib/orchestrator';
+import type { Certificate, State } from '$lib/orchestrator';
 
 export let certificate: Certificate;
+let states = certificate.states
+
+var sortedStates: State[] = states.sort(
+	(s1,s2) => {
+		if (new Date(s1.timestamp) < new Date(s2.timestamp)){
+			return 1
+		} else {
+			return 0
+		}
+	});
 
 let open = false;
 let openScrollable = false;
@@ -55,7 +65,7 @@ const toggleScrollable = () => (openScrollable = !openScrollable);
 				</tr>
 			</thead>
 			<tbody>
-			{#each certificate.states.reverse() as state}
+			{#each sortedStates as state}
 				<tr>
 					<td>{state.state}</td>
 					<td>
