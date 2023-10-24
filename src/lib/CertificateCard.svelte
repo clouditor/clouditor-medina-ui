@@ -8,10 +8,8 @@ let states = certificate.states
 let sortedStates = states.sort(
 	(s1,s2) => {
 		if (new Date(s1.timestamp.replace(/[A-Z]+$/i, 'UTC')) > new Date(s2.timestamp.replace(/[A-Z]+$/i, 'UTC'))){
-			console.log("1")
 			return 1
 		} else {
-			console.log("0")
 			return 0
 		}
 	});
