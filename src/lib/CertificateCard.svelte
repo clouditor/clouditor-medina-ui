@@ -5,9 +5,9 @@ import type { Certificate, State } from '$lib/orchestrator';
 export let certificate: Certificate;
 let states = certificate.states
 
-var sortedStates: State[] = states.sort(
+let sortedStates = states.sort(
 	(s1,s2) => {
-		if (new Date(s1.timestamp) < new Date(s2.timestamp)){
+		if (new Date(s1.timestamp.replace(/[A-Z]+$/i, 'UTC')) > new Date(s2.timestamp.replace(/[A-Z]+$/i, 'UTC'))){
 			return 1
 		} else {
 			return 0
