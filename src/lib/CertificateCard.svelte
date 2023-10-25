@@ -53,7 +53,7 @@ const toggleScrollable = () => (openScrollable = !openScrollable);
 </Card>
 
 <Modal isOpen={openScrollable} toggle={toggleScrollable} scrollable>
-	<ModalHeader toggle={toggleScrollable}>Modal title</ModalHeader>
+	<ModalHeader toggle={toggleScrollable}>Certificate State History</ModalHeader>
 	<ModalBody>
 		<Table>
 			<thead>
